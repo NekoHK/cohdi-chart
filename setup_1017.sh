@@ -460,12 +460,13 @@ EOF
 
     # (3) Restart rke2 server & agent
     systemctl restart rke2-server || true
-    systemctl restart rke2-agent || true
+    systemctl restart rke2-agent || true  #RR: Last time I tried this it couldn't restart, but after machine reboot it worked fine 
 
     # (4) ctr pulls
-    ctr -a /run/k3s/containerd/containerd.sock -n k8s.io i pull --user "${REG_USER}:${REG_PASS}" "${REG_HOST}/dds:latest" || true
-    ctr -a /run/k3s/containerd/containerd.sock -n k8s.io i pull --user "${REG_USER}:${REG_PASS}" "${REG_HOST}/cdi-operator:latest" || true
-    ctr -a /run/k3s/containerd/containerd.sock -n k8s.io i pull --user "${REG_USER}:${REG_PASS}" "${REG_HOST}/cdi-dra:${CDI_DRA_TAG}" || true
+    #RR: needs to be run with sudo, but with sudo it doesn't recognize the path to crt so I used the full path in the command
+    sudo /usr/local/bin/ctr -a /run/k3s/containerd/containerd.sock -n k8s.io i pull --user "${REG_USER}:${REG_PASS}" "${REG_HOST}/dds:latest" || true
+    sudo /usr/local/bin/ctr -a /run/k3s/containerd/containerd.sock -n k8s.io i pull --user "${REG_USER}:${REG_PASS}" "${REG_HOST}/cdi-operator:latest" || true
+    sudo /usr/local/bin/ctr -a /run/k3s/containerd/containerd.sock -n k8s.io i pull --user "${REG_USER}:${REG_PASS}" "${REG_HOST}/cdi-dra:${CDI_DRA_TAG}" || true
 
     # Notes from doc: image list & tags
     curl -u "${REG_USER}:${REG_PASS}" "https://$(echo "${REG_HOST}" | sed 's/:.*//')/v2/_catalog" || true
