@@ -1,0 +1,113 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: dynamic-device-scaler-role
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - get
+- apiGroups:
+  - ""
+  resources:
+  - nodes
+  verbs:
+  - get
+  - list
+  - patch
+  - update
+- apiGroups:
+  - cro.hpsys.ibm.ie.com
+  resources:
+  - composabilityrequests
+  - composableresources
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - cro.hpsys.ibm.ie.com
+  resources:
+  - composabilityrequests/status
+  - composableresources/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - resource.k8s.io
+  resources:
+  - resourceclaims
+  - resourceslices
+  verbs:
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - resource.k8s.io
+  resources:
+  - resourceclaims/status
+  - resourceslices/status
+  verbs:
+  - get
+  - patch
+  - update
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/name: dynamic-device-scaler
+  name: dds-manager-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: dynamic-device-scaler-role
+subjects:
+- kind: ServiceAccount
+  name: dds-controller-manager
+  namespace: composable-dra
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/name: dynamic-device-scaler
+  name: dds-controller-manager
+  namespace: composable-dra
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dds-controller-manager
+  namespace: composable-dra
+spec:
+  selector:
+    matchLabels:
+      control-plane: controller-manager
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        control-plane: controller-manager
+    spec:
+      containers:
+      - name: dynamic-device-scaler
+        image: 10.38.251.227:5000/dds:latest
+        imagePullPolicy: IfNotPresent
+        command: ["/dynamic-device-scaler"]
+        args: ["--log-level=debug"]
+        env:
+        - name: SCAN_INTERVAL
+          value: "10"
+      serviceAccountName: dds-controller-manager
+      terminationGracePeriodSeconds: 10
