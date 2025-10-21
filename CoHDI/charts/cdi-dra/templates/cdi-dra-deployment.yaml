@@ -1,0 +1,99 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: cdi-dra
+  name: cdi-dra
+  namespace: composable-dra
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cdi-dra
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: cdi-dra
+    spec:
+      serviceAccountName: cdi-dra
+      hostAliases:
+      - ip: "192.168.1.101"                                #★FTI CDIの管理ソフトのIPアドレス
+        hostnames:
+        - "cdimgr.localdomain"                             #★FTI CDIの管理ソフトのURL
+      containers:
+      - image: 10.38.251.227:5000/cdi-dra:v18-e89254c      #●イメージの置き場所やイメージ名を環境に応じて変更
+        imagePullPolicy: IfNotPresent
+        name: cdi-dra-ccfsv
+        command: ["/cdi_dra"]
+        args:
+          - "-v"
+          - "-4"
+        env:
+        - name: CDI_ENDPOINT                               #★FTI CDIの管理ソフトのURL
+          value: "https://cdimgr.localdomain"
+        - name: TENANT_ID                                  #★FTI CDIの管理ソフトにアクセスするために必要な情報
+          value: "060ea5a5-46e4-42b4-8d95-70578718d8d0"
+        - name: USE_CAPI_BMH                               #★FTI CDI固有オプション
+          value: "false"
+        - name: USE_CM                                     #★FTI CDI固有オプション
+          value: "false"
+        - name: SCAN_INTERVAL                              #●Composable DRA driverのループの間隔(秒)。デフォルトは60秒。特に気にならない場合は変更不要。
+          value: "5s"
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cdi-dra
+  namespace: composable-dra
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cdi-dra
+rules:
+- apiGroups: [""]
+  resources: ["nodes"]
+  verbs: ["get", "list", "watch", "update", "patch"]
+- apiGroups: ["resource.k8s.io"]
+  resources: ["resourceslices"]
+  verbs: ["get", "list", "watch", "create", "patch", "update", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: cdi-dra-binding
+subjects:
+- kind: ServiceAccount
+  name: cdi-dra
+  namespace: composable-dra
+roleRef:
+  kind: ClusterRole
+  name: cdi-dra
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: cdi-dra
+  namespace: composable-dra
+rules:
+- apiGroups: [""]
+  resources: ["configmaps", "secrets"]
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: cdi-dra-binding
+  namespace: composable-dra
+subjects:
+- kind: ServiceAccount
+  name: cdi-dra
+  namespace: composable-dra
+roleRef:
+  kind: Role
+  name: cdi-dra
+  apiGroup: rbac.authorization.k8s.io
