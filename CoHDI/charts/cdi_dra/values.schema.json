@@ -1,0 +1,127 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "cdi-dra Helm values",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Release/name prefix used for resources.",
+      "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
+    },
+    "createNamespace": {
+      "type": "boolean",
+      "description": "Render templates/namespace.yaml when true.",
+      "default": true
+    },
+    "namespace": {
+      "type": "string",
+      "description": "Target Kubernetes namespace for namespaced resources.",
+      "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
+    },
+    "replicaCount": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 1,
+      "description": "Number of replicas for the Deployment."
+    },
+    "image": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Full image reference, e.g. registry/repo:tag"
+    },
+    "imagePullPolicy": {
+      "type": "string",
+      "enum": ["Always", "IfNotPresent", "Never"],
+      "default": "IfNotPresent",
+      "description": "Kubernetes image pull policy."
+    },
+    "hostAliases": {
+      "type": "array",
+      "description": "Optional hostAliases to inject into Pod spec.",
+      "default": [],
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "ip": {
+            "type": "string",
+            "format": "ipv4"
+          },
+          "hostnames": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "maxLength": 253,
+              "pattern": "^([a-z0-9]([-a-z0-9]*[a-z0-9])?)(\\.([a-z0-9]([-a-z0-9]*[a-z0-9])?))*$"
+            }
+          }
+        },
+        "required": ["ip", "hostnames"]
+      }
+    },
+    "env": {
+      "type": "object",
+      "description": "Environment variables for the container (string values).",
+      "default": {},
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "configmap": {
+      "type": "object",
+      "description": "ConfigMap content and related settings.",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
+        },
+        "labelPrefix": {
+          "type": "string"
+        },
+        "fabricIdRange": {
+          "type": "string",
+          "description": "Stored as string to preserve bracketed value like \"[0]\"."
+        },
+        "deviceInfo": {
+          "type": "string",
+          "description": "YAML block stored as string; rendered verbatim into the ConfigMap."
+        }
+      },
+      "required": ["name"]
+    },
+    "secret": {
+      "type": "object",
+      "description": "Opaque Secret stringData values.",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
+        },
+        "username": { "type": "string", "minLength": 1 },
+        "password": { "type": "string", "minLength": 1 },
+        "realm":    { "type": "string", "minLength": 1 },
+        "client_id": { "type": "string", "minLength": 1 },
+        "client_secret": { "type": "string", "minLength": 1 },
+        "certificate": {
+          "type": "string",
+          "description": "PEM-encoded certificate.",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "name",
+        "username",
+        "password",
+        "realm",
+        "client_id",
+        "client_secret",
+        "certificate"
+      ]
+    }
+  },
+  "required": ["name", "namespace", "image"]
+}

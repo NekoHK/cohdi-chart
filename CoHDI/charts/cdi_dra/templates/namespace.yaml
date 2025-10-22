@@ -1,7 +1,9 @@
+{{- if .Values.createNamespace }}
 apiVersion: v1
 kind: Namespace
 metadata:
   creationTimestamp: null
-  name: composable-dra
+  name: {{ .Values.namespace }}
 spec: {}
 status: {}
+{{- end }}

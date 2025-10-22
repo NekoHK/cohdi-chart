@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.configmap.name }}
+  namespace: {{ .Values.namespace }}
+data:
+  label-prefix: {{ .Values.configmap.labelPrefix | quote }}
+  fabric-id-range: {{ .Values.configmap.fabricIdRange | quote }}
+  device-info: |
+{{- nindent 4 .Values.configmap.deviceInfo }}
