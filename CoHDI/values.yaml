@@ -1,14 +1,1 @@
-global:
-  labels: {}
-  annotations: {}
-
-  image:
-    pullPolicy: IfNotPresent
-
-  podSecurityContext: {}
-  securityContext: {}
-
-  resources: {}
-  nodeSelector: {}
-  tolerations: []
-  affinity: {}
+{}
