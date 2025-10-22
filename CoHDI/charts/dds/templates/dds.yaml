@@ -102,7 +102,7 @@ spec:
     spec:
       containers:
       - name: dynamic-device-scaler
-        image: 10.38.251.227:5000/dds:latest
+        image: {{ .Values.image | quote }}
         imagePullPolicy: IfNotPresent
         command: ["/dynamic-device-scaler"]
         args: ["--log-level=debug"]

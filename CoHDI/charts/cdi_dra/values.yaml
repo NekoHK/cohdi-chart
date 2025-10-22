@@ -1,0 +1,17 @@
+namespace: composable-dra
+image: "10.38.251.227:5000/cdi-dra:v18-e89254c"
+replicas: 1
+labelPrefix: "cohdi.io"
+fabricIdRange: "[1,2]"
+configMapName: "composable-dra-dds"
+deviceInfo: ""
+secretName: "composable-dra-secret"
+credentials:
+  username: ""
+  password: ""
+  realm: ""
+  client_id: ""
+  client_secret: ""
+tls:
+  certificate: ""
+hostAliases: []

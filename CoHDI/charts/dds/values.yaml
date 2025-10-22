@@ -1,0 +1,6 @@
+namespace: composable-dra
+image: "10.38.251.227:5000/dds:latest"
+imagePullPolicy: IfNotPresent
+replicas: 1
+serviceAccountName: "dds-controller-manager"
+scanInterval: "10"

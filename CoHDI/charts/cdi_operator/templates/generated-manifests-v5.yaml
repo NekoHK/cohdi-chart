@@ -666,7 +666,7 @@ spec:
         - --health-probe-bind-address=:8081
         command:
         - /manager
-        image: 10.38.251.227:5000/cdi-operator:latest
+        image: {{ .Values.image | quote }}
         imagePullPolicy: IfNotPresent
         livenessProbe:
           httpGet:

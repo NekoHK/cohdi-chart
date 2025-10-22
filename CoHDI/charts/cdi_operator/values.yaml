@@ -1,0 +1,12 @@
+namespace: composable-resource-operator-system
+credentialsNamespace: credentials-namespace
+credentials:
+  username: "xxxxx"
+  password: "xxxxx"
+  client_id: "xxxxx"
+  client_secret: "xxxxx"
+tls:
+  crt: ""
+  key: ""
+  caCrt: ""
+image: "10.38.251.227:5000/cdi-operator:latest"
