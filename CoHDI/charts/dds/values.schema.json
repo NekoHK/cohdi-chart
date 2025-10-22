@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "dynamic-device-scaler Helm values",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "global": {
+      "type": "object",
+      "description": "Permits umbrella charts to pass global values.",
+      "additionalProperties": true
+    },
+    "name": {
+      "type": "string",
+      "default": "dynamic-device-scaler",
+      "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
+    },
+    "namespace": {
+      "type": "string",
+      "default": "composable-dra",
+      "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
+    },
+    "deploymentName": {
+      "type": "string",
+      "default": "dds-controller-manager",
+      "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
+    },
+    "replicaCount": { "type": "integer", "minimum": 1, "default": 1 },
+    "terminationGracePeriodSeconds": { "type": "integer", "minimum": 0, "default": 10 },
+    "image": { "type": "string", "minLength": 1 },
+    "imagePullPolicy": {
+      "type": "string",
+      "enum": ["Always", "IfNotPresent", "Never"],
+      "default": "IfNotPresent"
+    },
+    "args": {
+      "type": "array",
+      "default": ["--log-level=debug"],
+      "items": { "type": "string" }
+    },
+    "env": {
+      "type": "object",
+      "default": {},
+      "additionalProperties": { "type": "string" }
+    },
+    "serviceAccount": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "default": "dds-controller-manager",
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
+        }
+      },
+      "required": ["name"]
+    },
+    "rbac": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": { "type": "boolean", "default": true },
+        "clusterRoleName": {
+          "type": "string",
+          "default": "dynamic-device-scaler-role",
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
+        },
+        "clusterRoleBindingName": {
+          "type": "string",
+          "default": "dds-manager-rolebinding",
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
+        }
+      },
+      "required": ["enabled"]
+    },
+    "labels": {
+      "type": "object",
+      "default": {},
+      "additionalProperties": { "type": "string" }
+    }
+  },
+  "required": ["namespace", "image", "serviceAccount", "rbac"]
+}
