@@ -1,0 +1,105 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Composable Resource Operator Chart Values",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "global": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Permits umbrella charts to pass global values."
+    },
+    "operator": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
+        },
+        "systemNamespace": {
+          "type": "string",
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
+        },
+        "controllerSA": {
+          "type": "string",
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
+        },
+        "replicas": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": ["name", "systemNamespace", "controllerSA", "replicas"]
+    },
+    "image": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Full image reference registry/repo:tag"
+    },
+    "imagePullPolicy": {
+      "type": "string",
+      "enum": ["Always", "IfNotPresent", "Never"]
+    },
+    "credentials": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "createNamespace": { "type": "boolean" },
+        "namespace": {
+          "type": "string",
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
+        },
+        "secretName": {
+          "type": "string",
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
+        },
+        "username": { "type": "string", "minLength": 1 },
+        "password": { "type": "string", "minLength": 1 },
+        "client_id": { "type": "string", "minLength": 1 },
+        "client_secret": { "type": "string", "minLength": 1 },
+        "realm": { "type": "string", "minLength": 1 }
+      },
+      "required": ["namespace","secretName","username","password","client_id","client_secret","realm"]
+    },
+    "webhook": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tls": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "secretName": {
+              "type": "string",
+              "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
+            },
+            "crt": { "type": "string", "minLength": 1 },
+            "key": { "type": "string", "minLength": 1 }
+          },
+          "required": ["secretName","crt","key"]
+        },
+        "externalCA": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "secretName": {
+              "type": "string",
+              "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
+            },
+            "crt": { "type": "string", "minLength": 1 }
+          },
+          "required": ["secretName","crt"]
+        },
+        "caBundle": { "type": "string" }
+      },
+      "required": ["tls","externalCA","caBundle"]
+    },
+    "managerEnv": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "description": "Key-value environment variables injected into the manager container."
+    }
+  },
+  "required": ["operator","image","imagePullPolicy","credentials","webhook","managerEnv"]
+}
