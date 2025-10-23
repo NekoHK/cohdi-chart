@@ -479,7 +479,7 @@ spec:
           defaultMode: 420
       - name: custom-ca-certs
         secret:
-          secretName: {{ .Values.webhook.externalCA.secretName }}
+          secretName: {{ .Values.global.externalCA.secretName }}
           defaultMode: 420
       - name: host-tmp
         hostPath:
@@ -497,7 +497,7 @@ webhooks:
   sideEffects: None
   failurePolicy: Fail
   clientConfig:
-    caBundle: {{ .Values.webhook.caBundle | quote }}
+    caBundle: {{ .Values.global.externalCA.caBundle | quote }}
     service:
       name: {{ .Values.operator.name }}-webhook-service
       namespace: {{ .Values.operator.systemNamespace }}

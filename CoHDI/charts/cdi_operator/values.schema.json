@@ -73,21 +73,9 @@
             "key": { "type": "string", "minLength": 1 }
           },
           "required": ["secretName","crt","key"]
-        },
-        "externalCA": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "secretName": {
-              "type": "string",
-              "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
-            }
-          },
-          "required": ["secretName"]
-        },
-        "caBundle": { "type": "string" }
+        }        
       },
-      "required": ["tls","externalCA","caBundle"]
+      "required": ["tls"]
     },
     "managerEnv": {
       "type": "object",
