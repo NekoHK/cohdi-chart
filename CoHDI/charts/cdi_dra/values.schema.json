@@ -36,31 +36,6 @@
       "default": "IfNotPresent",
       "description": "Kubernetes image pull policy."
     },
-    "hostAliases": {
-      "type": "array",
-      "description": "Optional hostAliases to inject into Pod spec.",
-      "default": [],
-      "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "ip": {
-            "type": "string",
-            "format": "ipv4"
-          },
-          "hostnames": {
-            "type": "array",
-            "minItems": 1,
-            "items": {
-              "type": "string",
-              "maxLength": 253,
-              "pattern": "^([a-z0-9]([-a-z0-9]*[a-z0-9])?)(\\.([a-z0-9]([-a-z0-9]*[a-z0-9])?))*$"
-            }
-          }
-        },
-        "required": ["ip", "hostnames"]
-      }
-    },
     "env": {
       "type": "object",
       "description": "Environment variables for the container (string values).",

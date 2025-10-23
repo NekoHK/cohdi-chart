@@ -20,7 +20,7 @@ spec:
     spec:
       serviceAccountName: {{ .Values.name }}
       hostAliases:
-      {{- range .Values.hostAliases }}
+      {{- range .Values.global.hostAliases }}
         - ip: {{ .ip | quote }}
           hostnames:
           {{- range .hostnames }}

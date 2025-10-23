@@ -8,11 +8,6 @@ replicaCount: 1
 image: "10.38.251.227:5000/cdi-dra:v18-e89254c"
 imagePullPolicy: IfNotPresent
 
-hostAliases:
-  - ip: 192.168.1.101
-    hostnames:
-      - cdimgr.localdomain
-
 env:
   USE_CAPI_BMH: "false"
   USE_CM: "false"
