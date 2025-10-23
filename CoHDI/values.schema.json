@@ -28,6 +28,9 @@
         "credentials": {
           "type": "object",
           "properties": {
+            "createNamespace": { "type": "boolean" },
+            "namespace": { "type": "string" },
+            "secretName": { "type": "string" },
             "username": { "type": "string" },
             "password": { "type": "string" },
             "realm": { "type": "string" },
@@ -36,6 +39,7 @@
             "certificate": { "type": "string" }
           },
           "required": [
+            "secretName",
             "username",
             "password",
             "realm",

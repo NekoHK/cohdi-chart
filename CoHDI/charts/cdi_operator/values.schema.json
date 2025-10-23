@@ -41,22 +41,6 @@
       "type": "string",
       "enum": ["Always", "IfNotPresent", "Never"]
     },
-    "credentials": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "createNamespace": { "type": "boolean" },
-        "namespace": {
-          "type": "string",
-          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
-        },
-        "secretName": {
-          "type": "string",
-          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
-        }
-      },
-      "required": ["namespace","secretName"]
-    },
     "webhook": {
       "type": "object",
       "additionalProperties": false,
@@ -83,5 +67,5 @@
       "description": "Key-value environment variables injected into the manager container."
     }
   },
-  "required": ["operator","image","imagePullPolicy","credentials","webhook","managerEnv"]
+  "required": ["operator","image","imagePullPolicy","webhook","managerEnv"]
 }
