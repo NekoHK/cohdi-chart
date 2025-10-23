@@ -14,8 +14,6 @@ hostAliases:
       - cdimgr.localdomain
 
 env:
-  CDI_ENDPOINT: "https://cdimgr.localdomain"
-  TENANT_ID: "060ea5a5-46e4-42b4-8d95-70578718d8d0"
   USE_CAPI_BMH: "false"
   USE_CM: "false"
   SCAN_INTERVAL: "5s"
@@ -49,18 +47,6 @@ configmap:
 
 secret:
   name: composable-dra-secret
-  username: "tenant3-user"
-  password: "CDI@dm1n"
-  realm: "060ea5a5-46e4-42b4-8d95-70578718d8d0"
-  client_id: "cdi"
-  client_secret: "Zmet0q6Xjno0xzaAr76IH2IYr7DfScZj"
-  certificate: |
-    -----BEGIN CERTIFICATE-----
-    MIIDkjCCAnqgAwIBAgIUaSicFyqWGzZijlylo5oggwM9EoUwDQYJKoZIhvcNAQEL
-    BQAwXzELMAkGA1UEBhMCSlAxFTATBgNVBAcMDERlZmF...
-    ...KdfVMR+ovmCPmSJTkTWjAPGQu
-    qZBlmIPE
-    -----END CERTIFICATE-----
 
 
 

@@ -100,27 +100,8 @@
         "name": {
           "type": "string",
           "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
-        },
-        "username": { "type": "string", "minLength": 1 },
-        "password": { "type": "string", "minLength": 1 },
-        "realm":    { "type": "string", "minLength": 1 },
-        "client_id": { "type": "string", "minLength": 1 },
-        "client_secret": { "type": "string", "minLength": 1 },
-        "certificate": {
-          "type": "string",
-          "description": "PEM-encoded certificate.",
-          "minLength": 1
         }
-      },
-      "required": [
-        "name",
-        "username",
-        "password",
-        "realm",
-        "client_id",
-        "client_secret",
-        "certificate"
-      ]
+      }
     }
   },
   "required": ["name", "namespace", "image"]

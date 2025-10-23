@@ -36,6 +36,10 @@ spec:
             - name: {{ $k }}
               value: {{ $v | quote }}
           {{- end }}
+            - name: CDI_ENDPOINT
+              value: {{ .Values.global.env.CDI_ENDPOINT }}
+            - name: TENANT_ID
+              value: {{ .Values.global.env.TENANT_ID }}
 ---
 apiVersion: v1
 kind: ServiceAccount

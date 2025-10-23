@@ -7,10 +7,10 @@ appVersion: "0.1.0"
 dependencies:
   - name: cdi-dra
     version: 0.1.0
-    repository: "file://./charts/cdi-dra"
+    repository: "file://./charts/cdi_dra"
   - name: cdi-operator
     version: 0.1.0
-    repository: "file://./charts/cdi-operator"
+    repository: "file://./charts/cdi_operator"
   - name: dds
     version: 0.1.0
     repository: "file://./charts/dds"

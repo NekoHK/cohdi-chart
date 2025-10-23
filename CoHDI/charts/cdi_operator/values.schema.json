@@ -53,14 +53,9 @@
         "secretName": {
           "type": "string",
           "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
-        },
-        "username": { "type": "string", "minLength": 1 },
-        "password": { "type": "string", "minLength": 1 },
-        "client_id": { "type": "string", "minLength": 1 },
-        "client_secret": { "type": "string", "minLength": 1 },
-        "realm": { "type": "string", "minLength": 1 }
+        }
       },
-      "required": ["namespace","secretName","username","password","client_id","client_secret","realm"]
+      "required": ["namespace","secretName"]
     },
     "webhook": {
       "type": "object",
@@ -86,10 +81,9 @@
             "secretName": {
               "type": "string",
               "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
-            },
-            "crt": { "type": "string", "minLength": 1 }
+            }
           },
-          "required": ["secretName","crt"]
+          "required": ["secretName"]
         },
         "caBundle": { "type": "string" }
       },

@@ -437,6 +437,8 @@ spec:
         - name: {{ $k }}
           value: {{ $v | quote }}
 {{- end }}
+        - name: FTI_CDI_TENANT_ID
+          value: {{ .Values.global.TENANT_ID }}
         ports:
         - name: webhook-server
           containerPort: 9443
