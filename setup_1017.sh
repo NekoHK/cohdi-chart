@@ -20,7 +20,7 @@ sudo -E install -m 600 /etc/rancher/rke2/rke2.yaml /root/.kube/config
 sudo -E ln -sf /usr/local/bin/go /usr/bin/go
 
 
-# ─────────────── USER TOGGLES ───────────────
+# =============== USER TOGGLES ===============
 RUN_SERVER_STEPS=${RUN_SERVER_STEPS:-false}   # run Steps 1,3,4,5,7 on SERVER
 RUN_AGENT_STEPS=${RUN_AGENT_STEPS:-true}    # run Step 2 on AGENT
 
@@ -45,7 +45,7 @@ CDI_DRA_TAG="${CDI_DRA_TAG:-latest}"         # choose tag (doc: updated regularl
 CURRENT_STEP="(not started)"
 trap 'echo -e "\n❌ FAILED during: ${CURRENT_STEP}\nAborting."; exit 1' ERR
 
-# # ───────────────── STEP 1 — K8s ENV (SERVER) ─────────────────
+# # ================= STEP 1 — K8s ENV (SERVER) =================
 # if [[ "${RUN_SERVER_STEPS}" == "true" ]]; then
 #   CURRENT_STEP="Step 1: Configure RKE2 feature-gates (server)"
 #   echo -e "\n▶︎ BEGIN: ${CURRENT_STEP}"
@@ -77,7 +77,7 @@ trap 'echo -e "\n❌ FAILED during: ${CURRENT_STEP}\nAborting."; exit 1' ERR
 #   echo "✔ SUCCESS: ${CURRENT_STEP}"
 # fi
 
-# ──────────────── STEP 2 — NVIDIA DRIVER & TOOLKIT (AGENT) ────────────────
+# ================ STEP 2 — NVIDIA DRIVER & TOOLKIT (AGENT) ================
 if [[ "${RUN_AGENT_STEPS}" == "true" ]]; then
   CURRENT_STEP="Step 2: NVIDIA driver & container toolkit (agent)"
   echo -e "\n▶︎ BEGIN: ${CURRENT_STEP}"
@@ -155,7 +155,7 @@ if [[ "${RUN_AGENT_STEPS}" == "true" ]]; then
   echo "✔ SUCCESS: ${CURRENT_STEP}"
 fi
 
-# # ──────────────── STEP 3 — GPU OPERATOR (SERVER) ────────────────
+# # ================ STEP 3 — GPU OPERATOR (SERVER) ================
 # if [[ "${RUN_SERVER_STEPS}" == "true" ]]; then
 #   CURRENT_STEP="Step 3: Deploy NVIDIA GPU Operator (GFD only)"
 #   echo -e "\n▶︎ BEGIN: ${CURRENT_STEP}"
@@ -217,7 +217,7 @@ fi
 #   echo "✔ SUCCESS: ${CURRENT_STEP}"
 # fi
 
-# # ──────────────── STEP 4 — NVIDIA DRA DRIVER (SERVER) ────────────────
+# # ================ STEP 4 — NVIDIA DRA DRIVER (SERVER) ================
 # if [[ "${RUN_SERVER_STEPS}" == "true" ]]; then
 #   CURRENT_STEP="Step 4: Deploy NVIDIA DRA Driver"
 #   echo -e "\n▶︎ BEGIN: ${CURRENT_STEP}"
@@ -236,7 +236,7 @@ fi
 #   echo "✔ SUCCESS: ${CURRENT_STEP}"
 # fi
 
-# # ──────────────── STEP 5 — WORKLOAD POD (SERVER) ────────────────
+# # ================ STEP 5 — WORKLOAD POD (SERVER) ================
 # if [[ "${RUN_SERVER_STEPS}" == "true" ]]; then
 #   CURRENT_STEP="Step 5: Create ResourceClaimTemplate + workload pod"
 #   echo -e "\n▶︎ BEGIN: ${CURRENT_STEP}"
@@ -331,7 +331,7 @@ fi
 #   echo "✔ SUCCESS: ${CURRENT_STEP}"
 # fi
 
-# ──────────────── STEP 6 — BUILD / REGISTRY (SERVER) ────────────────
+# ================ STEP 6 — BUILD / REGISTRY (SERVER) ================
     if [[ "${PATTERN}" == "build" ]]; then
         CURRENT_STEP="Step 6 Pattern 1: Build CoHDI images (idempotent)"
         echo -e "\n▶︎ BEGIN: ${CURRENT_STEP}"
@@ -470,7 +470,7 @@ EOF
     exit 1
   fi
 
-# ──────────────── STEP 7 — DEPLOY COHDI COMPONENTS (SERVER) ────────────────
+# ================ STEP 7 — DEPLOY COHDI COMPONENTS (SERVER) ================
 if [[ "${RUN_SERVER_STEPS}" == "true" ]]; then
   CURRENT_STEP="Step 7: Deploy CoHDI Components"
   echo -e "\n▶︎ BEGIN: ${CURRENT_STEP}"
