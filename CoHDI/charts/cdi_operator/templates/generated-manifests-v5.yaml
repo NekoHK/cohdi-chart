@@ -488,7 +488,7 @@ webhooks:
   sideEffects: None
   failurePolicy: Fail
   clientConfig:
-    caBundle: {{ .Values.global.externalCA.caBundle | quote }}
+    caBundle: {{ .Values.caBundle | quote }}
     service:
       name: {{ .Values.operator.name }}-webhook-service
       namespace: {{ .Values.operator.systemNamespace }}

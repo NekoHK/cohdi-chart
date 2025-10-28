@@ -30,13 +30,15 @@
           "properties": {
             "createNamespace": { "type": "boolean" },
             "namespace": { "type": "string" },
-            "secretName": { "type": "string" },
+            "secretName": {
+              "type": "string",
+              "description": "Kubernetes Secret name containing tenant authentication credentials."
+            },
             "username": { "type": "string" },
             "password": { "type": "string" },
             "realm": { "type": "string" },
             "client_id": { "type": "string" },
-            "client_secret": { "type": "string" },
-            "certificate": { "type": "string" }
+            "client_secret": { "type": "string" }
           },
           "required": [
             "secretName",
@@ -44,24 +46,24 @@
             "password",
             "realm",
             "client_id",
-            "client_secret",
-            "certificate"
+            "client_secret"
           ]
         },
 
         "externalCA": {
           "type": "object",
+          "description": "Configuration for external Certificate Authority used by CDI components.",
           "properties": {
             "secretName": {
               "type": "string",
-              "description": "Kubernetes Secret name containing external CA certificate."
+              "description": "Kubernetes Secret name containing the external CA certificate."
             },
-            "caBundle": {
+            "certificate": {
               "type": "string",
-              "description": "Base64-encoded or PEM-formatted CA certificate bundle."
+              "description": "PEM-encoded CA certificate contents. Should match the certificate stored in the referenced Secret."
             }
           },
-          "required": ["secretName", "caBundle"]
+          "required": ["secretName", "certificate"]
         },
 
         "hostAliases": {
