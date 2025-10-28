@@ -85,9 +85,29 @@
             "required": ["ip", "hostnames"]
           },
           "minItems": 1
+        },
+
+        "configData": {
+          "type": "object",
+          "description": "Device and configuration data for CDI resources.",
+          "properties": {
+            "labelPrefix": {
+              "type": "string",
+              "description": "Prefix used for labeling CDI-related resources."
+            },
+            "fabricIdRange": {
+              "type": "string",
+              "description": "Range of fabric IDs, e.g. '[0]'."
+            },
+            "deviceInfo": {
+              "type": "string",
+              "description": "YAML-formatted list of device definitions with attributes."
+            }
+          },
+          "required": ["labelPrefix", "fabricIdRange", "deviceInfo"]
         }
       },
-      "required": ["env", "credentials", "externalCA", "hostAliases"]
+      "required": ["env", "credentials", "externalCA", "hostAliases", "configData"]
     }
   },
   "required": ["global"]

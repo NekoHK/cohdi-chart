@@ -52,17 +52,6 @@
         "name": {
           "type": "string",
           "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
-        },
-        "labelPrefix": {
-          "type": "string"
-        },
-        "fabricIdRange": {
-          "type": "string",
-          "description": "Stored as string to preserve bracketed value like \"[0]\"."
-        },
-        "deviceInfo": {
-          "type": "string",
-          "description": "YAML block stored as string; rendered verbatim into the ConfigMap."
         }
       },
       "required": ["name"]

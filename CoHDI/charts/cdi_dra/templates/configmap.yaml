@@ -4,7 +4,7 @@ metadata:
   name: {{ .Values.configmap.name }}
   namespace: {{ .Values.namespace }}
 data:
-  label-prefix: {{ .Values.configmap.labelPrefix | quote }}
-  fabric-id-range: {{ .Values.configmap.fabricIdRange | quote }}
+  label-prefix: {{ .Values.global.configData.labelPrefix | quote }}
+  fabric-id-range: {{ .Values.global.configData.fabricIdRange | quote }}
   device-info: |
-{{- nindent 4 .Values.configmap.deviceInfo }}
+{{- nindent 4 .Values.global.configData.deviceInfo }}
