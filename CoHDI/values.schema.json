@@ -68,7 +68,7 @@
 
         "hostAliases": {
           "type": "array",
-          "description": "List of static hostname–IP mappings to add to /etc/hosts inside pods.",
+          "description": "List of static hostname-IP mappings to add to /etc/hosts inside pods.",
           "items": {
             "type": "object",
             "properties": {
