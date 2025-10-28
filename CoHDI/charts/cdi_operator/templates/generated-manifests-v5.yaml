@@ -428,6 +428,8 @@ spec:
 {{- end }}
         - name: FTI_CDI_TENANT_ID
           value: {{ .Values.global.TENANT_ID }}
+        - name: FTI_CDI_ENDPOINT
+          value: "{{ (index .Values.global.hostAliases 0).ip }}:443"
         ports:
         - name: webhook-server
           containerPort: 9443
