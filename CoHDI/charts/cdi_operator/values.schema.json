@@ -41,16 +41,23 @@
       "type": "string",
       "enum": ["Always", "IfNotPresent", "Never"]
     },
-    "caBundle": {
-      "type": "string",
-      "minLength": 1,
-      "description": "Base64-encoded CA bundle used by CDI Operator webhook or API clients."
-    },
     "webhook": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "tls": {
+        "client" : {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "caBundle": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "Base64-encoded CA bundle used by CDI Operator webhook or API clients."
+                }
+            },
+            "required": ["caBundle"]
+        },
+        "server": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -64,7 +71,7 @@
           "required": ["secretName","crt","key"]
         }
       },
-      "required": ["tls"]
+      "required": ["server"]
     },
     "managerEnv": {
       "type": "object",
@@ -72,5 +79,5 @@
       "description": "Key-value environment variables injected into the manager container."
     }
   },
-  "required": ["operator", "image", "imagePullPolicy", "caBundle", "webhook", "managerEnv"]
+  "required": ["operator", "image", "imagePullPolicy", "webhook", "managerEnv"]
 }
