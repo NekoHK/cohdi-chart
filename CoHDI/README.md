@@ -87,6 +87,40 @@ kubectl get pods -A
 kubectl delete ns composable-dra composable-resource-operator-system cohdi credentials-namespace
 ```
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better.
+## Use script to perform cleanup, installation and testing in one go:
+```bash
+chmod +x ./run.sh
+./run.sh
+```
 
+# Contribute
+
+## Issues:
+### Errors during CoHDI installation such as:
+   
+![Alt text](imgs/installation_error_annotation.png)
+   
+Invalid ownership metadata; annotation validation error
+Helm refuses to “adopt” pre-existing resources unless they already carry Helm ownership metadata that matches the release which is being installed.
+
+### Current fix (using kubectl cli):
+There is a need to run below code before CoHDI installation:
+```bash
+PREFIXES='^(composable-resource-operator-|cdi-|dynamic-device-scaler-)'
+for kind in clusterrole clusterrolebinding validatingwebhookconfiguration mutatingwebhookconfiguration; do
+  kubectl get "$kind" -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}' \
+  | grep -E "$PREFIXES" \
+  | while read -r name; do
+      echo "Adopting $kind/$name"
+      kubectl label "$kind" "$name" app.kubernetes.io/managed-by=Helm --overwrite
+      kubectl annotate "$kind" "$name" \
+        meta.helm.sh/release-name=cohdi \
+        meta.helm.sh/release-namespace=cohdi \
+        --overwrite
+    done
+done
+```
+
+### An idea for better solution:
+
+Maybe there is a posibility to embed this fix inside CoHDI .yaml files. 
