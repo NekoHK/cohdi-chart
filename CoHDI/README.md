@@ -95,7 +95,11 @@ chmod +x ./run.sh
 ## Issues:
 ### Errors during CoHDI installation such as:
 
-![Alt text](imgs/installation_error_annotation.png)
+```
+Error: Unable to continue with install: ClusterRole "cdi-dra" in namespace "" exists and cannot be imported into the current release: invalid ownership metadata; label validation error: missing key "app.kubernetes.io/managed-by": must be set to "Helm"; annotation validation error: missing key "meta.helm.sh/release-name": must be set to "cohdi"; annotation validation error: missing key "meta.helm.sh/release-namespace": must be set to "cohdi"
+helm.go:84: [debug] ClusterRole "cdi-dra" in namespace "" exists and cannot be imported into the current release: invalid ownership metadata; label validation error: missing key "app.kubernetes.io/managed-by": must be set to "Helm"; annotation validation error: missing key "meta.helm.sh/release-name": must be set to "cohdi"; annotation validation error: missing key "meta.helm.sh/release-namespace": must be set to "cohdi"
+Unable to continue with install
+```
 
 Invalid ownership metadata; annotation validation error
 Helm refuses to “adopt” pre-existing resources unless they already carry Helm ownership metadata that matches the release which is being installed.
