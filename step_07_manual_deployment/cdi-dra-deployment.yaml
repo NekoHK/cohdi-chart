@@ -24,7 +24,7 @@ spec:
         hostnames:
         - "cdimgr.localdomain"                             #★FTI CDIの管理ソフトのURL
       containers:
-      - image: 10.38.251.227:5000/cdi-dra:v18-e89254c      #●イメージの置き場所やイメージ名を環境に応じて変更
+      - image: 10.38.251.227:5000/cdi-dra:v19-c6e55ba      #●イメージの置き場所やイメージ名を環境に応じて変更
         imagePullPolicy: IfNotPresent
         name: cdi-dra-ccfsv
         command: ["/cdi_dra"]

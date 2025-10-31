@@ -5,7 +5,7 @@ namespace: composable-dra
 
 replicaCount: 1
 
-image: "10.38.251.227:5000/cdi-dra:v18-e89254c"
+image: "10.38.251.227:5000/cdi-dra:v19-c6e55ba"
 imagePullPolicy: IfNotPresent
 
 env:
