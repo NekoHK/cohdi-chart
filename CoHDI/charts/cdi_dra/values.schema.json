@@ -6,29 +6,13 @@
   "properties": {
     "name": {
       "type": "string",
-      "description": "Release/name prefix used for resources.",
+      "description": "Name of the deployment or release.",
       "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
-    },
-    "createNamespace": {
-      "type": "boolean",
-      "description": "Render templates/namespace.yaml when true.",
-      "default": true
-    },
-    "namespace": {
-      "type": "string",
-      "description": "Target Kubernetes namespace for namespaced resources.",
-      "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
-    },
-    "replicaCount": {
-      "type": "integer",
-      "minimum": 1,
-      "default": 1,
-      "description": "Number of replicas for the Deployment."
     },
     "image": {
       "type": "string",
-      "minLength": 1,
-      "description": "Full image reference, e.g. registry/repo:tag"
+      "description": "Full image reference, e.g. registry/repo:tag",
+      "minLength": 1
     },
     "imagePullPolicy": {
       "type": "string",
@@ -36,37 +20,41 @@
       "default": "IfNotPresent",
       "description": "Kubernetes image pull policy."
     },
+    "args": {
+      "type": "array",
+      "description": "Container command arguments.",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
     "env": {
       "type": "object",
-      "description": "Environment variables for the container (string values).",
-      "default": {},
+      "description": "Environment variables for the container.",
       "additionalProperties": {
         "type": "string"
-      }
-    },
-    "configmap": {
-      "type": "object",
-      "description": "ConfigMap content and related settings.",
-      "additionalProperties": false,
-      "properties": {
-        "name": {
-          "type": "string",
-          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
-        }
       },
-      "required": ["name"]
-    },
-    "secret": {
-      "type": "object",
-      "description": "Opaque Secret stringData values.",
-      "additionalProperties": false,
       "properties": {
-        "name": {
+        "USE_CAPI_BMH": {
           "type": "string",
-          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
+          "enum": ["true", "false"],
+          "default": "false",
+          "description": "Enable or disable CAPI BareMetalHost integration."
+        },
+        "USE_CM": {
+          "type": "string",
+          "enum": ["true", "false"],
+          "default": "false",
+          "description": "Enable or disable Cluster Manager integration."
+        },
+        "SCAN_INTERVAL": {
+          "type": "string",
+          "pattern": "^[0-9]+s$",
+          "default": "5s",
+          "description": "Interval for scanning operations (e.g. '5s')."
         }
       }
     }
   },
-  "required": ["name", "namespace", "image"]
+  "required": ["name", "image"]
 }

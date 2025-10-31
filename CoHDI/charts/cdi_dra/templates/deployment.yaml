@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   creationTimestamp: null
   name: {{ .Values.name }}
-  namespace: {{ .Values.namespace }}
+  namespace: composable-dra
   labels:
     app: {{ .Values.name }}
 spec:
@@ -45,7 +45,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: {{ .Values.name }}
-  namespace: {{ .Values.namespace }}
+  namespace: composable-dra
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -66,7 +66,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: {{ .Values.name }}
-    namespace: {{ .Values.namespace }}
+    namespace: composable-dra
 roleRef:
   kind: ClusterRole
   name: {{ .Values.name }}
@@ -76,7 +76,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: {{ .Values.name }}
-  namespace: {{ .Values.namespace }}
+  namespace: composable-dra
 rules:
   - apiGroups: [""]
     resources: ["configmaps", "secrets"]
@@ -86,11 +86,11 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: {{ printf "%s-binding" .Values.name }}
-  namespace: {{ .Values.namespace }}
+  namespace: composable-dra
 subjects:
   - kind: ServiceAccount
     name: {{ .Values.name }}
-    namespace: {{ .Values.namespace }}
+    namespace: composable-dra
 roleRef:
   kind: Role
   name: {{ .Values.name }}
