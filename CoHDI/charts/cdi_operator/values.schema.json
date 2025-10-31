@@ -1,61 +1,49 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Composable Resource Operator Chart Values",
+  "title": "Composable Resource Operator Helm Values",
   "type": "object",
-  "additionalProperties": false,
+  "additionalProperties": true,
   "properties": {
-    "global": {
-      "type": "object",
-      "additionalProperties": true,
-      "description": "Permits umbrella charts to pass global values."
-    },
-    "operator": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "name": {
-          "type": "string",
-          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
-        },
-        "systemNamespace": {
-          "type": "string",
-          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
-        },
-        "controllerSA": {
-          "type": "string",
-          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
-        },
-        "replicas": {
-          "type": "integer",
-          "minimum": 1
-        }
-      },
-      "required": ["name", "systemNamespace", "controllerSA", "replicas"]
+    "name": {
+      "type": "string",
+      "description": "Name of the operator deployment or release.",
+      "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
     },
     "image": {
       "type": "string",
-      "minLength": 1,
-      "description": "Full image reference registry/repo:tag"
+      "description": "Full image reference, e.g. registry/repo:tag",
+      "minLength": 1
     },
     "imagePullPolicy": {
       "type": "string",
-      "enum": ["Always", "IfNotPresent", "Never"]
+      "enum": ["Always", "IfNotPresent", "Never"],
+      "default": "IfNotPresent",
+      "description": "Kubernetes image pull policy."
+    },
+    "args": {
+      "type": "array",
+      "description": "Container command-line arguments.",
+      "items": {
+        "type": "string"
+      },
+      "default": []
     },
     "webhook": {
       "type": "object",
+      "description": "Webhook server and client configuration.",
       "additionalProperties": false,
       "properties": {
-        "client" : {
+        "client": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
             "caBundle": {
-                  "type": "string",
-                  "minLength": 1,
-                  "description": "Base64-encoded CA bundle used by CDI Operator webhook or API clients."
-                }
-            },
-            "required": ["caBundle"]
+              "type": "string",
+              "minLength": 1,
+              "description": "Base64-encoded CA bundle used by the webhook client."
+            }
+          },
+          "required": ["caBundle"]
         },
         "server": {
           "type": "object",
@@ -63,21 +51,48 @@
           "properties": {
             "secretName": {
               "type": "string",
-              "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
+              "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$",
+              "description": "Secret name containing the webhook TLS certificate and key."
             },
-            "crt": { "type": "string", "minLength": 1 },
-            "key": { "type": "string", "minLength": 1 }
+            "crt": {
+              "type": "string",
+              "minLength": 1,
+              "description": "PEM-encoded TLS certificate for the webhook server."
+            },
+            "key": {
+              "type": "string",
+              "minLength": 1,
+              "description": "PEM-encoded private key for the webhook server."
+            }
           },
-          "required": ["secretName","crt","key"]
+          "required": ["secretName", "crt", "key"]
         }
       },
-      "required": ["server"]
+      "required": ["client", "server"]
     },
     "managerEnv": {
       "type": "object",
+      "description": "Environment variables injected into the manager container.",
       "additionalProperties": { "type": "string" },
-      "description": "Key-value environment variables injected into the manager container."
+      "properties": {
+        "CDI_PROVIDER_TYPE": {
+          "type": "string",
+          "description": "Defines the CDI provider type."
+        },
+        "DEVICE_RESOURCE_TYPE": {
+          "type": "string",
+          "description": "Specifies the DRA device resource type."
+        },
+        "FTI_CDI_API_TYPE": {
+          "type": "string",
+          "description": "Defines the API type for the FTI CDI."
+        },
+        "SSL_CERT_FILE": {
+          "type": "string",
+          "description": "Path to the custom CA certificate file used by the manager."
+        }
+      }
     }
   },
-  "required": ["operator", "image", "imagePullPolicy", "webhook", "managerEnv"]
+  "required": ["name", "image", "imagePullPolicy", "webhook", "managerEnv"]
 }

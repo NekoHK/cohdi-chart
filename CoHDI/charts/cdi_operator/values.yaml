@@ -1,12 +1,10 @@
-operator:
-  name: composable-resource-operator
-  systemNamespace: composable-resource-operator-system
-  controllerSA: composable-resource-operator-controller-manager
-  replicas: 1
+name: composable-resource-operator
 
 image: "10.38.251.227:5000/cdi-operator:latest"
 imagePullPolicy: IfNotPresent
 
+args:
+  - --log-level=debug
 
 webhook:
   client:
