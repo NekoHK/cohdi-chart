@@ -8,7 +8,7 @@ global:
     createNamespace: true
     namespace: credentials-namespace
     secretName: credentials
-    username: "tenant3-user"
+    username: "invalid_username"
     password: "CDI@dm1n"
     realm: "060ea5a5-46e4-42b4-8d95-70578718d8d0"
     client_id: "cdi"
@@ -41,7 +41,7 @@ global:
       -----END CERTIFICATE-----
 
   hostAliases:
-    - ip: 192.168.1.101
+    - ip: 111.111.111.111
       hostnames:
         - cdimgr.localdomain
 
