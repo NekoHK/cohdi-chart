@@ -1,92 +1,83 @@
 {{- /*
-No defaults: all required values must be provided in values.yaml.
-This template will fail-fast if a required key is missing.
+Simplified deployment template with hardcoded namespace, service account, and RBAC values.
 */ -}}
 
-{{- /* required scalar values */ -}}
-{{- $ns := required "Values.namespace is required" .Values.namespace -}}
 {{- $name := required "Values.name is required" .Values.name -}}
-{{- $saName := required "Values.serviceAccount.name is required" .Values.serviceAccount.name -}}
-{{- $deployName := required "Values.deploymentName is required" .Values.deploymentName -}}
 {{- $image := required "Values.image is required" .Values.image -}}
 {{- $imagePullPolicy := required "Values.imagePullPolicy is required" .Values.imagePullPolicy -}}
-{{- $replicas := required "Values.replicaCount is required" .Values.replicaCount -}}
 {{- $tgps := required "Values.terminationGracePeriodSeconds is required" .Values.terminationGracePeriodSeconds -}}
 
-{{- /* enforce that rbac.enabled is explicitly set (true/false), not omitted */ -}}
-{{- if not (and (hasKey .Values "rbac") (hasKey .Values.rbac "enabled")) -}}
-{{- fail "Values.rbac.enabled must be set (true or false)" -}}
-{{- end -}}
-{{- $rbacEnabled := .Values.rbac.enabled -}}
+{{/* Hardcoded values */}}
+{{- $ns := "composable-dra" -}}
+{{- $deployName := "dds-controller-manager" -}}
+{{- $saName := "dds-controller-manager" -}}
+{{- $replicas := 1 -}}
+{{- $rbacEnabled := true -}}
+{{- $clusterRoleName := "dynamic-device-scaler-role" -}}
+{{- $clusterRoleBindingName := "dds-manager-rolebinding" -}}
+
+{{/* Common label block */}}
+{{- $labels := dict "app.kubernetes.io/name" "dynamic-device-scaler" -}}
 
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: {{ $saName }}
   namespace: {{ $ns }}
-  {{- if and (hasKey .Values "labels") .Values.labels }}
   labels:
-  {{- range $k, $v := .Values.labels }}
-    {{ $k }}: {{ $v | quote }}
-  {{- end }}
-  {{- end }}
+    app.kubernetes.io/name: dynamic-device-scaler
 ---
 {{- if $rbacEnabled }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ required "Values.rbac.clusterRoleName is required when rbac.enabled=true" .Values.rbac.clusterRoleName }}
+  name: {{ $clusterRoleName }}
+  labels:
+    app.kubernetes.io/name: dynamic-device-scaler
 rules:
 - apiGroups: [""]
   resources: ["configmaps"]
   verbs: ["get"]
 - apiGroups: [""]
   resources: ["nodes"]
-  verbs: ["get","list","patch","update"]
+  verbs: ["get", "list", "patch", "update"]
 - apiGroups: ["cro.hpsys.ibm.ie.com"]
-  resources: ["composabilityrequests","composableresources"]
-  verbs: ["create","delete","get","list","patch","update","watch"]
+  resources: ["composabilityrequests", "composableresources"]
+  verbs: ["create", "delete", "get", "list", "patch", "update", "watch"]
 - apiGroups: ["cro.hpsys.ibm.ie.com"]
-  resources: ["composabilityrequests/status","composableresources/status"]
-  verbs: ["get","patch","update"]
+  resources: ["composabilityrequests/status", "composableresources/status"]
+  verbs: ["get", "patch", "update"]
 - apiGroups: ["resource.k8s.io"]
-  resources: ["resourceclaims","resourceslices"]
-  verbs: ["get","list","patch","update","watch"]
+  resources: ["resourceclaims", "resourceslices"]
+  verbs: ["get", "list", "patch", "update", "watch"]
 - apiGroups: ["resource.k8s.io"]
-  resources: ["resourceclaims/status","resourceslices/status"]
-  verbs: ["get","patch","update"]
+  resources: ["resourceclaims/status", "resourceslices/status"]
+  verbs: ["get", "patch", "update"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: {{ required "Values.rbac.clusterRoleBindingName is required when rbac.enabled=true" .Values.rbac.clusterRoleBindingName }}
-  {{- if and (hasKey .Values "labels") .Values.labels }}
+  name: {{ $clusterRoleBindingName }}
   labels:
-  {{- range $k, $v := .Values.labels }}
-    {{ $k }}: {{ $v | quote }}
-  {{- end }}
-  {{- end }}
+    app.kubernetes.io/name: dynamic-device-scaler
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ required "Values.rbac.clusterRoleName is required when rbac.enabled=true" .Values.rbac.clusterRoleName }}
+  name: {{ $clusterRoleName }}
 subjects:
 - kind: ServiceAccount
   name: {{ $saName }}
   namespace: {{ $ns }}
 ---
 {{- end }}
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ $deployName }}
   namespace: {{ $ns }}
-  {{- if and (hasKey .Values "labels") .Values.labels }}
   labels:
-  {{- range $k, $v := .Values.labels }}
-    {{ $k }}: {{ $v | quote }}
-  {{- end }}
-  {{- end }}
+    app.kubernetes.io/name: dynamic-device-scaler
 spec:
   replicas: {{ $replicas }}
   selector:
@@ -96,6 +87,7 @@ spec:
     metadata:
       labels:
         control-plane: controller-manager
+        app.kubernetes.io/name: dynamic-device-scaler
     spec:
       serviceAccountName: {{ $saName }}
       terminationGracePeriodSeconds: {{ $tgps }}

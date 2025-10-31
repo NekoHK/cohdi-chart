@@ -2,81 +2,50 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "dynamic-device-scaler Helm values",
   "type": "object",
-  "additionalProperties": false,
+  "additionalProperties": true,
   "properties": {
-    "global": {
-      "type": "object",
-      "description": "Permits umbrella charts to pass global values.",
-      "additionalProperties": true
-    },
     "name": {
       "type": "string",
+      "description": "Name of the container or app.",
       "default": "dynamic-device-scaler",
       "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
     },
-    "namespace": {
-      "type": "string",
-      "default": "composable-dra",
-      "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
+    "terminationGracePeriodSeconds": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 10,
+      "description": "Number of seconds Kubernetes will wait before forcefully terminating the pod."
     },
-    "deploymentName": {
+    "image": {
       "type": "string",
-      "default": "dds-controller-manager",
-      "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
+      "minLength": 1,
+      "description": "Full container image reference, e.g. registry/repo:tag."
     },
-    "replicaCount": { "type": "integer", "minimum": 1, "default": 1 },
-    "terminationGracePeriodSeconds": { "type": "integer", "minimum": 0, "default": 10 },
-    "image": { "type": "string", "minLength": 1 },
     "imagePullPolicy": {
       "type": "string",
       "enum": ["Always", "IfNotPresent", "Never"],
-      "default": "IfNotPresent"
+      "default": "IfNotPresent",
+      "description": "Kubernetes image pull policy."
     },
     "args": {
       "type": "array",
-      "default": ["--log-level=debug"],
-      "items": { "type": "string" }
+      "description": "Container command-line arguments.",
+      "items": { "type": "string" },
+      "default": ["--log-level=debug"]
     },
     "env": {
       "type": "object",
+      "description": "Environment variables for the container.",
       "default": {},
-      "additionalProperties": { "type": "string" }
-    },
-    "serviceAccount": {
-      "type": "object",
-      "additionalProperties": false,
+      "additionalProperties": { "type": "string" },
       "properties": {
-        "name": {
+        "SCAN_INTERVAL": {
           "type": "string",
-          "default": "dds-controller-manager",
-          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
+          "pattern": "^[0-9]+$",
+          "description": "Interval (in seconds) between scans, e.g. '10'."
         }
-      },
-      "required": ["name"]
-    },
-    "rbac": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "enabled": { "type": "boolean", "default": true },
-        "clusterRoleName": {
-          "type": "string",
-          "default": "dynamic-device-scaler-role",
-          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
-        },
-        "clusterRoleBindingName": {
-          "type": "string",
-          "default": "dds-manager-rolebinding",
-          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
-        }
-      },
-      "required": ["enabled"]
-    },
-    "labels": {
-      "type": "object",
-      "default": {},
-      "additionalProperties": { "type": "string" }
+      }
     }
   },
-  "required": ["namespace", "image", "serviceAccount", "rbac"]
+  "required": ["name", "image"]
 }

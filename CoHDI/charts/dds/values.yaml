@@ -1,9 +1,5 @@
 name: dynamic-device-scaler
 
-namespace: composable-dra
-
-deploymentName: dds-controller-manager
-replicaCount: 1
 terminationGracePeriodSeconds: 10
 
 image: "10.38.251.227:5000/dds:latest"
@@ -13,18 +9,3 @@ args:
   - --log-level=debug
 env:
   SCAN_INTERVAL: "10"
-
-serviceAccount:
-  name: dds-controller-manager
-
-rbac:
-  enabled: true
-  clusterRoleName: dynamic-device-scaler-role
-  clusterRoleBindingName: dds-manager-rolebinding
-
-labels:
-  app.kubernetes.io/name: dynamic-device-scaler
-
-
-
-
