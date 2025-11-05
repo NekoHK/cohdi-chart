@@ -54,16 +54,12 @@
           "type": "object",
           "description": "Configuration for external Certificate Authority used by CDI components.",
           "properties": {
-            "secretName": {
-              "type": "string",
-              "description": "Kubernetes Secret name containing the external CA certificate."
-            },
             "certificate": {
               "type": "string",
               "description": "PEM-encoded CA certificate contents. Should match the certificate stored in the referenced Secret."
             }
           },
-          "required": ["secretName", "certificate"]
+          "required": ["certificate"]
         },
 
         "hostAliases": {

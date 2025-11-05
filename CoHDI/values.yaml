@@ -15,7 +15,6 @@ global:
     client_secret: "Zmet0q6Xjno0xzaAr76IH2IYr7DfScZj"
 
   externalCA:
-    secretName: external-server-ca-cert
     certificate: |
       -----BEGIN CERTIFICATE-----
       MIIDkjCCAnqgAwIBAgIUaSicFyqWGzZijlylo5oggwM9EoUwDQYJKoZIhvcNAQEL

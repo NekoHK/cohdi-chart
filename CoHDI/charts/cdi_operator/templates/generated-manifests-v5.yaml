@@ -470,7 +470,7 @@ spec:
           defaultMode: 420
       - name: custom-ca-certs
         secret:
-          secretName: {{ .Values.global.externalCA.secretName }}
+          secretName: external-server-ca-cert
           defaultMode: 420
       - name: host-tmp
         hostPath:
