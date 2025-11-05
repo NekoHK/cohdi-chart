@@ -5,7 +5,5 @@ terminationGracePeriodSeconds: 10
 image: "10.38.251.227:5000/dds:latest"
 imagePullPolicy: IfNotPresent
 
-args:
-  - --log-level=debug
 env:
   SCAN_INTERVAL: "10"

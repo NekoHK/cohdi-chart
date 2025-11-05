@@ -3,8 +3,6 @@ name: cdi-dra
 image: "10.38.251.227:5000/cdi-dra:v19-c6e55ba"
 imagePullPolicy: IfNotPresent
 
-args:
-  - --log-level=debug
 env:
   USE_CAPI_BMH: "false"
   USE_CM: "false"

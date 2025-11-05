@@ -20,14 +20,6 @@
       "default": "IfNotPresent",
       "description": "Kubernetes image pull policy."
     },
-    "args": {
-      "type": "array",
-      "description": "Container command-line arguments.",
-      "items": {
-        "type": "string"
-      },
-      "default": []
-    },
     "webhook": {
       "type": "object",
       "description": "Webhook server and client configuration.",

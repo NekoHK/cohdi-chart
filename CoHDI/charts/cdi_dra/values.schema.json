@@ -20,14 +20,6 @@
       "default": "IfNotPresent",
       "description": "Kubernetes image pull policy."
     },
-    "args": {
-      "type": "array",
-      "description": "Container command arguments.",
-      "items": {
-        "type": "string"
-      },
-      "default": []
-    },
     "env": {
       "type": "object",
       "description": "Environment variables for the container.",

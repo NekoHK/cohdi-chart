@@ -97,16 +97,8 @@ spec:
           imagePullPolicy: {{ $imagePullPolicy }}
           command:
             - /dynamic-device-scaler
-          {{- if .Values.args }}
-          args:
-          {{- range .Values.args }}
-            - {{ . | quote }}
-          {{- end }}
-          {{- end }}
-          {{- if .Values.env }}
           env:
           {{- range $k, $v := .Values.env }}
             - name: {{ $k }}
               value: {{ $v | quote }}
-          {{- end }}
           {{- end }}
