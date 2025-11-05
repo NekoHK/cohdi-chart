@@ -1,7 +1,5 @@
 name: dynamic-device-scaler
 
-terminationGracePeriodSeconds: 10
-
 image: "10.38.251.227:5000/dds:latest"
 imagePullPolicy: IfNotPresent
 

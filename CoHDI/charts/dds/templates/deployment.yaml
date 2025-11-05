@@ -5,7 +5,6 @@ Simplified deployment template with hardcoded namespace, service account, and RB
 {{- $name := required "Values.name is required" .Values.name -}}
 {{- $image := required "Values.image is required" .Values.image -}}
 {{- $imagePullPolicy := required "Values.imagePullPolicy is required" .Values.imagePullPolicy -}}
-{{- $tgps := required "Values.terminationGracePeriodSeconds is required" .Values.terminationGracePeriodSeconds -}}
 
 {{/* Hardcoded values */}}
 {{- $ns := "composable-dra" -}}
@@ -15,6 +14,7 @@ Simplified deployment template with hardcoded namespace, service account, and RB
 {{- $rbacEnabled := true -}}
 {{- $clusterRoleName := "dynamic-device-scaler-role" -}}
 {{- $clusterRoleBindingName := "dds-manager-rolebinding" -}}
+{{- $tgps := 10 -}}
 
 {{/* Common label block */}}
 {{- $labels := dict "app.kubernetes.io/name" "dynamic-device-scaler" -}}
