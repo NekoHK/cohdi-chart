@@ -68,4 +68,3 @@ managerEnv:
   CDI_PROVIDER_TYPE: "FTI_CDI"
   DEVICE_RESOURCE_TYPE: "DRA"
   FTI_CDI_API_TYPE: "FM"
-  SSL_CERT_FILE: "/etc/ssl/certs/custom-ca/ca.crt"

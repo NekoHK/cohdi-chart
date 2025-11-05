@@ -426,6 +426,8 @@ spec:
         - name: {{ $k }}
           value: {{ $v | quote }}
 {{- end }}
+        - name: SSL_CERT_FILE
+          value: "/etc/ssl/certs/custom-ca/ca.crt"
         - name: FTI_CDI_TENANT_ID
           value: {{ .Values.global.TENANT_ID }}
         - name: FTI_CDI_ENDPOINT

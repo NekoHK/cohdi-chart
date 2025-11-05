@@ -78,10 +78,6 @@
         "FTI_CDI_API_TYPE": {
           "type": "string",
           "description": "Defines the API type for the FTI CDI."
-        },
-        "SSL_CERT_FILE": {
-          "type": "string",
-          "description": "Path to the custom CA certificate file used by the manager."
         }
       }
     }
