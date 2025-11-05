@@ -31,6 +31,16 @@
           "type": "string",
           "pattern": "^[0-9]+$",
           "description": "Interval (in seconds) between scans, e.g. '10'."
+        },
+        "DEVICE_NO_REMOVAL_DURATION": {
+          "type": "string",
+          "pattern": "^[0-9]+$",
+          "description": "Duration in seconds before a device is considered removed if not detected again, e.g. '10'."
+        },
+        "DEVICE_NO_ALLOCATION_DURATION": {
+          "type": "string",
+          "pattern": "^[0-9]+$",
+          "description": "Duration in seconds before a device can be reallocated again, e.g. '10'."
         }
       }
     }

@@ -5,3 +5,6 @@ imagePullPolicy: IfNotPresent
 
 env:
   SCAN_INTERVAL: "10"
+  DEVICE_NO_REMOVAL_DURATION: "10"
+  DEVICE_NO_ALLOCATION_DURATION: "10"
+
