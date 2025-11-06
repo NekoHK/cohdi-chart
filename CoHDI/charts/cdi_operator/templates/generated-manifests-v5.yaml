@@ -249,7 +249,7 @@ rules:
   resources: ["pods/exec"]
   verbs: ["create"]
 - apiGroups: [""]
-  resourceNames: [{{ .Values.global.credentials.secretName | quote }}]
+  resourceNames: ["credentials"]
   resources: ["secrets"]
   verbs: ["get"]
 - apiGroups: ["apps"]

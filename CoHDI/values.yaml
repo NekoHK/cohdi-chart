@@ -5,9 +5,6 @@ global:
     TENANT_ID: "060ea5a5-46e4-42b4-8d95-70578718d8d0"
 
   credentials:
-    createNamespace: true
-    namespace: credentials-namespace
-    secretName: credentials
     username: "invalid_username"
     password: "CDI@dm1n"
     realm: "060ea5a5-46e4-42b4-8d95-70578718d8d0"
