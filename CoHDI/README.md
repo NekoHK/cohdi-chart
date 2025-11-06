@@ -81,7 +81,7 @@ kubectl get pods -A
 
 ## Uninstall:
 ```bash
-kubectl delete ns composable-dra composable-resource-operator-system cohdi credentials-namespace
+helm uninstall cohdi -n cohdi
 ```
 
 # Contribute

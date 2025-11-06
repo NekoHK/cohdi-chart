@@ -2,8 +2,12 @@
 
 cd CoHDI || exit 1
 
+# 
+helm uninstall cohdi -n cohdi || true
+sleep 5
+
 # Cleanup previous configuration
-kubectl delete ns composable-dra composable-resource-operator-system cohdi credentials-namespace --ignore-not-found || true
+# kubectl delete ns composable-dra composable-resource-operator-system cohdi credentials-namespace --ignore-not-found || true
 rm -f Chart.lock
 
 # Tag existing cluster-level resources so Helm will "treat them as its own"
@@ -28,7 +32,8 @@ helm dependency build .
 helm lint .
 
 # Install/upgrade cohdi
-helm upgrade --install cohdi . -n cohdi --create-namespace --debug
+helm install cohdi . -n cohdi --create-namespace --debug
+# helm upgrade --install cohdi . -n cohdi --create-namespace --debug
 
 # Wait and check pods
 sleep 5
