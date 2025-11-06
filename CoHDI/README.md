@@ -67,6 +67,117 @@ These steps show how to create mock CA and server certificates with OpenSSL for 
 ## Configure values.yaml
 Update `./values.yaml` with your settings.
 
+
+## Installing the GPU driver
+* add repo
+
+```bash
+sudo zypper ar https://developer.download.nvidia.com/compute/cuda/repos/sles15/x86_64/ cuda-sle15
+sudo zypper --gpg-auto-import-keys refresh
+```
+
+* install Open Kernel driver KMP
+
+```bash
+sudo zypper install -y --auto-agree-with-licenses nv-prefer-signed-open-driver
+```
+
+* utilities&ext install
+
+```bash
+version=`rpm -qa --queryformat '%{VERSION}\n' nv-prefer-signed-open-driver | cut -d_ -f1 | sort -u | tail -n1`
+sudo zypper install -y --auto-agree-with-licenses nvidia-compute-utils-G06=$version nvidia-persistenced=$version
+```
+
+* check
+
+```bash
+sudo reboot
+nvidia-smi
+```
+
+Note: At this point, if you attach a suitable GPU to the agent node
+      from LCC, the GPU will be visible in lspc | grep NVI and
+      nvidia-smi.
+
+* Configure nvidia-smi to run without sudo
+
+```bash
+sudo usermod -aG video,render $USER
+```
+
+* Add the path to lspci
+
+```bash
+echo 'export PATH="$PATH:/sbin"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+
+
+## Deploying the NVIDIA GPU Operator (server node)
+Deploy the GPU Operator by referring to the following document.
+```
+https://docs.rke2.io/advanced#deploy-nvidia-operator
+```
+
+```bash
+kubectl -n kube-system edit helmchart gpu-operator
+```
+
+After all the created Pods are Running, edit the yaml using the above
+command as follows to turn off components other than GFD.
+```
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: gpu-operator
+  namespace: kube-system
+spec:
+  repo: https://helm.ngc.nvidia.com/nvidia
+  chart: gpu-operator
+  targetNamespace: gpu-operator
+  createNamespace: true
+  valuesContent: |-
+    toolkit:
+      enabled: false
+      env:
+      - name: CONTAINERD_SOCKET
+        value: /run/k3s/containerd/containerd.sock
+    driver:
+      enabled: false
+    devicePlugin:
+      enabled: false
+    dcgm:
+      enabled: false
+    dcgmExporter:
+      enabled: false
+    nodeStatusExporter:
+      enabled: false
+    migManager:
+      enabled: false
+    cdi:
+      enabled: false
+    ccManager:
+      enabled: false
+    gdrcopy:
+      enabled: false
+    kataManager:
+      enabled: false
+    psa:
+      enabled: false
+    sandboxDevicePlugin:
+      enabled: false
+    sandboxWorkloads:
+      enabled: false
+    vfioManager:
+      enabled: false
+    vgpuDeviceManager:
+      enabled: false
+    vgpuManager:
+      enabled: false
+```
+
 # Build and Test
 
 ## Install/Upgrade CoHDI
