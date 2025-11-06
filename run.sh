@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd CoHDI || exit 1
+
 # Cleanup previous configuration
 kubectl delete ns composable-dra composable-resource-operator-system cohdi credentials-namespace --ignore-not-found || true
 rm -f Chart.lock

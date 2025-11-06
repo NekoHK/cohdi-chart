@@ -84,12 +84,6 @@ kubectl get pods -A
 kubectl delete ns composable-dra composable-resource-operator-system cohdi credentials-namespace
 ```
 
-## Use script to perform cleanup, installation and testing in one go:
-```bash
-chmod +x ./run.sh
-./run.sh
-```
-
 # Contribute
 
 ## Issues:
