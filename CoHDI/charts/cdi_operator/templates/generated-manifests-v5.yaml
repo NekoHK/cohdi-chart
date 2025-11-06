@@ -462,9 +462,6 @@ spec:
         - name: custom-ca-certs
           mountPath: /etc/ssl/certs/custom-ca
           readOnly: true
-        - name: host-tmp
-          mountPath: /host/tmp
-          readOnly: true
       volumes:
       - name: cert
         secret:
@@ -474,10 +471,6 @@ spec:
         secret:
           secretName: external-server-ca-cert
           defaultMode: 420
-      - name: host-tmp
-        hostPath:
-          path: /tmp
-          type: Directory
 ---
 # ValidatingWebhookConfiguration
 apiVersion: admissionregistration.k8s.io/v1

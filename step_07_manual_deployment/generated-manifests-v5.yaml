@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Namespace
 metadata:
   labels:
-    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/managed-by: kustomize
     app.kubernetes.io/name: composable-resource-operator
     control-plane: controller-manager
   name: composable-resource-operator-system
@@ -264,7 +264,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   labels:
-    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/managed-by: kustomize
     app.kubernetes.io/name: composable-resource-operator
   name: composable-resource-operator-controller-manager
   namespace: composable-resource-operator-system
@@ -273,7 +273,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   labels:
-    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/managed-by: kustomize
     app.kubernetes.io/name: composable-resource-operator
   name: composable-resource-operator-leader-election-role
   namespace: composable-resource-operator-system
@@ -314,7 +314,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   labels:
-    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/managed-by: kustomize
     app.kubernetes.io/name: composable-resource-operator
   name: composable-resource-operator-composabilityrequest-editor-role
 rules:
@@ -341,7 +341,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   labels:
-    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/managed-by: kustomize
     app.kubernetes.io/name: composable-resource-operator
   name: composable-resource-operator-composabilityrequest-viewer-role
 rules:
@@ -364,7 +364,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   labels:
-    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/managed-by: kustomize
     app.kubernetes.io/name: composable-resource-operator
   name: composable-resource-operator-composableresource-editor-role
 rules:
@@ -391,7 +391,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   labels:
-    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/managed-by: kustomize
     app.kubernetes.io/name: composable-resource-operator
   name: composable-resource-operator-composableresource-viewer-role
 rules:
@@ -562,7 +562,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   labels:
-    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/managed-by: kustomize
     app.kubernetes.io/name: composable-resource-operator
   name: composable-resource-operator-leader-election-rolebinding
   namespace: composable-resource-operator-system
@@ -579,7 +579,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   labels:
-    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/managed-by: kustomize
     app.kubernetes.io/name: composable-resource-operator
   name: composable-resource-operator-manager-rolebinding
 roleRef:
@@ -608,7 +608,7 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/managed-by: kustomize
     app.kubernetes.io/name: composable-resource-operator
     control-plane: controller-manager
   name: composable-resource-operator-controller-manager-metrics-service
@@ -626,7 +626,7 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/managed-by: kustomize
     app.kubernetes.io/name: composable-resource-operator
   name: composable-resource-operator-webhook-service
   namespace: composable-resource-operator-system
@@ -642,7 +642,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/managed-by: kustomize
     app.kubernetes.io/name: composable-resource-operator
     control-plane: controller-manager
   name: composable-resource-operator-controller-manager
@@ -717,9 +717,6 @@ spec:
         - mountPath: /etc/ssl/certs/custom-ca
           name: custom-ca-certs
           readOnly: true
-        - mountPath: /host/tmp
-          name: host-tmp
-          readOnly: true
       securityContext:
         runAsNonRoot: true
       serviceAccountName: composable-resource-operator-controller-manager
@@ -733,10 +730,6 @@ spec:
         secret:
           secretName: external-server-ca-cert
           defaultMode: 420
-      - hostPath:
-          path: /tmp
-          type: Directory
-        name: host-tmp
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
