@@ -25,41 +25,17 @@ cd cohdi_helm
 
 These steps show how to create mock CA and server certificates with OpenSSL for testing.
 
-1. Create an OpenSSL Config File
-   Save as `openssl.conf`:
-   ```
-   [ req ]
-   default_bits       = 2048
-   distinguished_name = req_distinguished_name
-   x509_extensions    = v3_ca
-   prompt             = no
-
-   [ req_distinguished_name ]
-   C  = JP
-   ST = Tokyo
-   L  = Default City
-   O  = Default Company Ltd
-   CN = cdimgr.localdomain
-
-   [ v3_ca ]
-   subjectAltName = @alt_names
-
-   [ alt_names ]
-   DNS.1 = cdimgr.localdomain
-   IP.1  = 192.168.1.101
-   ```
-
-2. Create a CA Private Key and Certificate
+1. Create a CA Private Key and Certificate
    ```bash
    openssl req -x509 -newkey rsa:2048 -days 365      -keyout ca.key -out ca.crt -config openssl.conf -nodes
    ```
 
-3. Create a Server Private Key and CSR
+2. Create a Server Private Key and CSR
    ```bash
    openssl req -new -newkey rsa:2048 -keyout server.key      -out server.csr -config openssl.conf -nodes
    ```
 
-4. Sign the Server Certificate with the CA
+3. Sign the Server Certificate with the CA
    ```bash
    openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key      -CAcreateserial -out server.crt -days 365 -extensions v3_ca      -extfile openssl.conf
    ```
@@ -69,50 +45,27 @@ Update `./values.yaml` with your settings.
 
 
 ## Installing the GPU driver
-* add repo
+The GPU driver installation process depends on your environment.
 
-```bash
-sudo zypper ar https://developer.download.nvidia.com/compute/cuda/repos/sles15/x86_64/ cuda-sle15
-sudo zypper --gpg-auto-import-keys refresh
-```
+- [SLES Instructions](./docs/GPU_DRIVER_SLES.md)
+- [RHEL Instructions](./docs/GPU_DRIVER_RHEL.md)
 
-* install Open Kernel driver KMP
-
-```bash
-sudo zypper install -y --auto-agree-with-licenses nv-prefer-signed-open-driver
-```
-
-* utilities&ext install
-
-```bash
-version=`rpm -qa --queryformat '%{VERSION}\n' nv-prefer-signed-open-driver | cut -d_ -f1 | sort -u | tail -n1`
-sudo zypper install -y --auto-agree-with-licenses nvidia-compute-utils-G06=$version nvidia-persistenced=$version
-```
-
-* check
-
+### Check installation
 ```bash
 sudo reboot
-nvidia-smi
+sudo nividia-smi
 ```
 
-Note: At this point, if you attach a suitable GPU to the agent node
-      from LCC, the GPU will be visible in lspc | grep NVI and
-      nvidia-smi.
-
-* Configure nvidia-smi to run without sudo
-
+### Allow `nvidia-smi` to run without `sudo`
 ```bash
 sudo usermod -aG video,render $USER
 ```
 
-* Add the path to lspci
-
+### Add `/sbin` to PATH
 ```bash
 echo 'export PATH="$PATH:/sbin"' >> ~/.bashrc
 source ~/.bashrc
 ```
-
 
 
 ## Deploying the NVIDIA GPU Operator (server node)
