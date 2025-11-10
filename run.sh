@@ -25,6 +25,17 @@ for kind in clusterrole clusterrolebinding validatingwebhookconfiguration mutati
     done
 done
 
+# Remove labels and annotations (for testing purposes) 
+# for kind in clusterrole clusterrolebinding validatingwebhookconfiguration mutatingwebhookconfiguration; do
+#   kubectl get "$kind" -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}' \
+#   | grep -E "$PREFIXES" \
+#   | while read -r name; do
+#       kubectl label "$kind" "$name" app.kubernetes.io/managed-by- --overwrite
+#       kubectl annotate "$kind" "$name" meta.helm.sh/release-name- --overwrite
+#       kubectl annotate "$kind" "$name" meta.helm.sh/release-namespace- --overwrite
+#     done
+# done
+
 # Build dependencies
 helm dependency build .
 
