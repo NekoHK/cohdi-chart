@@ -465,7 +465,7 @@ spec:
       volumes:
       - name: cert
         secret:
-          secretName: {{ .Values.webhook.server.secretName }}
+          secretName: webhook-server-cert
           defaultMode: 420
       - name: custom-ca-certs
         secret:

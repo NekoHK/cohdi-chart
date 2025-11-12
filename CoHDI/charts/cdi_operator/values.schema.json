@@ -41,11 +41,6 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "secretName": {
-              "type": "string",
-              "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$",
-              "description": "Secret name containing the webhook TLS certificate and key."
-            },
             "crt": {
               "type": "string",
               "minLength": 1,
@@ -57,7 +52,7 @@
               "description": "PEM-encoded private key for the webhook server."
             }
           },
-          "required": ["secretName", "crt", "key"]
+          "required": ["crt", "key"]
         }
       },
       "required": ["client", "server"]

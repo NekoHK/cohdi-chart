@@ -42,7 +42,6 @@ global:
         - cdimgr.localdomain
 
   configData:
-    labelPrefix: "cohdi.io"
     fabricIdRange: "[0]"
     deviceInfo: |
       - index: 1

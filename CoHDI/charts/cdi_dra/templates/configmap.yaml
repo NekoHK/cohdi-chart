@@ -4,7 +4,7 @@ metadata:
   name: composable-dra-dds
   namespace: composable-dra
 data:
-  label-prefix: {{ .Values.global.configData.labelPrefix | quote }}
+  label-prefix: "cohdi.io"
   fabric-id-range: {{ .Values.global.configData.fabricIdRange | quote }}
   device-info: |
 {{- nindent 4 .Values.global.configData.deviceInfo }}
