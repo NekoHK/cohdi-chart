@@ -370,6 +370,7 @@ EOF
 
     # (4) ctr pulls
     #RR: needs to be run with sudo, but with sudo it doesn't recognize the path to crt so I used the full path in the command
+    sudo chmod 644 /etc/rancher/rke2/rke2.yaml
     sudo -E /usr/local/bin/ctr -a /run/k3s/containerd/containerd.sock -n k8s.io i pull --user "${REG_USER}:${REG_PASS}" "${REG_HOST}/dds:latest" || true
     sudo -E /usr/local/bin/ctr -a /run/k3s/containerd/containerd.sock -n k8s.io i pull --user "${REG_USER}:${REG_PASS}" "${REG_HOST}/cdi-operator:latest" || true
     sudo -E /usr/local/bin/ctr -a /run/k3s/containerd/containerd.sock -n k8s.io i pull --user "${REG_USER}:${REG_PASS}" "${REG_HOST}/cdi-dra:${CDI_DRA_TAG}" || true
