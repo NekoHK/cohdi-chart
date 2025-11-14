@@ -16,7 +16,7 @@ TEST_NS="${TEST_NS:-tensorflow-test}"
 REG_HOST="${REG_HOST:-10.38.251.227:5000}"
 REG_USER="${REG_USER:-cdiadmin}"
 REG_PASS="${REG_PASS:-cdiadmin}"
-CA_CERT_SRC="${CA_CERT_SRC:-}"               # optional path to cohdi-ca.crt to install
+CA_CERT_SRC="${CA_CERT_SRC:-/usr/share/pki/trust/anchors/cohdi-ca.crt}"
 CDI_DRA_TAG="v19-c6e55ba"         # choose tag (doc: updated regularly)
 
 # Kube config (RKE2)
@@ -333,11 +333,6 @@ fi
     sudo -E zypper -n install docker
     sudo -E usermod -aG docker "$USER" || true
     docker version || true   # may require re-login; non-fatal
-
-    # Trust CA (doc: place CA; do non-interactive if provided)
-    if [[ -n "${CA_CERT_SRC}" && -r "${CA_CERT_SRC}" ]]; then
-      install -D -m0644 "${CA_CERT_SRC}" /usr/share/pki/trust/anchors/cohdi-ca.crt
-    fi
     sudo -E chmod 0644 /usr/share/pki/trust/anchors/cohdi-ca.crt || true
     sudo -E update-ca-certificates
     sudo -E systemctl restart docker
@@ -348,7 +343,7 @@ fi
     # (1) Write /etc/rancher/rke2/registries.yaml
     sudo -E mkdir -p /etc/rancher/rke2/certs.d/"${REG_HOST}"
     if [[ -n "${CA_CERT_SRC}" && -r "${CA_CERT_SRC}" ]]; then
-      install -D -m0644 "${CA_CERT_SRC}" /etc/rancher/rke2/certs.d/"${REG_HOST}"/cohdi-ca.crt
+      sudo -E install -D -m0644 "${CA_CERT_SRC}" /etc/rancher/rke2/certs.d/"${REG_HOST}"/cohdi-ca.crt
     fi
     sudo -E tee /etc/rancher/rke2/registries.yaml > /dev/null <<EOF
 mirrors:
