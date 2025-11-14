@@ -152,6 +152,7 @@ if [[ "${RUN_SERVER_STEPS}" == "true" ]]; then
   CURRENT_STEP="Step 3: Deploy NVIDIA GPU Operator (GFD only)"
   echo -e "\nBEGIN: ${CURRENT_STEP}"
 
+  sudo chmod 644 /etc/rancher/rke2/rke2.yaml
   # Non-interactive equivalent of kubectl edit: apply HelmChart CR w/ GFD only
   cat <<'EOF' | kubectl -n kube-system apply -f -
 apiVersion: helm.cattle.io/v1
