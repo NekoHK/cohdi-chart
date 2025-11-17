@@ -3,50 +3,73 @@
   "title": "cdi-dra Helm values",
   "type": "object",
   "additionalProperties": true,
+
   "properties": {
-    "name": {
-      "type": "string",
-      "description": "Name of the deployment or release.",
-      "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
-    },
-    "image": {
-      "type": "string",
-      "description": "Full image reference, e.g. registry/repo:tag",
-      "minLength": 1
-    },
-    "imagePullPolicy": {
-      "type": "string",
-      "enum": ["Always", "IfNotPresent", "Never"],
-      "default": "IfNotPresent",
-      "description": "Kubernetes image pull policy."
-    },
-    "env": {
+    "common": {
       "type": "object",
-      "description": "Environment variables for the container.",
-      "additionalProperties": {
-        "type": "string"
-      },
+      "additionalProperties": true,
+      "required": ["name", "image"],
       "properties": {
-        "USE_CAPI_BMH": {
+        "name": {
           "type": "string",
-          "enum": ["true", "false"],
-          "default": "false",
-          "description": "Enable or disable CAPI BareMetalHost integration."
+          "description": "Name of the deployment or release.",
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
         },
-        "USE_CM": {
+        "image": {
           "type": "string",
-          "enum": ["true", "false"],
-          "default": "false",
-          "description": "Enable or disable Cluster Manager integration."
+          "description": "Full image reference, e.g. registry/repo:tag",
+          "minLength": 1
         },
-        "SCAN_INTERVAL": {
+        "imagePullPolicy": {
           "type": "string",
-          "pattern": "^[0-9]+s$",
-          "default": "5s",
-          "description": "Interval for scanning operations (e.g. '5s')."
+          "enum": ["Always", "IfNotPresent", "Never"],
+          "default": "IfNotPresent",
+          "description": "Kubernetes image pull policy."
+        },
+        "env": {
+          "type": "object",
+          "description": "Environment variables for the common container.",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "properties": {
+            "SCAN_INTERVAL": {
+              "type": "string",
+              "pattern": "^[0-9]+s$",
+              "default": "5s",
+              "description": "Interval for scanning operations (e.g. '5s')."
+            }
+          }
+        }
+      }
+    },
+
+    "fti_cdi": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "env": {
+          "type": "object",
+          "description": "Environment variables for the fti_cdi component.",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "properties": {
+            "USE_CAPI_BMH": {
+              "type": "string",
+              "enum": ["true", "false"],
+              "default": "false",
+              "description": "Enable or disable CAPI BareMetalHost integration."
+            },
+            "USE_CM": {
+              "type": "string",
+              "enum": ["true", "false"],
+              "default": "false",
+              "description": "Enable or disable Cluster Manager integration."
+            }
+          }
         }
       }
     }
-  },
-  "required": ["name", "image"]
+  }
 }

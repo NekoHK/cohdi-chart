@@ -3,79 +3,101 @@
   "title": "Composable Resource Operator Helm Values",
   "type": "object",
   "additionalProperties": true,
+
   "properties": {
-    "name": {
-      "type": "string",
-      "description": "Name of the operator deployment or release.",
-      "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
-    },
-    "image": {
-      "type": "string",
-      "description": "Full image reference, e.g. registry/repo:tag",
-      "minLength": 1
-    },
-    "imagePullPolicy": {
-      "type": "string",
-      "enum": ["Always", "IfNotPresent", "Never"],
-      "default": "IfNotPresent",
-      "description": "Kubernetes image pull policy."
-    },
-    "webhook": {
+    "common": {
       "type": "object",
-      "description": "Webhook server and client configuration.",
-      "additionalProperties": false,
+      "additionalProperties": true,
       "properties": {
-        "client": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "caBundle": {
-              "type": "string",
-              "minLength": 1,
-              "description": "Base64-encoded CA bundle used by the webhook client."
-            }
-          },
-          "required": ["caBundle"]
+        "name": {
+          "type": "string",
+          "description": "Name of the operator deployment or release.",
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
         },
-        "server": {
+        "image": {
+          "type": "string",
+          "description": "Full image reference, e.g. registry/repo:tag",
+          "minLength": 1
+        },
+        "imagePullPolicy": {
+          "type": "string",
+          "enum": ["Always", "IfNotPresent", "Never"],
+          "default": "IfNotPresent",
+          "description": "Kubernetes image pull policy."
+        },
+
+        "webhook": {
           "type": "object",
+          "description": "Webhook server and client configuration.",
           "additionalProperties": false,
           "properties": {
-            "crt": {
-              "type": "string",
-              "minLength": 1,
-              "description": "PEM-encoded TLS certificate for the webhook server."
+            "client": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "caBundle": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "Base64-encoded CA bundle used by the webhook client."
+                }
+              },
+              "required": ["caBundle"]
             },
-            "key": {
-              "type": "string",
-              "minLength": 1,
-              "description": "PEM-encoded private key for the webhook server."
+            "server": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "crt": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "PEM-encoded TLS certificate for the webhook server."
+                },
+                "key": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "PEM-encoded private key for the webhook server."
+                }
+              },
+              "required": ["crt", "key"]
             }
           },
-          "required": ["crt", "key"]
+          "required": ["client", "server"]
+        },
+
+        "managerEnv": {
+          "type": "object",
+          "description": "Environment variables injected into the manager container.",
+          "additionalProperties": { "type": "string" },
+          "properties": {
+            "CDI_PROVIDER_TYPE": {
+              "type": "string",
+              "description": "Defines the CDI provider type."
+            },
+            "DEVICE_RESOURCE_TYPE": {
+              "type": "string",
+              "description": "Specifies the DRA device resource type."
+            }
+          }
         }
       },
-      "required": ["client", "server"]
+      "required": ["name", "image", "imagePullPolicy", "webhook", "managerEnv"]
     },
-    "managerEnv": {
+
+    "fti_cdi": {
       "type": "object",
-      "description": "Environment variables injected into the manager container.",
-      "additionalProperties": { "type": "string" },
+      "additionalProperties": true,
       "properties": {
-        "CDI_PROVIDER_TYPE": {
-          "type": "string",
-          "description": "Defines the CDI provider type."
-        },
-        "DEVICE_RESOURCE_TYPE": {
-          "type": "string",
-          "description": "Specifies the DRA device resource type."
-        },
-        "FTI_CDI_API_TYPE": {
-          "type": "string",
-          "description": "Defines the API type for the FTI CDI."
+        "managerEnv": {
+          "type": "object",
+          "additionalProperties": { "type": "string" },
+          "properties": {
+            "FTI_CDI_API_TYPE": {
+              "type": "string",
+              "description": "Defines the API type for the FTI CDI."
+            }
+          }
         }
       }
     }
-  },
-  "required": ["name", "image", "imagePullPolicy", "webhook", "managerEnv"]
+  }
 }

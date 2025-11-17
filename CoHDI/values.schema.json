@@ -2,82 +2,9 @@
   "$schema": "https://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
-    "global": {
+    "common": {
       "type": "object",
       "properties": {
-        "env": {
-          "type": "object",
-          "properties": {
-            "CDI_ENDPOINT": {
-              "type": "string",
-              "description": "Base URL of the CDI Manager endpoint (e.g. https://cdimgr.localdomain)."
-            },
-            "CLUSTER_ID": {
-              "type": "string",
-              "description": "Cluster identifier. Can be left blank for standalone installations."
-            },
-            "TENANT_ID": {
-              "type": "string",
-              "pattern": "^[0-9a-fA-F-]{36}$",
-              "description": "UUID of the tenant."
-            }
-          },
-          "required": ["CDI_ENDPOINT", "TENANT_ID"]
-        },
-
-        "credentials": {
-          "type": "object",
-          "properties": {
-            "username": { "type": "string" },
-            "password": { "type": "string" },
-            "realm": { "type": "string", "pattern": "^[0-9a-fA-F-]{36}$" },
-            "client_id": { "type": "string" },
-            "client_secret": { "type": "string" }
-          },
-          "required": [
-            "username",
-            "password",
-            "realm",
-            "client_id",
-            "client_secret"
-          ]
-        },
-
-        "externalCA": {
-          "type": "object",
-          "description": "Configuration for external Certificate Authority used by CDI components.",
-          "properties": {
-            "certificate": {
-              "type": "string",
-              "description": "PEM-encoded CA certificate contents. Should match the certificate stored in the referenced Secret."
-            }
-          },
-          "required": ["certificate"]
-        },
-
-        "hostAliases": {
-          "type": "array",
-          "description": "List of static hostname-IP mappings to add to /etc/hosts inside pods.",
-          "items": {
-            "type": "object",
-            "properties": {
-              "ip": {
-                "type": "string",
-                "pattern": "^([0-9]{1,3}\\.){3}[0-9]{1,3}$",
-                "description": "IPv4 address for the host alias."
-              },
-              "hostnames": {
-                "type": "array",
-                "items": { "type": "string" },
-                "minItems": 1,
-                "description": "Hostnames mapped to the given IP address."
-              }
-            },
-            "required": ["ip", "hostnames"]
-          },
-          "minItems": 1
-        },
-
         "configData": {
           "type": "object",
           "description": "Device and configuration data for CDI resources.",
@@ -94,8 +21,92 @@
           "required": ["fabricIdRange", "deviceInfo"]
         }
       },
-      "required": ["env", "credentials", "externalCA", "hostAliases", "configData"]
+      "required": ["configData"]
+    },
+
+    "fti_cdi": {
+      "type": "object",
+      "properties": {
+        "credentials": {
+          "type": "object",
+          "properties": {
+            "username": { "type": "string" },
+            "password": { "type": "string" },
+            "realm": {
+              "type": "string",
+              "pattern": "^[0-9a-fA-F-]{36}$"
+            },
+            "client_id": { "type": "string" },
+            "client_secret": { "type": "string" }
+          },
+          "required": [
+            "username",
+            "password",
+            "realm",
+            "client_id",
+            "client_secret"
+          ]
+        },
+
+        "env": {
+          "type": "object",
+          "properties": {
+            "CDI_ENDPOINT": {
+              "type": "string",
+              "description": "Base URL of the CDI Manager endpoint (e.g. https://cdimgr.localdomain)."
+            },
+            "CLUSTER_ID": {
+              "type": "string",
+              "description": "Cluster identifier. May be blank."
+            },
+            "TENANT_ID": {
+              "type": "string",
+              "pattern": "^[0-9a-fA-F-]{36}$",
+              "description": "UUID of the tenant."
+            }
+          },
+          "required": ["CDI_ENDPOINT", "TENANT_ID"]
+        },
+
+        "externalCA": {
+          "type": "object",
+          "properties": {
+            "certificate": {
+              "type": "string",
+              "description": "PEM-encoded CA certificate."
+            }
+          },
+          "required": ["certificate"]
+        },
+
+        "hostAliases": {
+          "type": "array",
+          "description": "Additional host aliases entries for pods.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "ip": {
+                "type": "string",
+                "pattern": "^([0-9]{1,3}\\.){3}[0-9]{1,3}$"
+              },
+              "hostnames": {
+                "type": "array",
+                "items": { "type": "string" },
+                "minItems": 1
+              }
+            },
+            "required": ["ip", "hostnames"]
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "credentials",
+        "env",
+        "externalCA",
+        "hostAliases"
+      ]
     }
   },
-  "required": ["global"]
+  "required": ["common", "fti_cdi"]
 }

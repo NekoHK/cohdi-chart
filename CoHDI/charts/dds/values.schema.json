@@ -3,47 +3,62 @@
   "title": "dynamic-device-scaler Helm values",
   "type": "object",
   "additionalProperties": true,
+
   "properties": {
-    "name": {
-      "type": "string",
-      "description": "Name of the container or app.",
-      "default": "dynamic-device-scaler",
-      "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
-    },
-    "image": {
-      "type": "string",
-      "minLength": 1,
-      "description": "Full container image reference, e.g. registry/repo:tag."
-    },
-    "imagePullPolicy": {
-      "type": "string",
-      "enum": ["Always", "IfNotPresent", "Never"],
-      "default": "IfNotPresent",
-      "description": "Kubernetes image pull policy."
-    },
-    "env": {
+    "common": {
       "type": "object",
-      "description": "Environment variables for the container.",
-      "default": {},
-      "additionalProperties": { "type": "string" },
+      "additionalProperties": true,
+
       "properties": {
-        "SCAN_INTERVAL": {
+        "name": {
           "type": "string",
-          "pattern": "^[0-9]+$",
-          "description": "Interval (in seconds) between scans, e.g. '10'."
+          "description": "Name of the container or app.",
+          "default": "dynamic-device-scaler",
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
         },
-        "DEVICE_NO_REMOVAL_DURATION": {
+
+        "image": {
           "type": "string",
-          "pattern": "^[0-9]+$",
-          "description": "Duration in seconds before a device is considered removed if not detected again, e.g. '10'."
+          "minLength": 1,
+          "description": "Full container image reference, e.g. registry/repo:tag."
         },
-        "DEVICE_NO_ALLOCATION_DURATION": {
+
+        "imagePullPolicy": {
           "type": "string",
-          "pattern": "^[0-9]+$",
-          "description": "Duration in seconds before a device can be reallocated again, e.g. '10'."
+          "enum": ["Always", "IfNotPresent", "Never"],
+          "default": "IfNotPresent",
+          "description": "Kubernetes image pull policy."
+        },
+
+        "env": {
+          "type": "object",
+          "description": "Environment variables for the container.",
+          "default": {},
+          "additionalProperties": { "type": "string" },
+
+          "properties": {
+            "SCAN_INTERVAL": {
+              "type": "string",
+              "pattern": "^[0-9]+$",
+              "description": "Interval (in seconds) between scans, e.g. '10'."
+            },
+
+            "DEVICE_NO_REMOVAL_DURATION": {
+              "type": "string",
+              "pattern": "^[0-9]+$",
+              "description": "Duration in seconds before a device is considered removed if not detected again."
+            },
+
+            "DEVICE_NO_ALLOCATION_DURATION": {
+              "type": "string",
+              "pattern": "^[0-9]+$",
+              "description": "Duration in seconds before a device can be reallocated again."
+            }
+          }
         }
-      }
+      },
+
+      "required": ["name", "image"]
     }
-  },
-  "required": ["name", "image"]
+  }
 }
