@@ -20,7 +20,7 @@ spec:
     spec:
       serviceAccountName: {{ .Values.name }}
       hostAliases:
-      {{- range .Values.global.hostAliases }}
+      {{- range .Values.global.fti_cdi.hostAliases }}
         - ip: {{ .ip | quote }}
           hostnames:
           {{- range .hostnames }}
@@ -29,7 +29,7 @@ spec:
       {{- end }}
       containers:
         - name: {{ .Values.name }}
-          image: "{{ .Values.image }}"
+          image: {{ quote .Values.image }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           env:
           {{- range $k, $v := .Values.env }}
@@ -37,9 +37,9 @@ spec:
               value: {{ $v | quote }}
           {{- end }}
             - name: CDI_ENDPOINT
-              value: {{ .Values.global.env.CDI_ENDPOINT }}
+              value: {{ .Values.global.fti_cdi.env.CDI_ENDPOINT }}
             - name: TENANT_ID
-              value: {{ .Values.global.env.TENANT_ID }}
+              value: {{ .Values.global.fti_cdi.env.TENANT_ID }}
 ---
 apiVersion: v1
 kind: ServiceAccount

@@ -434,7 +434,9 @@ spec:
         - name: FTI_CDI_TENANT_ID
           value: {{ .Values.global.TENANT_ID }}
         - name: FTI_CDI_ENDPOINT
-          value: "{{ (index .Values.global.hostAliases 0).ip }}:443"
+        {{- with (first .Values.global.fti_cdi.hostAliases) }}
+          value: "{{ .ip }}:443"
+        {{- end }}
         ports:
         - name: webhook-server
           containerPort: 9443
@@ -486,7 +488,7 @@ webhooks:
   sideEffects: None
   failurePolicy: Fail
   clientConfig:
-    caBundle: {{ .Values.webhook.client.caBundle | quote }}
+    caBundle: {{ .Values.common.webhook.client.caBundle | quote }}
     service:
       name: {{ .Values.name }}-webhook-service
       namespace: composable-resource-operator-system
