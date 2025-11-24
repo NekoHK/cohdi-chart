@@ -15,5 +15,8 @@ steps:
   inputs: 
     helmVersionToInstall: latest
 
-- script: helm lint CoHDI && helm template CoHDI
-  displayName: 'Check Helm chart and subcharts'
+- script: helm lint --strict CoHDI
+  displayName: 'Run helm lint'
+
+- script: helm template CoHDI
+  displayName: 'Generate template locally'
