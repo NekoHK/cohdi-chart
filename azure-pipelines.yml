@@ -1,0 +1,19 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- feature-2281
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: HelmInstaller@1
+  displayName: Helm installer
+  inputs: 
+    helmVersionToInstall: latest
+
+- script: helm lint CoHDI
+  displayName: 'Check Helm charts'
