@@ -2,23 +2,23 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   creationTimestamp: null
-  name: {{ .Values.name }}
+  name: {{ .Values.common.name }}
   namespace: composable-dra
   labels:
-    app: {{ .Values.name }}
+    app: {{ .Values.common.name }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Values.name }}
+      app: {{ .Values.common.name }}
   strategy: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
-        app: {{ .Values.name }}
+        app: {{ .Values.common.name }}
     spec:
-      serviceAccountName: {{ .Values.name }}
+      serviceAccountName: {{ .Values.common.name }}
       hostAliases:
       {{- range .Values.global.fti_cdi.hostAliases }}
         - ip: {{ .ip | quote }}
@@ -28,11 +28,11 @@ spec:
           {{- end }}
       {{- end }}
       containers:
-        - name: {{ .Values.name }}
-          image: {{ quote .Values.image }}
-          imagePullPolicy: {{ .Values.imagePullPolicy }}
+        - name: {{ .Values.common.name }}
+          image: {{ quote .Values.common.image }}
+          imagePullPolicy: {{ .Values.common.imagePullPolicy }}
           env:
-          {{- range $k, $v := .Values.env }}
+          {{- range $k, $v := .Values.common.env }}
             - name: {{ $k }}
               value: {{ $v | quote }}
           {{- end }}
@@ -44,13 +44,13 @@ spec:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: {{ .Values.name }}
+  name: {{ .Values.common.name }}
   namespace: composable-dra
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ .Values.name }}
+  name: {{ .Values.common.name }}
 rules:
   - apiGroups: [""]
     resources: ["nodes"]
@@ -62,20 +62,20 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: {{ printf "%s-binding" .Values.name }}
+  name: {{ printf "%s-binding" .Values.common.name }}
 subjects:
   - kind: ServiceAccount
-    name: {{ .Values.name }}
+    name: {{ .Values.common.name }}
     namespace: composable-dra
 roleRef:
   kind: ClusterRole
-  name: {{ .Values.name }}
+  name: {{ .Values.common.name }}
   apiGroup: rbac.authorization.k8s.io
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: {{ .Values.name }}
+  name: {{ .Values.common.name }}
   namespace: composable-dra
 rules:
   - apiGroups: [""]
@@ -85,13 +85,13 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: {{ printf "%s-binding" .Values.name }}
+  name: {{ printf "%s-binding" .Values.common.name }}
   namespace: composable-dra
 subjects:
   - kind: ServiceAccount
-    name: {{ .Values.name }}
+    name: {{ .Values.common.name }}
     namespace: composable-dra
 roleRef:
   kind: Role
-  name: {{ .Values.name }}
+  name: {{ .Values.common.name }}
   apiGroup: rbac.authorization.k8s.io

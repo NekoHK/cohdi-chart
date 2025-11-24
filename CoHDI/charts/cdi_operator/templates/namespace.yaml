@@ -3,6 +3,7 @@ kind: Namespace
 metadata:
   name: composable-resource-operator-system
   labels:
-    app.kubernetes.io/name: {{ .Values.name }}
+    app.kubernetes.io/name: {{ .Values.common.name }}
     app.kubernetes.io/managed-by: Helm
     control-plane: controller-manager
+

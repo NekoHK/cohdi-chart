@@ -417,8 +417,8 @@ spec:
         runAsNonRoot: true
       containers:
       - name: manager
-        image: {{ .Values.image | quote }}
-        imagePullPolicy: {{ .Values.imagePullPolicy }}
+        image: {{ .Values.common.image | quote }}
+        imagePullPolicy: {{ .Values.common.imagePullPolicy }}
         command: ["/manager"]
         args:
           - --metrics-bind-address=:8443
@@ -432,7 +432,7 @@ spec:
         - name: SSL_CERT_FILE
           value: "/etc/ssl/certs/custom-ca/ca.crt"
         - name: FTI_CDI_TENANT_ID
-          value: {{ .Values.global.TENANT_ID }}
+          value: {{ .Values.global.fti_cdi.TENANT_ID }}
         - name: FTI_CDI_ENDPOINT
         {{- with (first .Values.global.fti_cdi.hostAliases) }}
           value: "{{ .ip }}:443"
