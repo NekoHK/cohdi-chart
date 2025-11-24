@@ -32,14 +32,18 @@ spec:
           image: {{ quote .Values.common.image }}
           imagePullPolicy: {{ .Values.common.imagePullPolicy }}
           env:
-          {{- range $k, $v := .Values.common.env }}
-            - name: {{ $k }}
-              value: {{ $v | quote }}
-          {{- end }}
             - name: CDI_ENDPOINT
               value: {{ .Values.global.fti_cdi.env.CDI_ENDPOINT }}
             - name: TENANT_ID
               value: {{ .Values.global.fti_cdi.env.TENANT_ID }}
+          {{- range $k, $v := .Values.fti_cdi.env }}
+            - name: {{ $k }}
+              value: {{ $v | quote }}
+          {{- end }}
+          {{- range $k, $v := .Values.common.env }}
+            - name: {{ $k }}
+              value: {{ $v | quote }}
+          {{- end }}
 ---
 apiVersion: v1
 kind: ServiceAccount
