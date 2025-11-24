@@ -15,5 +15,5 @@ steps:
   inputs: 
     helmVersionToInstall: latest
 
-- script: helm lint CoHDI
-  displayName: 'Check Helm charts'
+- script: helm lint CoHDI && helm template CoHDI
+  displayName: 'Check Helm chart and subcharts'
