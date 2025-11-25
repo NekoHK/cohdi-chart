@@ -150,17 +150,17 @@ metadata:
   name: composable-resource-operator-controller-manager
   namespace: composable-resource-operator-system
   labels:
-    app.kubernetes.io/name: {{ .Values.name }}
+    app.kubernetes.io/name: {{ .Values.common.name }}
     app.kubernetes.io/managed-by: Helm
 ---
 # Leader election Role (namespaced)
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: {{ .Values.name }}-leader-election-role
+  name: {{ .Values.common.name }}-leader-election-role
   namespace: composable-resource-operator-system
   labels:
-    app.kubernetes.io/name: {{ .Values.name }}
+    app.kubernetes.io/name: {{ .Values.common.name }}
     app.kubernetes.io/managed-by: Helm
 rules:
 - apiGroups: [""]
@@ -177,9 +177,9 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ .Values.name }}-composabilityrequest-editor-role
+  name: {{ .Values.common.name }}-composabilityrequest-editor-role
   labels:
-    app.kubernetes.io/name: {{ .Values.name }}
+    app.kubernetes.io/name: {{ .Values.common.name }}
     app.kubernetes.io/managed-by: Helm
 rules:
 - apiGroups: ["cro.hpsys.ibm.ie.com"]
@@ -192,9 +192,9 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ .Values.name }}-composabilityrequest-viewer-role
+  name: {{ .Values.common.name }}-composabilityrequest-viewer-role
   labels:
-    app.kubernetes.io/name: {{ .Values.name }}
+    app.kubernetes.io/name: {{ .Values.common.name }}
     app.kubernetes.io/managed-by: Helm
 rules:
 - apiGroups: ["cro.hpsys.ibm.ie.com"]
@@ -207,9 +207,9 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ .Values.name }}-composableresource-editor-role
+  name: {{ .Values.common.name }}-composableresource-editor-role
   labels:
-    app.kubernetes.io/name: {{ .Values.name }}
+    app.kubernetes.io/name: {{ .Values.common.name }}
     app.kubernetes.io/managed-by: Helm
 rules:
 - apiGroups: ["cro.hpsys.ibm.ie.com"]
@@ -222,9 +222,9 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ .Values.name }}-composableresource-viewer-role
+  name: {{ .Values.common.name }}-composableresource-viewer-role
   labels:
-    app.kubernetes.io/name: {{ .Values.name }}
+    app.kubernetes.io/name: {{ .Values.common.name }}
     app.kubernetes.io/managed-by: Helm
 rules:
 - apiGroups: ["cro.hpsys.ibm.ie.com"]
@@ -237,7 +237,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ .Values.name }}-manager-role
+  name: {{ .Values.common.name }}-manager-role
 rules:
 - apiGroups: [""]
   resources: ["nodes","pods"]
@@ -289,7 +289,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ .Values.name }}-metrics-auth-role
+  name: {{ .Values.common.name }}-metrics-auth-role
 rules:
 - apiGroups: ["authentication.k8s.io"]
   resources: ["tokenreviews"]
@@ -301,7 +301,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ .Values.name }}-metrics-reader
+  name: {{ .Values.common.name }}-metrics-reader
 rules:
 - nonResourceURLs: ["/metrics"]
   verbs: ["get"]
@@ -310,15 +310,15 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: {{ .Values.name }}-leader-election-rolebinding
+  name: {{ .Values.common.name }}-leader-election-rolebinding
   namespace: composable-resource-operator-system
   labels:
-    app.kubernetes.io/name: {{ .Values.name }}
+    app.kubernetes.io/name: {{ .Values.common.name }}
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: {{ .Values.name }}-leader-election-role
+  name: {{ .Values.common.name }}-leader-election-role
 subjects:
 - kind: ServiceAccount
   name: composable-resource-operator-controller-manager
@@ -328,14 +328,14 @@ subjects:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: {{ .Values.name }}-manager-rolebinding
+  name: {{ .Values.common.name }}-manager-rolebinding
   labels:
-    app.kubernetes.io/name: {{ .Values.name }}
+    app.kubernetes.io/name: {{ .Values.common.name }}
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ .Values.name }}-manager-role
+  name: {{ .Values.common.name }}-manager-role
 subjects:
 - kind: ServiceAccount
   name: composable-resource-operator-controller-manager
@@ -344,11 +344,11 @@ subjects:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: {{ .Values.name }}-metrics-auth-rolebinding
+  name: {{ .Values.common.name }}-metrics-auth-rolebinding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ .Values.name }}-metrics-auth-role
+  name: {{ .Values.common.name }}-metrics-auth-role
 subjects:
 - kind: ServiceAccount
   name: composable-resource-operator-controller-manager
@@ -358,10 +358,10 @@ subjects:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.name }}-controller-manager-metrics-service
+  name: {{ .Values.common.name }}-controller-manager-metrics-service
   namespace: composable-resource-operator-system
   labels:
-    app.kubernetes.io/name: {{ .Values.name }}
+    app.kubernetes.io/name: {{ .Values.common.name }}
     app.kubernetes.io/managed-by: Helm
     control-plane: controller-manager
 spec:
@@ -376,10 +376,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.name }}-webhook-service
+  name: {{ .Values.common.name }}-webhook-service
   namespace: composable-resource-operator-system
   labels:
-    app.kubernetes.io/name: {{ .Values.name }}
+    app.kubernetes.io/name: {{ .Values.common.name }}
     app.kubernetes.io/managed-by: Helm
 spec:
   ports:
@@ -393,10 +393,10 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.name }}-controller-manager
+  name: {{ .Values.common.name }}-controller-manager
   namespace: composable-resource-operator-system
   labels:
-    app.kubernetes.io/name: {{ .Values.name }}
+    app.kubernetes.io/name: {{ .Values.common.name }}
     app.kubernetes.io/managed-by: Helm
     control-plane: controller-manager
 spec:
@@ -425,14 +425,18 @@ spec:
           - --leader-elect
           - --health-probe-bind-address=:8081
         env:
-{{- range $k, $v := .Values.managerEnv }}
+{{- range $k, $v := .Values.fti_cdi.managerEnv }}
+        - name: {{ $k }}
+          value: {{ $v | quote }}
+{{- end }}
+{{- range $k, $v := .Values.common.managerEnv }}
         - name: {{ $k }}
           value: {{ $v | quote }}
 {{- end }}
         - name: SSL_CERT_FILE
           value: "/etc/ssl/certs/custom-ca/ca.crt"
         - name: FTI_CDI_TENANT_ID
-          value: {{ .Values.global.fti_cdi.TENANT_ID }}
+          value: {{ .Values.global.fti_cdi.env.TENANT_ID | quote}}
         - name: FTI_CDI_ENDPOINT
         {{- with (first .Values.global.fti_cdi.hostAliases) }}
           value: "{{ .ip }}:443"
@@ -481,7 +485,7 @@ spec:
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
 metadata:
-  name: {{ .Values.name }}-validating-webhook-configuration
+  name: {{ .Values.common.name }}-validating-webhook-configuration
 webhooks:
 - name: vcomposabilityrequest.kb.io
   admissionReviewVersions: ["v1"]
@@ -490,7 +494,7 @@ webhooks:
   clientConfig:
     caBundle: {{ .Values.common.webhook.client.caBundle | quote }}
     service:
-      name: {{ .Values.name }}-webhook-service
+      name: {{ .Values.common.name }}-webhook-service
       namespace: composable-resource-operator-system
       path: /validate-cro-hpsys-ibm-ie-com-v1alpha1-composabilityrequest
   rules:
