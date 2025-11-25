@@ -1,0 +1,52 @@
+suite: Test Deployment Rendering
+templates:
+  - templates/deployment.yaml
+
+tests:
+  - it: should set correct deployment name
+    set:
+      common.name: cdi-dra
+      common.image: "10.38.251.227:5000/cdi-dra:v19-c6e55ba"
+      common.imagePullPolicy: IfNotPresent
+      global.fti_cdi.hostAliases: []
+      global.fti_cdi.env.CDI_ENDPOINT: "http://dummy-endpoint"
+      global.fti_cdi.env.TENANT_ID: "tenant-123"
+    documentSelector:
+      path: kind
+      value: Deployment
+    asserts:
+      - equal:
+          path: metadata.name
+          value: cdi-dra
+
+  - it: should use correct image
+    set:
+      common.name: cdi-dra
+      common.image: "10.38.251.227:5000/cdi-dra:v19-c6e55ba"
+      global.fti_cdi.hostAliases: []
+      global.fti_cdi.env.CDI_ENDPOINT: "http://dummy-endpoint"
+      global.fti_cdi.env.TENANT_ID: "tenant-123"
+    documentSelector:
+      path: kind
+      value: Deployment
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: "10.38.251.227:5000/cdi-dra:v19-c6e55ba"
+
+  - it: should include env vars from fti_cdi
+    set:
+      common.name: cdi-dra
+      global.fti_cdi.hostAliases: []
+      global.fti_cdi.env.CDI_ENDPOINT: "http://dummy-endpoint"
+      global.fti_cdi.env.TENANT_ID: "tenant-123"
+      fti_cdi.env.USE_CAPI_BMH: "true"
+    documentSelector:
+      path: kind
+      value: Deployment
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: USE_CAPI_BMH
+            value: "true"

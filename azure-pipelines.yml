@@ -5,6 +5,7 @@
 
 trigger:
 - feature-2281
+- feature-2281-*
 
 pool:
   vmImage: ubuntu-latest
@@ -20,3 +21,8 @@ steps:
 
 - script: helm template CoHDI
   displayName: 'Generate template locally'
+
+- script: |
+    chmod +x run_all_helm_tests.sh
+    ./run_all_helm_tests.sh
+  displayName: 'Run all Helm unit tests'
