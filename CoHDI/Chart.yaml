@@ -4,13 +4,4 @@ description: Umbrella chart for CDI DRA, CRO operator, and DDS.
 type: application
 version: 0.1.0
 appVersion: "0.1.0"
-dependencies:
-  - name: cdi-dra
-    version: 0.1.0
-    repository: "file://./charts/cdi_dra"
-  - name: cdi-operator
-    version: 0.1.0
-    repository: "file://./charts/cdi_operator"
-  - name: dds
-    version: 0.1.0
-    repository: "file://./charts/dds"
+

@@ -79,10 +79,10 @@ The `values.yaml` that needs to be updated is below.
 CoHDI/
   values.yaml (common to all components)
   charts/
-    cdi_dra/
-      values.yaml (for cdi_dra)
-    cdi_operator/
-      values.yaml (for cdi_operator)
+    cdi-dra/
+      values.yaml (for cdi-dra)
+    cdi-operator/
+      values.yaml (for cdi-operator)
     dds/
       values.yaml (for dds)
 ```
@@ -107,7 +107,7 @@ Below is a list of items that should be updated in `values.yaml`.
 | ip                            | CDI management IP address                  | *1   | 111.111.111.111              |
 | hostnames                     | CDI admin hostname                         | *1   | cdimgr.localdomain           |
 
-### `values.yaml` for cdi_dra
+### `values.yaml` for cdi-dra
 
 | Key                           | Description                                | Get  | Initial value                |
 |:------------------------------|:-------------------------------------------|:----:|:-----------------------------|
@@ -129,7 +129,7 @@ Below is a list of items that should be updated in `values.yaml`.
 | DEVICE_NO_REMOVAL_DURATION    | Time from last use of device until it can be detached | *4 | "10"                |
 | DEVICE_NO_ALLOCATION_DURATION | Time from last use of device to reschedule | *4   | "10"                         |
 
-### `values.yaml` for cdi_operator
+### `values.yaml` for cdi-operator
 
 | Key                           | Description                                | Get  | Initial value                |
 |:------------------------------|:-------------------------------------------|:----:|:-----------------------------|
