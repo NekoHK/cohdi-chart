@@ -27,7 +27,7 @@ trap 'echo -e "\nFAILED during: ${CURRENT_STEP}\nAborting."; exit 1' ERR
 
 sudo -E test -x /var/lib/rancher/rke2/bin/kubectl || { echo "kubectl not found at /var/lib/rancher/rke2/bin"; ls -l /var/lib/rancher/rke2/bin; exit 1; }
 sudo -E ln -sf /var/lib/rancher/rke2/bin/kubectl /usr/bin/kubectl
-sudo -E which kubectl  
+sudo -E which kubectl
 sudo -E kubectl version --client=true
 sudo -E install -d -m 700 /root/.kube
 sudo -E install -m 644 /etc/rancher/rke2/rke2.yaml /root/.kube/config
@@ -361,14 +361,14 @@ EOF
 
     # (3) Restart rke2 server & agent
     sudo -E systemctl restart rke2-server || true
-    # sudo -E systemctl restart rke2-agent || true  #RR: Last time I tried this it couldn't restart, but after machine reboot it worked fine 
+    # sudo -E systemctl restart rke2-agent || true  #RR: Last time I tried this it couldn't restart, but after machine reboot it worked fine
 
     # (4) ctr pulls
     #RR: needs to be run with sudo, but with sudo it doesn't recognize the path to crt so I used the full path in the command
     sudo chmod 644 /etc/rancher/rke2/rke2.yaml
-    sudo -E /var/lib/rancher/rke2/bin/ctr -a /run/k3s/containerd/containerd.sock -n k8s.io i pull --user "${REG_USER}:${REG_PASS}" "${REG_HOST}/dds:latest" || true
-    sudo -E /var/lib/rancher/rke2/bin/ctr -a /run/k3s/containerd/containerd.sock -n k8s.io i pull --user "${REG_USER}:${REG_PASS}" "${REG_HOST}/cdi-operator:latest" || true
-    sudo -E /var/lib/rancher/rke2/bin/ctr -a /run/k3s/containerd/containerd.sock -n k8s.io i pull --user "${REG_USER}:${REG_PASS}" "${REG_HOST}/cdi-dra:${CDI_DRA_TAG}" || true
+    sudo -E /var/lib/rancher/rke2/bin/ctr -a /run/k3s/containerd/containerd.sock -n k8s.io i pull -k /etc/rancher/rke2/certs.d/${REG_HOST}/cohdi-ca.crt --local --user "${REG_USER}:${REG_PASS}" "${REG_HOST}/dds:latest" || true
+    sudo -E /var/lib/rancher/rke2/bin/ctr -a /run/k3s/containerd/containerd.sock -n k8s.io i pull -k /etc/rancher/rke2/certs.d/${REG_HOST}/cohdi-ca.crt --local --user "${REG_USER}:${REG_PASS}" "${REG_HOST}/cdi-operator:latest" || true
+    sudo -E /var/lib/rancher/rke2/bin/ctr -a /run/k3s/containerd/containerd.sock -n k8s.io i pull -k /etc/rancher/rke2/certs.d/${REG_HOST}/cohdi-ca.crt --local --user "${REG_USER}:${REG_PASS}" "${REG_HOST}/cdi-dra:${CDI_DRA_TAG}" || true
 
     echo "SUCCESS: ${CURRENT_STEP}"
 
