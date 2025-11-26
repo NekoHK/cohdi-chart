@@ -4,8 +4,7 @@
 # https://aka.ms/yaml
 
 trigger:
-- feature-2281
-- feature-2281-*
+- feature-2281-tests
 
 pool:
   vmImage: ubuntu-latest
