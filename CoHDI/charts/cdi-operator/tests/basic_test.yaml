@@ -39,7 +39,7 @@ tests:
             password: "pass1"
             client_id: "client1"
             client_secret: "secret1"
-            realm: "realm1"
+            realm: "060ea5a5-46e4-42b4-8d95-70578718d8d0"
           externalCA:
             certificate: "dummy-ca"
     asserts:
@@ -90,7 +90,7 @@ tests:
             password: "pass1"
             client_id: "client1"
             client_secret: "secret1"
-            realm: "realm1"
+            realm: "060ea5a5-46e4-42b4-8d95-70578718d8d0"
           externalCA:
             certificate: "dummy-ca"
     asserts:
@@ -133,7 +133,7 @@ tests:
             password: "pass1"
             client_id: "client1"
             client_secret: "secret1"
-            realm: "realm1"
+            realm: "060ea5a5-46e4-42b4-8d95-70578718d8d0"
           externalCA:
             certificate: "dummy-ca"
     asserts:
@@ -182,15 +182,17 @@ tests:
       global:
         fti_cdi:
           env:
-            TENANT_ID: "tenant-123"
+            TENANT_ID: "060ea5a5-46e4-42b4-8d95-70578718d8d0"
           hostAliases:
-            - ip: "1.2.3.4"
+            - ip: "111.111.111.111"
+              hostnames:
+                - "cdimgr.localdomain"
           credentials:
             username: "user1"
             password: "pass1"
             client_id: "client1"
             client_secret: "secret1"
-            realm: "realm1"
+            realm: "060ea5a5-46e4-42b4-8d95-70578718d8d0"
           externalCA:
             certificate: "dummy-ca"
     documentSelector:
@@ -220,12 +222,12 @@ tests:
           path: spec.template.spec.containers[0].env
           content:
             name: FTI_CDI_TENANT_ID
-            value: "tenant-123"
+            value: "060ea5a5-46e4-42b4-8d95-70578718d8d0"
       - contains:
           path: spec.template.spec.containers[0].env
           content:
             name: FTI_CDI_ENDPOINT
-            value: "1.2.3.4:443"
+            value: "111.111.111.111:443"
 
   - it: renders ValidatingWebhookConfiguration with CA bundle and service
     set:
@@ -237,9 +239,11 @@ tests:
       global:
         fti_cdi:
           env:
-            TENANT_ID: "tenant-123"
+            TENANT_ID: "060ea5a5-46e4-42b4-8d95-70578718d8d0"
           hostAliases:
-            - ip: "1.2.3.4"
+            - ip: "111.111.111.111"
+              hostnames:
+                - "cdimgr.localdomain"
     documentSelector:
       path: kind
       value: ValidatingWebhookConfiguration

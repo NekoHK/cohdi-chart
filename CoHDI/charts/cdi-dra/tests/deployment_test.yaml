@@ -8,9 +8,12 @@ tests:
       common.name: cdi-dra
       common.image: "10.38.251.227:5000/cdi-dra:v19-c6e55ba"
       common.imagePullPolicy: IfNotPresent
-      global.fti_cdi.hostAliases: []
-      global.fti_cdi.env.CDI_ENDPOINT: "http://dummy-endpoint"
-      global.fti_cdi.env.TENANT_ID: "tenant-123"
+      global.fti_cdi.hostAliases:
+        - ip: "111.111.111.111"
+          hostnames:
+            - "cdimgr.localdomain"
+      global.fti_cdi.env.CDI_ENDPOINT: "https://cdimgr.localdomain"
+      global.fti_cdi.env.TENANT_ID: "060ea5a5-46e4-42b4-8d95-70578718d8d0"
     documentSelector:
       path: kind
       value: Deployment
@@ -23,9 +26,12 @@ tests:
     set:
       common.name: cdi-dra
       common.image: "10.38.251.227:5000/cdi-dra:v19-c6e55ba"
-      global.fti_cdi.hostAliases: []
-      global.fti_cdi.env.CDI_ENDPOINT: "http://dummy-endpoint"
-      global.fti_cdi.env.TENANT_ID: "tenant-123"
+      global.fti_cdi.hostAliases:
+        - ip: "111.111.111.111"
+          hostnames:
+            - "cdimgr.localdomain"
+      global.fti_cdi.env.CDI_ENDPOINT: "https://cdimgr.localdomain"
+      global.fti_cdi.env.TENANT_ID: "060ea5a5-46e4-42b4-8d95-70578718d8d0"
     documentSelector:
       path: kind
       value: Deployment
@@ -37,9 +43,12 @@ tests:
   - it: should include env vars from fti_cdi
     set:
       common.name: cdi-dra
-      global.fti_cdi.hostAliases: []
-      global.fti_cdi.env.CDI_ENDPOINT: "http://dummy-endpoint"
-      global.fti_cdi.env.TENANT_ID: "tenant-123"
+      global.fti_cdi.hostAliases:
+        - ip: "111.111.111.111"
+          hostnames:
+            - "cdimgr.localdomain"
+      global.fti_cdi.env.CDI_ENDPOINT: "https://cdimgr.localdomain"
+      global.fti_cdi.env.TENANT_ID: "060ea5a5-46e4-42b4-8d95-70578718d8d0"
       fti_cdi.env.USE_CAPI_BMH: "true"
     documentSelector:
       path: kind

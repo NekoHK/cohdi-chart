@@ -1,6 +1,6 @@
 apiVersion: v2
 name: CoHDI
-description: Umbrella chart for CDI DRA, CRO operator, and DDS.
+description: CoHDI chart for CDI DRA, CRO operator, and DDS.
 type: application
 version: 0.1.0
 appVersion: "0.1.0"

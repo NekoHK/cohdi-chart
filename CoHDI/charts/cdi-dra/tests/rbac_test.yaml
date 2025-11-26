@@ -11,10 +11,13 @@ tests:
       common.imagePullPolicy: IfNotPresent
       global:
         fti_cdi:
-          hostAliases: []
+          hostAliases:
+          - ip: "111.111.111.111"
+            hostnames:
+              - "cdimgr.localdomain"
           env:
-            CDI_ENDPOINT: "http://dummy-endpoint"
-            TENANT_ID: "tenant-123"
+            CDI_ENDPOINT: "https://cdimgr.localdomain"
+            TENANT_ID: "060ea5a5-46e4-42b4-8d95-70578718d8d0"
     documentSelector:
       path: kind
       value: ServiceAccount
@@ -32,10 +35,13 @@ tests:
       common.imagePullPolicy: IfNotPresent
       global:
         fti_cdi:
-          hostAliases: []
+          hostAliases:
+          - ip: "111.111.111.111"
+            hostnames:
+              - "cdimgr.localdomain"
           env:
-            CDI_ENDPOINT: "http://dummy-endpoint"
-            TENANT_ID: "tenant-123"
+            CDI_ENDPOINT: "https://cdimgr.localdomain"
+            TENANT_ID: "060ea5a5-46e4-42b4-8d95-70578718d8d0"
     documentSelector:
       path: kind
       value: ClusterRoleBinding
