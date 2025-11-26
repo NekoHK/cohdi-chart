@@ -13,7 +13,7 @@ pool:
 steps:
 - task: HelmInstaller@1
   displayName: Helm installer
-  inputs: 
+  inputs:
     helmVersionToInstall: latest
 
 - script: helm lint --strict CoHDI
@@ -22,7 +22,7 @@ steps:
 - script: helm template CoHDI
   displayName: 'Generate template locally'
 
-- script: |
-    chmod +x run_all_helm_tests.sh
-    ./run_all_helm_tests.sh
+- task: ShellScript@2
+  inputs:
+    scriptPath: 'run_all_helm_tests.sh'
   displayName: 'Run all Helm unit tests'
