@@ -1,74 +1,38 @@
 common:
   name: composable-resource-operator
 
-  image: "10.38.251.227:5000/cdi-operator:latest"
-  imagePullPolicy: IfNotPresent
+  image:
+    registry: docker.io
+    repository: bitnami/cdi-operator
+    tag: latest
+    pullPolicy: IfNotPresent
 
   webhook:
-    client:
-      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURFekNDQWZ1Z0F3SUJBZ0lVTW55WEVkSmhYamdqNE9qQ0JUNVYvNXN2VWdFd0RRWUpLb1pJaHZjTkFRRUwKQlFBd0dURVhNQlVHQTFVRUF3d09ZM0p2TFhkbFltaHZiMnN0WTJFd0hoY05NalV3TlRNd01UWTFPVFUyV2hjTgpNelV3TlRJNE1UWTFPVFUyV2pBWk1SY3dGUVlEVlFRRERBNWpjbTh0ZDJWaWFHOXZheTFqWVRDQ0FTSXdEUVlKCktvWklodmNOQVFFQkJRQURnZ0VQQURDQ0FRb0NnZ0VCQUpsRlU0SjFxR1hkK1BqcmxaWmpuNHF1RlJwcks5eXUKLytDQWp1alJnWFFhcStiNGVUSDNCaWxMOEQ3eGlPWkFmdmgzRm5SbWlVdjBObUNiSUdMVldQZXdIT0ZYWnBjRAorZVliZk9qS2UzUmFlcFhPdFRoU05tYmZkM1U3b0Q0U3hHUGY2RXRWeXUvUmlsck1tL3dOZ29BYWgrd1pKUGJLCks5M1JwK1ZFcTVuUDh1Y1ozQlFjRFlNaUJtYkYrTFNCdlkzNHdsZzliQk1xY0F6SUg5Zm15VU8rNTk4QTM5V3EKWG8rNDQ2ZDNaekRYVk4wbHFwRGM5MERhMlpTR2ZzM09RRWxmOWtLNG1PTVJCa1h0Z09IQVNSdUUvd3hSRVludgppczM0YjVOdTVvWVFndmcrNy9ZNnNPanp2SlNXM3VMbjhmektRay8zNm5BL2x4dHY3MDhxVmFVQ0F3RUFBYU5UCk1GRXdIUVlEVlIwT0JCWUVGRFdSTkl5UUV6cXZEdVFRQjRET25tbjFobzQ5TUI4R0ExVWRJd1FZTUJhQUZEV1IKTkl5UUV6cXZEdVFRQjRET25tbjFobzQ5TUE4R0ExVWRFd0VCL3dRRk1BTUJBZjh3RFFZSktvWklodmNOQVFFTApCUUFEZ2dFQkFCNWxyUGJLNVZDRDhWdnBndkU2V0NCQ1JWbEwvQU15RURkalFmeFFEM1lsZEljcXdnY3lITkZwCnRVM0JwR1NScFE1SU83SGYxZmZ6YTMybXA3YjJLUDBXMkFYa3hQZGtPeW5VMUQ4RGZYbXV3NDlKaHpFcGMwL0UKK2xTZkNEWnpkUVVyMXVwNGxvNUlOSlRaV3NhSE1wMnJacHduejJUMnRIZDZHaDdZV29lTFNvM3ZhQVYrNEFSSgorQmdpaU9kMlpnL0V1aE84ZENyYS9Mc2sxcVhib2hKZ213dEhIYTNnaUF4ZmpNcFdZdXlGN2hZUTl6V0ZUZ2Z3Ck43TjUxZXpxQmVDR3YrbG1ySmJWODlnbW5SWktMTml6aC9UelRjNkNHRWIyUklJWkJYWVpjUDJOOEd0LzJLdDcKYWowOVVsYlExTE9pajU3MldZNEI1OGhaeERIbXZZND0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQ==
+    client: |
+        -----BEGIN CERTIFICATE-----
+        @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+        @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+        @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+        -----END CERTIFICATE-----
 
     server:
       crt: |
         -----BEGIN CERTIFICATE-----
-        MIIERzCCAy+gAwIBAgIUW5ZV/bSYz7P1H+Xu00M7EcFW0+QwDQYJKoZIhvcNAQEL
-        BQAwNzE1MDMGA1UEAwwsY29tcG9zYWJsZS1yZXNvdXJjZS1vcGVyYXRvci13ZWJo
-        b29rLXNlcnZpY2UwHhcNMjUxMDE0MTAzNjUwWhcNMjYxMDE0MTAzNjUwWjA3MTUw
-        MwYDVQQDDCxjb21wb3NhYmxlLXJlc291cmNlLW9wZXJhdG9yLXdlYmhvb2stc2Vy
-        dmljZTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAOCupppfZVgcoRIy
-        kl3skHdk7jRALhoE2/AHqTJXSWqPCVEKIKB5LLAvFkxpiy+tHpPiq1CYdkcyoo2S
-        Y7rrV0IwSzqMMUpMqDXy7bwFSIoJfSqA6MF3LhT8LjeNtCf0WxUgof34WzIlPIBD
-        wshg4l1d27JHZoKNiKZ+4Q+c6DLwspBkFAs2LcT7PRYbF9Ya/mNdbSNxcnxXAaL+
-        sV/qZSYA0l5KbIEse82MkKhS54MnfPdBzSQCJwimZEmYSDaX9AjpktdaHGsUJ16C
-        jb3EgtgsLkHguT4+pb4xbGsnwcccxFXiyYNOYMcfVVFtfJs8b3sUL/nHFRaejKwf
-        urW+ou0CAwEAAaOCAUkwggFFMB0GA1UdDgQWBBTw8NEj7gcTApR8GQCU9ZpA1GDh
-        1zAfBgNVHSMEGDAWgBTw8NEj7gcTApR8GQCU9ZpA1GDh1zCBxQYDVR0RBIG9MIG6
-        glRjb21wb3NhYmxlLXJlc291cmNlLW9wZXJhdG9yLXdlYmhvb2stc2VydmljZS5j
-        b21wb3NhYmxlLXJlc291cmNlLW9wZXJhdG9yLXN5c3RlbS5zdmOCYmNvbXBvc2Fi
-        bGUtcmVzb3VyY2Utb3BlcmF0b3Itd2ViaG9vay1zZXJ2aWNlLmNvbXBvc2FibGUt
-        cmVzb3VyY2Utb3BlcmF0b3Itc3lzdGVtLnN2Yy5jbHVzdGVyLmxvY2FsMAwGA1Ud
-        EwEB/wQCMAAwDgYDVR0PAQH/BAQDAgWgMB0GA1UdJQQWMBQGCCsGAQUFBwMBBggr
-        BgEFBQcDAjANBgkqhkiG9w0BAQsFAAOCAQEAHdSZRwJpYblk4wyRfnfkWZb8uYoE
-        FQ95pyPj55om8gi9U4gOp9puPVOrgaG9gYuGrOzr64oV4bihs5SHSCH5Y4/ojumn
-        WMS+vKRpw7jzpXT7BvLz+M2lbAHciUxKvgwsKU6wGnS5EHfUhOhlmYQIlVHtJo+u
-        ydojxJYvRY36SLDzT8OTJ6F/T/qNnNx58XAfxtBNMC2kt3/RmG1wnQhu7UTVyzT2
-        Kf1tLtdY+TokKmOMfQNpCINLI0F7xDu1bf1NWrSj7ZeK57TR9MerkJn275tPEotv
-        rW/yHBhyNqJ7X0dPlyMZqSz7cxxCZnDtTWbPlAVy8DWL9XKHHAojhFhcCg==
+        @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+        @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+        @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
         -----END CERTIFICATE-----
 
       key: |
         -----BEGIN PRIVATE KEY-----
-        MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDgrqaaX2VYHKES
-        MpJd7JB3ZO40QC4aBNvwB6kyV0lqjwlRCiCgeSywLxZMaYsvrR6T4qtQmHZHMqKN
-        kmO661dCMEs6jDFKTKg18u28BUiKCX0qgOjBdy4U/C43jbQn9FsVIKH9+FsyJTyA
-        Q8LIYOJdXduyR2aCjYimfuEPnOgy8LKQZBQLNi3E+z0WGxfWGv5jXW0jcXJ8VwGi
-        /rFf6mUmANJeSmyBLHvNjJCoUueDJ3z3Qc0kAicIpmRJmEg2l/QI6ZLXWhxrFCde
-        go29xILYLC5B4Lk+PqW+MWxrJ8HHHMRV4smDTmDHH1VRbXybPG97FC/5xxUWnoys
-        H7q1vqLtAgMBAAECggEAP/ssIUCyJNW+PmbdTFbNytoYhROTrUAd+2vLEDVQCEKk
-        JgoqwVfQVHmMMYVKp/B2CSnenAxWfi7aoFMECFn1FrmW6py6eox6yCYd8dFVV02d
-        cYmU/ma4Xixz4sj8+PW6LDmHN8HOAmkdIe9p29LPE0RjiBCSDfJM7BCseVw2uS5O
-        KqDioagGYq3I8EdVkpVHruAZ9wqI7WzPv/KNsGzKbkzhLVsel4emwN44P8It0slT
-        VGWkRDVKuJCYi+AkQpe5RsgLyo5EgzfwqJFlpwyrL9Ony/NoG2z2GcHRQDU1ZQst
-        6MDESpQJ/ykfDLqbl8L7FC+exV0cfg197U7BonTalwKBgQDxoxk8ex59kO6bYBr7
-        tobwtZPYCZm3brFCZr8SbRm4W89giGFmcTCzmmKbmQaAa6pAIAg04rGKQfudvlTJ
-        2ikXtuDI2M+3eFuauJyfnzcskTdIEzC9z99gSXgIeyMdrphx6aDplFDpZGr3u0SZ
-        kuctECIZshGA0Y1BLxQFiRNfEwKBgQDuCY5le2JRI6lg0fWhwITmIu/AzW4ijR6W
-        bDUCNuGCFGEQk4xrKEDGwl+VaLPGh9pSbcQzDrX2yM16mutfGlYTPqBwr6T8BjpE
-        6b5PudI6qgoJMAWnLnZLpzgHYSHGdgwvovkxWR+g3TSpOd/E2y5vRy6KO6rFmhvE
-        spwFmKw1/wKBgCMRP21WlNM2QFqONPxIvgaa42zb39IOH216ico7yRrHQC5LPI9o
-        Z9/4zMy2BYqHlXqe63H5YDinYMPAxn9QyNvnL3IWfPasYebvWdOUgKZYIMS1/EHf
-        tBQ+NUxNyofZOch2VmLvolpst1VieQ8skZ4plDlUbVPblXtbQLWY8hW/AoGAfyU/
-        mFlFdM21pW/A4ntxAXRb2AJi97WlRvfZgKtL3S2Bg1csw/gmUYR1hdr9W+go56qW
-        CCetbnpntzuUyaHJpFHpZQeM+slgynqIGxHIh2lYHvw1qM0ahuJ0/QwW/GkFrVRC
-        Auf2CvjdLh8ptX7V2L6Oz2t7ljzw5Cn7SMn6AoUCgYAZe1m6UxVXGjM9baY3FbyN
-        mSdUxTwUDL0HT938CCNt96K3IJj69zM23+cMBvzhRdoFP4skm5ZPnIemVXy4EEPk
-        0dQkf8ihLCa3Xt+Rq8i06G7kydB/D/pGcbdXJ3+9brh+kBhVPgGNhQ2svLZUZ7Vp
-        xFIhKfAUCp9cqgBwga0zVw==
+        @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+        @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+        @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
         -----END PRIVATE KEY-----
 
   managerEnv:
-    CDI_PROVIDER_TYPE: "FTI_CDI"
     DEVICE_RESOURCE_TYPE: "DRA"
+    CDI_PROVIDER_TYPE: "FTI_CDI"
 
 fti_cdi:
   managerEnv:

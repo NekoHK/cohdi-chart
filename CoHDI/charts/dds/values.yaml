@@ -1,8 +1,11 @@
 common:
   name: dynamic-device-scaler
 
-  image: "10.38.251.227:5000/dds:latest"
-  imagePullPolicy: IfNotPresent
+  image:
+    registry: docker.io
+    repository: bitnami/dds
+    tag: latest
+    pullPolicy: IfNotPresent
 
   env:
     SCAN_INTERVAL: "10"
