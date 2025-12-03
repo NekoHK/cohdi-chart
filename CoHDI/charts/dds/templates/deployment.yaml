@@ -4,7 +4,7 @@ Simplified deployment template with hardcoded namespace, service account, and RB
 
 {{- $name := required "Values.common.name is required" .Values.common.name -}}
 {{- $image := required "Values.common.image is required" .Values.common.image -}}
-{{- $imagePullPolicy := required "Values.common.imagePullPolicy is required" .Values.common.imagePullPolicy -}}
+{{- $imagePullPolicy := default "IfNotPresent" .Values.common.imagePullPolicy -}}
 
 {{/* Hardcoded values */}}
 {{- $ns := "composable-dra" -}}
