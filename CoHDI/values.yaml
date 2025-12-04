@@ -27,43 +27,26 @@ global:
 
   fti_cdi:
     credentials:
-      username: "invalid_username"
-      password: "CDI@dm1n"
-      realm: "060ea5a5-46e4-42b4-8d95-70578718d8d0"
+      username: "username"
+      password: "password"
+      realm: "00000000-0000-0000-0000-000000000000"
       client_id: "cdi"
-      client_secret: "Zmet0q6Xjno0xzaAr76IH2IYr7DfScZj"
+      client_secret: "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
     env:
       CDI_ENDPOINT: "https://cdimgr.localdomain"
       CLUSTER_ID: ""
-      TENANT_ID: "060ea5a5-46e4-42b4-8d95-70578718d8d0"
+      TENANT_ID: "00000000-0000-0000-0000-000000000000"
 
     externalCA:
       certificate: |
         -----BEGIN CERTIFICATE-----
-        MIIDkjCCAnqgAwIBAgIUaSicFyqWGzZijlylo5oggwM9EoUwDQYJKoZIhvcNAQEL
-        BQAwXzELMAkGA1UEBhMCSlAxFTATBgNVBAcMDERlZmF1bHQgQ2l0eTEcMBoGA1UE
-        CgwTRGVmYXVsdCBDb21wYW55IEx0ZDEbMBkGA1UEAwwSY2RpbWdyLmxvY2FsZG9t
-        YWluMB4XDTI1MDkyOTA2MjcxNFoXDTI2MDkyOTA2MjcxNFowXzELMAkGA1UEBhMC
-        SlAxFTATBgNVBAcMDERlZmF1bHQgQ2l0eTEcMBoGA1UECgwTRGVmYXVsdCBDb21w
-        YW55IEx0ZDEbMBkGA1UEAwwSY2RpbWdyLmxvY2FsZG9tYWluMIIBIjANBgkqhkiG
-        9w0BAQEFAAOCAQ8AMIIBCgKCAQEApjorwHE2za1kN1wTaseUvkrwl92LpqFi8lJb
-        anafDq4t6csyieI+vdZtxFM6QybguzgnAjVh3ANDK6Gs8+i4wAMfnLW2QANhGivc
-        xajtSrZ+ODShrc+/6RGkgk834iNcp6rPZ2z/0vzydBqXjK+UIJdmY5VRLc6tCVdE
-        8rQ3LTYn+aihu5hzuFGectHfoUoM5w5m67u+h+kzbeOQ7GdkMaRKS0+0sbDBC+Ex
-        IOZIoqj4uXvZmGeRXqg9Hp9n9CX5b3mQpJVFU7efdKFSBOwJFJ/dqShW8k15NgsO
-        XquwPWoZVA13sJbRqZOttxd+ZSKVboq1DPV8W5h9jFM9UxcYCQIDAQABo0YwRDAj
-        BgNVHREEHDAaghJjZGltZ3IubG9jYWxkb21haW6HBMCoAWUwHQYDVR0OBBYEFOj6
-        MP36fo1v0JWiZIPmYMIriA2GMA0GCSqGSIb3DQEBCwUAA4IBAQAFe8aYj3KLZOkR
-        FuPxQglVS9mKvBxkKnJzkBPawkDsaEzcoc4mDpPD79gsGY+dcdXhv6XyOHWquxZF
-        4nMkcOibzi+Hra86i2SzFlMTzUHRytlvVtPWmtixK25I0od8mmoJmS/m+W+Tplcy
-        rJfUzsYxGn90Q+MEpzl1TGgaTxftmPP8xgggsJmALdVr9AWudWQYHtDhAFuD/WZv
-        bohsVJazIhOhw6H+40G1HdfZwc9L/aM/YTwVPFhFIYQx38eaDfarZMcbwUTvCUd/
-        oGlPMtMaazOucBSj4q0WpBKEkxakVb7SeWaK5v5KdfVMR+ovmCPmSJTkTWjAPGQu
-        qZBlmIPE
+        @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+        @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+        @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
         -----END CERTIFICATE-----
 
     hostAliases:
-      - ip: 111.111.111.111
+      - ip: 198.51.100.2
         hostnames:
           - cdimgr.localdomain

@@ -79,12 +79,12 @@ The `values.yaml` that needs to be updated is below.
 CoHDI/
   values.yaml (common to all components)
   charts/
-    cdi_dra/
-      values.yaml (for cdi_dra)
-    cdi_operator/
-      values.yaml (for cdi_operator)
-    dds/
-      values.yaml (for dds)
+    composable-dra-driver/
+      values.yaml (for composable-dra-driver)
+    composable-resource-operator/
+      values.yaml (for composable-resource-operator)
+    dynamic-device-scaler/
+      values.yaml (for dynamic-device-scaler)
 ```
 
 Below is a list of items that should be updated in `values.yaml`.
@@ -107,7 +107,7 @@ Below is a list of items that should be updated in `values.yaml`.
 | ip                            | CDI management IP address                  | *1   | 111.111.111.111              |
 | hostnames                     | CDI admin hostname                         | *1   | cdimgr.localdomain           |
 
-### `values.yaml` for cdi_dra
+### `values.yaml` for composable-dra-driver
 
 | Key                           | Description                                | Get  | Initial value                |
 |:------------------------------|:-------------------------------------------|:----:|:-----------------------------|
@@ -118,7 +118,7 @@ Below is a list of items that should be updated in `values.yaml`.
 | USE_CAPI_BMH                  | Availability of ClusterAPI and BMH         | *5   | "false"                      |
 | USE_CM                        | Availability of CM (Cluster Manager)       | *5   | "false"                      |
 
-### `values.yaml` for dds
+### `values.yaml` for dynamic-device-scaler
 
 | Key                           | Description                                | Get  | Initial value                |
 |:------------------------------|:-------------------------------------------|:----:|:-----------------------------|
@@ -129,7 +129,7 @@ Below is a list of items that should be updated in `values.yaml`.
 | DEVICE_NO_REMOVAL_DURATION    | Time from last use of device until it can be detached | *4 | "10"                |
 | DEVICE_NO_ALLOCATION_DURATION | Time from last use of device to reschedule | *4   | "10"                         |
 
-### `values.yaml` for cdi_operator
+### `values.yaml` for composable-resource-operator
 
 | Key                           | Description                                | Get  | Initial value                |
 |:------------------------------|:-------------------------------------------|:----:|:-----------------------------|

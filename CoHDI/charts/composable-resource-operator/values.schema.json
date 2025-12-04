@@ -3,7 +3,6 @@
   "title": "Composable Resource Operator Helm Values",
   "type": "object",
   "additionalProperties": true,
-
   "properties": {
     "common": {
       "type": "object",
@@ -15,33 +14,41 @@
           "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
         },
         "image": {
-          "type": "string",
+          "type": "object",
           "description": "Full image reference, e.g. registry/repo:tag",
-          "minLength": 1
+          "properties": {
+            "registry": {
+              "type": "string",
+              "description": "Container registry, e.g. docker.io"
+            },
+            "repository": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Image repository, e.g. bitnami/cdi-operator"
+            },
+            "tag": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Image tag, e.g. v19-c6e55ba"
+            },
+            "pullPolicy": {
+              "type": "string",
+              "enum": ["Always", "IfNotPresent", "Never"],
+              "default": "IfNotPresent",
+              "description": "Kubernetes image pull policy."
+            }
+          },
+          "required": ["registry", "repository", "tag", "pullPolicy"]
         },
-        "imagePullPolicy": {
-          "type": "string",
-          "enum": ["Always", "IfNotPresent", "Never"],
-          "default": "IfNotPresent",
-          "description": "Kubernetes image pull policy."
-        },
-
         "webhook": {
           "type": "object",
           "description": "Webhook server and client configuration.",
           "additionalProperties": false,
           "properties": {
             "client": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "caBundle": {
-                  "type": "string",
-                  "minLength": 1,
-                  "description": "Base64-encoded CA bundle used by the webhook client."
-                }
-              },
-              "required": ["caBundle"]
+              "type": "string",
+              "minLength": 1,
+              "description": "PEM-encoded CA bundle or client certificate used by the webhook client."
             },
             "server": {
               "type": "object",
@@ -63,7 +70,6 @@
           },
           "required": ["client", "server"]
         },
-
         "managerEnv": {
           "type": "object",
           "description": "Environment variables injected into the manager container.",
@@ -80,9 +86,8 @@
           }
         }
       },
-      "required": ["name", "image", "imagePullPolicy", "webhook", "managerEnv"]
+      "required": ["name", "image", "webhook", "managerEnv"]
     },
-
     "fti_cdi": {
       "type": "object",
       "additionalProperties": true,

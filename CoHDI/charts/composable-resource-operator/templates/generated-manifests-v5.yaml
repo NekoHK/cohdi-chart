@@ -12,6 +12,17 @@ spec:
     plural: composabilityrequests
     singular: composabilityrequest
   scope: Cluster
+  conversion:
+    strategy: Webhook
+    webhook:
+      clientConfig:
+        service:
+          name: composable-resource-operator-webhook-service
+          namespace: composable-resource-operator-system
+          path: /convert
+          port: 443
+      conversionReviewVersions:
+        - v1
   versions:
     - name: v1alpha1
       served: true
@@ -417,8 +428,8 @@ spec:
         runAsNonRoot: true
       containers:
       - name: manager
-        image: {{ .Values.common.image | quote }}
-        imagePullPolicy: {{ .Values.common.imagePullPolicy }}
+        image: {{ printf "%s/%s" .Values.common.image.registry .Values.common.image.repository | quote }}
+        imagePullPolicy: {{ .Values.common.image.pullPolicy }}
         command: ["/manager"]
         args:
           - --metrics-bind-address=:8443
@@ -492,7 +503,7 @@ webhooks:
   sideEffects: None
   failurePolicy: Fail
   clientConfig:
-    caBundle: {{ .Values.common.webhook.client.caBundle | quote }}
+    caBundle: {{ .Values.common.webhook.client | quote }}
     service:
       name: {{ .Values.common.name }}-webhook-service
       namespace: composable-resource-operator-system

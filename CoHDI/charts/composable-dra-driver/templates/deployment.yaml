@@ -29,8 +29,8 @@ spec:
       {{- end }}
       containers:
         - name: {{ .Values.common.name }}
-          image: {{ quote .Values.common.image }}
-          imagePullPolicy: {{ .Values.common.imagePullPolicy }}
+          image: {{ printf "%s/%s" .Values.common.image.registry .Values.common.image.repository | quote }}
+          imagePullPolicy: {{ .Values.common.image.pullPolicy }}
           env:
             - name: CDI_ENDPOINT
               value: {{ .Values.global.fti_cdi.env.CDI_ENDPOINT }}
