@@ -3,11 +3,11 @@ common:
 
   image:
     registry: docker.io
-    repository: bitnami/dds
-    tag: latest
+    repository: bitnami/dynamic-device-scaler
+    tag: 0.1.0
     pullPolicy: IfNotPresent
 
   env:
-    SCAN_INTERVAL: "10"
-    DEVICE_NO_REMOVAL_DURATION: "10"
-    DEVICE_NO_ALLOCATION_DURATION: "10"
+    SCAN_INTERVAL: "60"
+    DEVICE_NO_REMOVAL_DURATION: "600"
+    DEVICE_NO_ALLOCATION_DURATION: "60"

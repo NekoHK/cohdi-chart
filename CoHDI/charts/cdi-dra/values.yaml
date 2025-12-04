@@ -1,10 +1,10 @@
 common:
-  name: cdi-dra
+  name: composable-dra-driver
 
   image:
     registry: docker.io
-    repository: bitnami/cdi-dra
-    tag: v19-c6e55ba
+    repository: bitnami/composable-dra-driver
+    tag: 0.1.0
     pullPolicy: IfNotPresent
 
   env:

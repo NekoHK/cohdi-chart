@@ -3,17 +3,17 @@ common:
 
   image:
     registry: docker.io
-    repository: bitnami/cdi-operator
-    tag: latest
+    repository: bitnami/composable-resource-operator
+    tag: 0.1.0
     pullPolicy: IfNotPresent
 
   webhook:
     client: |
-        -----BEGIN CERTIFICATE-----
-        @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-        @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-        @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-        -----END CERTIFICATE-----
+      -----BEGIN CERTIFICATE-----
+      @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+      @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+      @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+      -----END CERTIFICATE-----
 
     server:
       crt: |

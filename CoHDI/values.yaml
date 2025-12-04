@@ -27,16 +27,16 @@ global:
 
   fti_cdi:
     credentials:
-      username: ""
-      password: ""
-      realm: ""
+      username: "username"
+      password: "password"
+      realm: "00000000-0000-0000-0000-000000000000"
       client_id: "cdi"
-      client_secret: ""
+      client_secret: "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
     env:
       CDI_ENDPOINT: "https://cdimgr.localdomain"
       CLUSTER_ID: ""
-      TENANT_ID: ""
+      TENANT_ID: "00000000-0000-0000-0000-000000000000"
 
     externalCA:
       certificate: |
