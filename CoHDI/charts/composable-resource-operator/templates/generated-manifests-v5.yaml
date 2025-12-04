@@ -417,8 +417,8 @@ spec:
         runAsNonRoot: true
       containers:
       - name: manager
-        image: {{ .Values.common.image | quote }}
-        imagePullPolicy: {{ .Values.common.imagePullPolicy }}
+        image: {{ printf "%s/%s" .Values.common.image.registry .Values.common.image.repository | quote }}
+        imagePullPolicy: {{ .Values.common.image.pullPolicy }}
         command: ["/manager"]
         args:
           - --metrics-bind-address=:8443

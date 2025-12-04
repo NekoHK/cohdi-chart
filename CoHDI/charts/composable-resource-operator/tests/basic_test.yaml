@@ -17,7 +17,6 @@ tests:
           path: metadata.labels["app.kubernetes.io/name"]
           value: composable-resource-operator
 
-
 ---
 suite: cdi-operator secrets checks
 templates:
@@ -157,7 +156,6 @@ tests:
           pattern: ".+"
         documentIndex: 2
 
-
 ---
 suite: cdi-operator deployment and webhook checks
 templates:
@@ -168,14 +166,16 @@ tests:
     set:
       common:
         name: composable-resource-operator
-        image: "example.com/cdi-operator:tag"
-        imagePullPolicy: IfNotPresent
+        image:
+          registry: example.io
+          repository: example/cdi-operator:latest
+          tag: 0.4.0
+          pullPolicy: Never
         managerEnv:
           CDI_PROVIDER_TYPE: "FTI_CDI"
           DEVICE_RESOURCE_TYPE: "DRA"
         webhook:
-          client:
-            caBundle: "dummy-cabundle"
+          client: "dummy-client"
       fti_cdi:
         managerEnv:
           FTI_CDI_API_TYPE: "FM"
@@ -212,7 +212,10 @@ tests:
           value: composable-resource-operator-controller-manager
       - equal:
           path: spec.template.spec.containers[0].image
-          value: "example.com/cdi-operator:tag"
+          value: "example.io/example/cdi-operator:latest"
+      - equal:
+          path: spec.template.spec.containers[0].imagePullPolicy
+          value: Never
       - contains:
           path: spec.template.spec.containers[0].env
           content:
@@ -234,8 +237,7 @@ tests:
       common:
         name: composable-resource-operator
         webhook:
-          client:
-            caBundle: "dummy-cabundle"
+          client: "dummy-client"
       global:
         fti_cdi:
           env:
@@ -255,7 +257,7 @@ tests:
           value: composable-resource-operator-validating-webhook-configuration
       - equal:
           path: webhooks[0].clientConfig.caBundle
-          value: "dummy-cabundle"
+          value: "dummy-client"
       - equal:
           path: webhooks[0].clientConfig.service.name
           value: composable-resource-operator-webhook-service

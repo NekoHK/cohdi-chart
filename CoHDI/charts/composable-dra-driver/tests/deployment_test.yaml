@@ -5,9 +5,14 @@ templates:
 tests:
   - it: should set correct deployment name
     set:
-      common.name: cdi-dra
-      common.image: "10.38.251.227:5000/cdi-dra:v19-c6e55ba"
-      common.imagePullPolicy: IfNotPresent
+      common:
+        name: cdi-dra
+        image:
+          registry: example.io
+          repository: example/cdi-dra:latest
+          tag: 0.4.0
+          pullPolicy: Never
+
       global.fti_cdi.hostAliases:
         - ip: "111.111.111.111"
           hostnames:
@@ -24,8 +29,13 @@ tests:
 
   - it: should use correct image
     set:
-      common.name: cdi-dra
-      common.image: "10.38.251.227:5000/cdi-dra:v19-c6e55ba"
+      common:
+        name: cdi-dra
+        image:
+          registry: example.io
+          repository: example/cdi-dra:latest
+          tag: 0.4.0
+          pullPolicy: Never
       global.fti_cdi.hostAliases:
         - ip: "111.111.111.111"
           hostnames:
@@ -38,7 +48,10 @@ tests:
     asserts:
       - equal:
           path: spec.template.spec.containers[0].image
-          value: "10.38.251.227:5000/cdi-dra:v19-c6e55ba"
+          value: "example.io/example/cdi-dra:latest"
+      - equal:
+          path: spec.template.spec.containers[0].imagePullPolicy
+          value: Never
 
   - it: should include env vars from fti_cdi
     set:
