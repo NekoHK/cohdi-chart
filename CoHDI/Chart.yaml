@@ -5,12 +5,12 @@ type: application
 version: 0.1.0
 appVersion: "0.1.0"
 dependencies:
-  - name: cdi-dra
+  - name: composable-dra-driver
     version: 0.1.0
-    repository: file://charts/cdi-dra
-  - name: cdi-operator
+    repository: file://charts/composable-dra-driver
+  - name: composable-resource-operator
     version: 0.1.0
-    repository: file://charts/cdi-operator
-  - name: dds
+    repository: file://charts/composable-resource-operator
+  - name: dynamic-device-scaler
     version: 0.1.0
-    repository: file://charts/dds
+    repository: file://charts/dynamic-device-scaler

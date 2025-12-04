@@ -1,5 +1,5 @@
 apiVersion: v2
-name: dds
+name: dynamic-device-scaler
 description: Dynamic Device Scaler
 type: application
 version: 0.1.0
