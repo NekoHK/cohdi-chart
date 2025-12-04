@@ -12,6 +12,17 @@ spec:
     plural: composabilityrequests
     singular: composabilityrequest
   scope: Cluster
+  conversion:
+    strategy: Webhook
+    webhook:
+      clientConfig:
+        service:
+          name: composable-resource-operator-webhook-service
+          namespace: composable-resource-operator-system
+          path: /convert
+          port: 443
+      conversionReviewVersions:
+        - v1
   versions:
     - name: v1alpha1
       served: true
