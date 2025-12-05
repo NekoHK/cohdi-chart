@@ -75,13 +75,13 @@
           "description": "Environment variables injected into the manager container.",
           "additionalProperties": { "type": "string" },
           "properties": {
-            "CDI_PROVIDER_TYPE": {
-              "type": "string",
-              "description": "Defines the CDI provider type."
-            },
             "DEVICE_RESOURCE_TYPE": {
               "type": "string",
               "description": "Specifies the DRA device resource type."
+            },
+            "CDI_PROVIDER_TYPE": {
+              "type": "string",
+              "description": "Defines the CDI provider type."
             }
           }
         }
