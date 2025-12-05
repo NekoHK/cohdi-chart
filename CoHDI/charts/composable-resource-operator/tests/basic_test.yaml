@@ -258,6 +258,7 @@ tests:
       - equal:
           path: webhooks[0].clientConfig.caBundle
           value: "dummy-client"
+          decodeBase64: true
       - equal:
           path: webhooks[0].clientConfig.service.name
           value: composable-resource-operator-webhook-service

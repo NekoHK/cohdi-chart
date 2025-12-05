@@ -503,7 +503,7 @@ webhooks:
   sideEffects: None
   failurePolicy: Fail
   clientConfig:
-    caBundle: {{ .Values.common.webhook.client | quote }}
+    caBundle: {{ .Values.common.webhook.client | b64enc | quote }}
     service:
       name: {{ .Values.common.name }}-webhook-service
       namespace: composable-resource-operator-system
