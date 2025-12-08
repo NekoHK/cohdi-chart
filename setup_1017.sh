@@ -17,9 +17,9 @@ REG_HOST="${REG_HOST:-10.38.251.227:5000}"
 REG_USER="${REG_USER:-cdiadmin}"
 REG_PASS="${REG_PASS:-cdiadmin}"
 CA_CERT_SRC="${CA_CERT_SRC:-/usr/share/pki/trust/anchors/cohdi-ca.crt}"
-CDI_DRA_TAG="0.1.0"         # choose tag (doc: updated regularly)
-CDI_CRO_TAG="0.1.0"         # choose tag (doc: updated regularly)
-CDI_DDS_TAG="0.1.0"         # choose tag (doc: updated regularly)
+CDI_DRA_TAG="v19-c6e55ba"         # choose tag (doc: updated regularly)
+CDI_CRO_TAG="gc"         # choose tag (doc: updated regularly)
+CDI_DDS_TAG="test"         # choose tag (doc: updated regularly)
 
 # Kube config (RKE2)
 export KUBECONFIG="${KUBECONFIG:-/etc/rancher/rke2/rke2.yaml}"
