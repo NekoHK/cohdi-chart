@@ -368,9 +368,9 @@ EOF
     # (4) ctr pulls
     #RR: needs to be run with sudo, but with sudo it doesn't recognize the path to crt so I used the full path in the command
     sudo chmod 644 /etc/rancher/rke2/rke2.yaml
-    sudo -E /var/lib/rancher/rke2/bin/ctr -a /run/k3s/containerd/containerd.sock -n k8s.io i pull -k /etc/rancher/rke2/certs.d/${REG_HOST}/cohdi-ca.crt --local --user "${REG_USER}:${REG_PASS}" "${REG_HOST}/dds:${CDI_DDS_TAG}" || true
-    sudo -E /var/lib/rancher/rke2/bin/ctr -a /run/k3s/containerd/containerd.sock -n k8s.io i pull -k /etc/rancher/rke2/certs.d/${REG_HOST}/cohdi-ca.crt --local --user "${REG_USER}:${REG_PASS}" "${REG_HOST}/cdi-operator:${CDI_CRO_TAG}" || true
-    sudo -E /var/lib/rancher/rke2/bin/ctr -a /run/k3s/containerd/containerd.sock -n k8s.io i pull -k /etc/rancher/rke2/certs.d/${REG_HOST}/cohdi-ca.crt --local --user "${REG_USER}:${REG_PASS}" "${REG_HOST}/cdi-dra:${CDI_DRA_TAG}" || true
+    sudo -E /var/lib/rancher/rke2/bin/ctr -a /run/k3s/containerd/containerd.sock -n k8s.io i pull --tlscacert /etc/rancher/rke2/certs.d/${REG_HOST}/cohdi-ca.crt --local --user "${REG_USER}:${REG_PASS}" "${REG_HOST}/dds:${CDI_DDS_TAG}" || true
+    sudo -E /var/lib/rancher/rke2/bin/ctr -a /run/k3s/containerd/containerd.sock -n k8s.io i pull --tlscacert /etc/rancher/rke2/certs.d/${REG_HOST}/cohdi-ca.crt --local --user "${REG_USER}:${REG_PASS}" "${REG_HOST}/cdi-operator:${CDI_CRO_TAG}" || true
+    sudo -E /var/lib/rancher/rke2/bin/ctr -a /run/k3s/containerd/containerd.sock -n k8s.io i pull --tlscacert /etc/rancher/rke2/certs.d/${REG_HOST}/cohdi-ca.crt --local --user "${REG_USER}:${REG_PASS}" "${REG_HOST}/cdi-dra:${CDI_DRA_TAG}" || true
 
     echo "SUCCESS: ${CURRENT_STEP}"
 
