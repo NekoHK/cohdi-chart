@@ -17,7 +17,9 @@ REG_HOST="${REG_HOST:-10.38.251.227:5000}"
 REG_USER="${REG_USER:-cdiadmin}"
 REG_PASS="${REG_PASS:-cdiadmin}"
 CA_CERT_SRC="${CA_CERT_SRC:-/usr/share/pki/trust/anchors/cohdi-ca.crt}"
-CDI_DRA_TAG="v19-c6e55ba"         # choose tag (doc: updated regularly)
+CDI_DRA_TAG="0.1.0"         # choose tag (doc: updated regularly)
+CDI_CRO_TAG="0.1.0"         # choose tag (doc: updated regularly)
+CDI_DDS_TAG="0.1.0"         # choose tag (doc: updated regularly)
 
 # Kube config (RKE2)
 export KUBECONFIG="${KUBECONFIG:-/etc/rancher/rke2/rke2.yaml}"
@@ -366,8 +368,8 @@ EOF
     # (4) ctr pulls
     #RR: needs to be run with sudo, but with sudo it doesn't recognize the path to crt so I used the full path in the command
     sudo chmod 644 /etc/rancher/rke2/rke2.yaml
-    sudo -E /var/lib/rancher/rke2/bin/ctr -a /run/k3s/containerd/containerd.sock -n k8s.io i pull -k /etc/rancher/rke2/certs.d/${REG_HOST}/cohdi-ca.crt --local --user "${REG_USER}:${REG_PASS}" "${REG_HOST}/dds:latest" || true
-    sudo -E /var/lib/rancher/rke2/bin/ctr -a /run/k3s/containerd/containerd.sock -n k8s.io i pull -k /etc/rancher/rke2/certs.d/${REG_HOST}/cohdi-ca.crt --local --user "${REG_USER}:${REG_PASS}" "${REG_HOST}/cdi-operator:latest" || true
+    sudo -E /var/lib/rancher/rke2/bin/ctr -a /run/k3s/containerd/containerd.sock -n k8s.io i pull -k /etc/rancher/rke2/certs.d/${REG_HOST}/cohdi-ca.crt --local --user "${REG_USER}:${REG_PASS}" "${REG_HOST}/dds:${CDI_DDS_TAG}" || true
+    sudo -E /var/lib/rancher/rke2/bin/ctr -a /run/k3s/containerd/containerd.sock -n k8s.io i pull -k /etc/rancher/rke2/certs.d/${REG_HOST}/cohdi-ca.crt --local --user "${REG_USER}:${REG_PASS}" "${REG_HOST}/cdi-operator:${CDI_CRO_TAG}" || true
     sudo -E /var/lib/rancher/rke2/bin/ctr -a /run/k3s/containerd/containerd.sock -n k8s.io i pull -k /etc/rancher/rke2/certs.d/${REG_HOST}/cohdi-ca.crt --local --user "${REG_USER}:${REG_PASS}" "${REG_HOST}/cdi-dra:${CDI_DRA_TAG}" || true
 
     echo "SUCCESS: ${CURRENT_STEP}"
