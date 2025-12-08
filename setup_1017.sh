@@ -375,7 +375,7 @@ EOF
     echo "SUCCESS: ${CURRENT_STEP}"
 
  # ================ STEP 7 — DEPLOY COHDI COMPONENTS (SERVER) ================
-  cd step_07_manual_deployment || exit 1
-  chmod +x step_07.sh && ./step_07.sh; cd ..
+  # cd step_07_manual_deployment || exit 1
+  # chmod +x step_07.sh && ./step_07.sh; cd ..
 
 echo -e "\nDONE: All selected steps completed."
