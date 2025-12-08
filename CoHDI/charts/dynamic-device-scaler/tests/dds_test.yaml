@@ -11,7 +11,7 @@ tests:
         name: dynamic-device-scaler
         image:
           registry: example.io
-          repository: example/dds:latest
+          repository: example/dds
           tag: 0.4.0
           pullPolicy: IfNotPresent
         env:
@@ -38,7 +38,7 @@ tests:
         name: dynamic-device-scaler
         image:
           registry: example.io
-          repository: example/dds:latest
+          repository: example/dds
           tag: 0.4.0
           pullPolicy: IfNotPresent
         env:
@@ -73,7 +73,7 @@ tests:
         name: dynamic-device-scaler
         image:
           registry: example.io
-          repository: example/dds:latest
+          repository: example/dds
           tag: 0.4.0
           pullPolicy: Never
         env:
@@ -94,7 +94,7 @@ tests:
         documentIndex: 3
       - equal:
           path: spec.template.spec.containers[0].image
-          value: "example.io/example/dds:latest"
+          value: "example.io/example/dds:0.4.0"
         documentIndex: 3
       - equal:
           path: spec.template.spec.containers[0].imagePullPolicy

@@ -168,7 +168,7 @@ tests:
         name: composable-resource-operator
         image:
           registry: example.io
-          repository: example/cdi-operator:latest
+          repository: example/cdi-operator
           tag: 0.4.0
           pullPolicy: Never
         managerEnv:
@@ -212,7 +212,7 @@ tests:
           value: composable-resource-operator-controller-manager
       - equal:
           path: spec.template.spec.containers[0].image
-          value: "example.io/example/cdi-operator:latest"
+          value: "example.io/example/cdi-operator:0.4.0"
       - equal:
           path: spec.template.spec.containers[0].imagePullPolicy
           value: Never

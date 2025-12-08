@@ -93,7 +93,7 @@ spec:
       terminationGracePeriodSeconds: {{ $tgps }}
       containers:
         - name: {{ $name }}
-          image: {{ printf "%s/%s" $image.registry $image.repository | quote }}
+          image: {{ printf "%s/%s:%s" $image.registry $image.repository $image.tag | quote }}
           imagePullPolicy: {{ $imagePullPolicy }}
           command:
             - /dynamic-device-scaler

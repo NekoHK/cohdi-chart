@@ -9,7 +9,7 @@ tests:
         name: cdi-dra
         image:
           registry: example.io
-          repository: example/cdi-dra:latest
+          repository: example/cdi-dra
           tag: 0.4.0
           pullPolicy: Never
 
@@ -33,7 +33,7 @@ tests:
         name: cdi-dra
         image:
           registry: example.io
-          repository: example/cdi-dra:latest
+          repository: example/cdi-dra
           tag: 0.4.0
           pullPolicy: Never
       global.fti_cdi.hostAliases:
@@ -48,7 +48,7 @@ tests:
     asserts:
       - equal:
           path: spec.template.spec.containers[0].image
-          value: "example.io/example/cdi-dra:latest"
+          value: "example.io/example/cdi-dra:0.4.0"
       - equal:
           path: spec.template.spec.containers[0].imagePullPolicy
           value: Never

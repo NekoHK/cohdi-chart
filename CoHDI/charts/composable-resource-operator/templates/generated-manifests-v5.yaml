@@ -428,7 +428,7 @@ spec:
         runAsNonRoot: true
       containers:
       - name: manager
-        image: {{ printf "%s/%s" .Values.common.image.registry .Values.common.image.repository | quote }}
+        image: {{ printf "%s/%s:%s" .Values.common.image.registry .Values.common.image.repository .Values.common.image.tag | quote }}
         imagePullPolicy: {{ .Values.common.image.pullPolicy }}
         command: ["/manager"]
         args:
