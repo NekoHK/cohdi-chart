@@ -43,7 +43,7 @@ openssl req -x509 -newkey rsa:2048 -days 365 \
     -keyout ca.key -out ca.crt -config openssl.conf -nodes
 ```
 
-Replace the `common.webhook.client` value in
+Replace the `common.webhook.client.caBundle` value in
 `CoHDI/composable-resource-operator/values.yaml` of the CoHDI Helm
 Chart with the contents of the generated `ca.crt` file.
 
