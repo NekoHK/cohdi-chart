@@ -46,9 +46,16 @@
           "additionalProperties": false,
           "properties": {
             "client": {
-              "type": "string",
-              "minLength": 1,
-              "description": "PEM-encoded CA bundle or client certificate used by the webhook client."
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "caBundle": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "PEM-encoded CA bundle or client certificate used by the webhook client."
+                }
+              },
+              "required": ["caBundle"]
             },
             "server": {
               "type": "object",

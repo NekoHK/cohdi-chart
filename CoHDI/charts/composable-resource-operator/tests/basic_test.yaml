@@ -175,7 +175,8 @@ tests:
           CDI_PROVIDER_TYPE: "FTI_CDI"
           DEVICE_RESOURCE_TYPE: "DRA"
         webhook:
-          client: "dummy-client"
+          client:
+            caBundle: "dummy-client"
       fti_cdi:
         managerEnv:
           FTI_CDI_API_TYPE: "FM"
@@ -237,7 +238,8 @@ tests:
       common:
         name: composable-resource-operator
         webhook:
-          client: "dummy-client"
+          client:
+            caBundle: "dummy-client"
       global:
         fti_cdi:
           env:
