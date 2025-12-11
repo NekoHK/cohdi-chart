@@ -2,16 +2,16 @@
 
 # Introduction
 
-The **CoHDI Helm chart** deploys the CoHDI system - an integration layer for CDI
-management and device configuration in Kubernetes.
+The **CoHDI Helm chart** deploys the CoHDI system - an integration
+layer for CDI management and device configuration in Kubernetes.
 
 ## Prerequisite environmental information
 
 The following environment is required.
 
-- K8s v1.34 or higher
-- Enable feature gate for DRADeviceTaints
-- Enable feature gate for DRADeviceBindingConditions
+* K8s v1.34 or higher
+* Enable feature gate for DRADeviceTaints
+* Enable feature gate for DRADeviceBindingConditions
 
 # Getting Started
 
@@ -33,8 +33,8 @@ cd cohdi_helm
 
 ## Creating Certificates (for webhook)
 
-These steps show how to create CA and server certificates and server private key
-for webhook with OpenSSL.
+These steps show how to create CA and server certificates and server
+private key for webhook with OpenSSL.
 
 1. Create a CA Private Key and Certificate
 
@@ -44,8 +44,8 @@ openssl req -x509 -newkey rsa:2048 -days 365 \
 ```
 
 Replace the `common.webhook.client` value in
-`CoHDI/composable-resource-operator/values.yaml` of the CoHDI Helm Chart with
-the contents of the generated `ca.crt` file.
+`CoHDI/composable-resource-operator/values.yaml` of the CoHDI Helm
+Chart with the contents of the generated `ca.crt` file.
 
 2. Create a Server Private Key and CSR
 
@@ -55,8 +55,8 @@ openssl req -new -newkey rsa:2048 -keyout server.key \
 ```
 
 Replace the `common.webhook.server.key` value in
-`CoHDI/composable-resource-operator/values.yaml` of the CoHDI Helm Chart with
-the contents of the generated `server.key` file.
+`CoHDI/composable-resource-operator/values.yaml` of the CoHDI Helm
+Chart with the contents of the generated `server.key` file.
 
 3. Sign the Server Certificate with the CA
 
@@ -67,8 +67,8 @@ openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key \
 ```
 
 Replace the `common.webhook.server.crt` value in
-`CoHDI/composable-resource-operator/values.yaml` of the CoHDI Helm Chart with
-the contents of the generated `server.crt` file.
+`CoHDI/composable-resource-operator/values.yaml` of the CoHDI Helm
+Chart with the contents of the generated `server.crt` file.
 
 ## Installing the GPU driver
 
@@ -79,8 +79,8 @@ The GPU driver installation process depends on your environment.
 
 ## Creating `DeviceClass`
 
-On the Kubernetes cluster where you will deploy CoHDI, create `DeviceClass` for
-Dynamic Resource Allocation
+On the Kubernetes cluster where you will deploy CoHDI, create
+`DeviceClass` for Dynamic Resource Allocation
 (https://kubernetes.io/docs/concepts/scheduling-eviction/dynamic-resource-allocation/).
 If you are using an NVIDIA GPU, create the following `DeviceClass`.
 
@@ -97,8 +97,8 @@ spec:
 
 ## Configure `values.yaml`
 
-There are some pieces of information that need to be entered by the user. Update
-`values.yaml` with the settings.
+There are some pieces of information that need to be entered by the
+user.  Update `values.yaml` with the settings.
 
 The `values.yaml` that needs to be updated is below.
 
@@ -120,61 +120,61 @@ Below is a list of items that should be updated in `values.yaml`.
 
 ### Common `values.yaml` for all components
 
-| Key                                     | Description                                                              | Get | Initial value                            |
-| :-------------------------------------- | :----------------------------------------------------------------------- | :-: | :--------------------------------------- |
-| (Vendor-independent parameters)         |                                                                          |     |                                          |
-| `deviceInfo`                            | Definition information for each device                                   | \*7 |                                          |
-| `fabricIdRange`                         | CDI Fabric ID Range                                                      | \*7 | `"[0]"`                                  |
-| (Vendor-dependent parameters [fti_cdi]) |                                                                          |     |                                          |
-| `username`                              | Tenant administrator username                                            | \*2 | `"username"`                             |
-| `password`                              | Tenant administrator password                                            | \*2 | `"password"`                             |
-| `realm`                                 | relm for token acquisition                                               | \*2 | `"00000000-0000-0000-0000-000000000000"` |
-| `client_id`                             | client_id for token acquisition                                          | \*1 | `"cdi"`                                  |
-| `client_secret`                         | client_secret for token acquisition                                      | \*1 | `"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"`     |
-| `CDI_ENDPOINT`                          | FSAS's PRIMERGY CDI API server URL                                       | \*1 | `"https://cdimgr.localdomain"`           |
-| `CLUSTER_ID`                            | Cluster UUID                                                             | \*6 | `""`                                     |
-| `TENANT_ID`                             | Tenant UUID                                                              | \*2 | `"00000000-0000-0000-0000-000000000000"` |
-| `certificate`                           | PEM-encoded CA certificate for validating FSAS PRIMERGY CDI's API server | \*1 |                                          |
-| `ip`                                    | FSAS's PRIMERGY CDI management IP address                                | \*1 | `198.51.100.2`                           |
-| `hostnames`                             | FSAS's PRIMERGY CDI admin hostname                                       | \*1 | `cdimgr.localdomain`                     |
+| Key                             | Description                                | Get  | Initial value                            |
+|:--------------------------------|:-------------------------------------------|:----:|:-----------------------------------------|
+| (Vendor-independent parameters) |                                            |      |                                          |
+| `deviceInfo`                    | Definition information for each device     | *7   |                                          |
+| `fabricIdRange`                 | CDI Fabric ID Range                        | *7   | `"[0]"`                                  |
+| (Vendor-dependent parameters [fti_cdi]) |                                    |      |                                          |
+| `username`                      | Tenant administrator username              | *2   | `"username"`                             |
+| `password`                      | Tenant administrator password              | *2   | `"password"`                             |
+| `realm`                         | relm for token acquisition                 | *2   | `"00000000-0000-0000-0000-000000000000"` |
+| `client_id`                     | client_id for token acquisition            | *1   | `"cdi"`                                  |
+| `client_secret`                 | client_secret for token acquisition        | *1   | `"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"`     |
+| `CDI_ENDPOINT`                  | FSAS's PRIMERGY CDI API server URL         | *1   | `"https://cdimgr.localdomain"`           |
+| `CLUSTER_ID`                    | Cluster UUID                               | *6   | `""`                                     |
+| `TENANT_ID`                     | Tenant UUID                                | *2   | `"00000000-0000-0000-0000-000000000000"` |
+| `certificate`                   | PEM-encoded CA certificate for validating FSAS PRIMERGY CDI's API server | *1   |            |
+| `ip`                            | FSAS's PRIMERGY CDI management IP address  | *1   | `198.51.100.2`                           |
+| `hostnames`                     | FSAS's PRIMERGY CDI admin hostname         | *1   | `cdimgr.localdomain`                     |
 
 ### `values.yaml` for composable-dra-driver
 
-| Key                                     | Description                          | Get | Initial value           |
-| :-------------------------------------- | :----------------------------------- | :-: | :---------------------- |
-| (Vendor-independent parameters)         |                                      |     |                         |
-| `name`                                  | Container name                       | \*5 | `composable-dra-driver` |
-| `image`                                 | Container image                      | \*4 |                         |
-| `SCAN_INTERVAL`                         | Loop processing interval (sec)       | \*4 | `"5s"`                  |
-| (Vendor-dependent parameters [fti_cdi]) |                                      |     |                         |
-| `USE_CAPI_BMH`                          | Availability of ClusterAPI and BMH   | \*5 | `"false"`               |
-| `USE_CM`                                | Availability of CM (Cluster Manager) | \*5 | `"false"`               |
+| Key                             | Description                                | Get  | Initial value                            |
+|:--------------------------------|:-------------------------------------------|:----:|:-----------------------------------------|
+| (Vendor-independent parameters) |                                            |      |                                          |
+| `name`                          | Container name                             | *5   | `composable-dra-driver`                  |
+| `image`                         | Container image                            | *4   |                                          |
+| `SCAN_INTERVAL`                 | Loop processing interval (sec)             | *4   | `"5s"`                                   |
+| (Vendor-dependent parameters [fti_cdi]) |                                    |      |                                          |
+| `USE_CAPI_BMH`                  | Availability of ClusterAPI and BMH         | *5   | `"false"`                                |
+| `USE_CM`                        | Availability of CM (Cluster Manager)       | *5   | `"false"`                                |
 
 ### `values.yaml` for composable-resource-operator
 
-| Key                                     | Description                          | Get | Initial value                  |
-| :-------------------------------------- | :----------------------------------- | :-: | :----------------------------- |
-| (Vendor-independent parameters)         |                                      |     |                                |
-| `name`                                  | Container name                       | \*5 | `composable-resource-operator` |
-| `image`                                 | Container image                      | \*4 |                                |
-| `caBundle`                              | Webhook server CA certificate bundle | \*3 |                                |
-| `crt`                                   | TLS crt                              | \*3 |                                |
-| `key`                                   | TLS key                              | \*3 |                                |
-| `DEVICE_RESOURCE_TYPE`                  | Device resource type                 | \*5 | `"DRA"`                        |
-| `CDI_PROVIDER_TYPE`                     | CDI provider type                    | \*5 | `"FTI_CDI"`                    |
-| (Vendor-dependent parameters [fti_cdi]) |                                      |     |                                |
-| `FTI_CDI_API_TYPE`                      | FSAS's PRIMERGY CDI API type         | \*5 | `"FM"`                         |
+| Key                             | Description                                | Get  | Initial value                            |
+|:--------------------------------|:-------------------------------------------|:----:|:-----------------------------------------|
+| (Vendor-independent parameters) |                                            |      |                                          |
+| `name`                          | Container name                             | *5   | `composable-resource-operator`           |
+| `image`                         | Container image                            | *4   |                                          |
+| `caBundle`                      | Webhook server CA certificate bundle       | *3   |                                          |
+| `crt`                           | TLS crt                                    | *3   |                                          |
+| `key`                           | TLS key                                    | *3   |                                          |
+| `DEVICE_RESOURCE_TYPE`          | Device resource type                       | *5   | `"DRA"`                                  |
+| `CDI_PROVIDER_TYPE`             | CDI provider type                          | *5   | `"FTI_CDI"`                              |
+| (Vendor-dependent parameters [fti_cdi]) |                                    |      |                                          |
+| `FTI_CDI_API_TYPE`              | FSAS's PRIMERGY CDI API type               | *5   | `"FM"`                                   |
 
 ### `values.yaml` for dynamic-device-scaler
 
-| Key                             | Description                                           | Get | Initial value           |
-| :------------------------------ | :---------------------------------------------------- | :-: | :---------------------- |
-| (Vendor-independent parameters) |                                                       |     |                         |
-| `name`                          | Container name                                        | \*5 | `dynamic-device-scaler` |
-| `image`                         | Container image                                       | \*4 |                         |
-| `SCAN_INTERVAL`                 | Interval (sec) of periodic timer events               | \*4 | `"60"`                  |
-| `DEVICE_NO_REMOVAL_DURATION`    | Time from last use of device until it can be detached | \*4 | `"600"`                 |
-| `DEVICE_NO_ALLOCATION_DURATION` | Time from last use of device to reschedule            | \*4 | `"60"`                  |
+| Key                             | Description                                | Get  | Initial value                            |
+|:--------------------------------|:-------------------------------------------|:----:|:-----------------------------------------|
+| (Vendor-independent parameters) |                                            |      |                                          |
+| `name`                          | Container name                             | *5   | `dynamic-device-scaler`                  |
+| `image`                         | Container image                            | *4   |                                          |
+| `SCAN_INTERVAL`                 | Interval (sec) of periodic timer events    | *4   | `"60"`                                   |
+| `DEVICE_NO_REMOVAL_DURATION`    | Time from last use of device until it can be detached | *4 | `"600"`                         |
+| `DEVICE_NO_ALLOCATION_DURATION` | Time from last use of device to reschedule | *4   | `"60"`                                   |
 
 ```
 *1: Check with the FSAS's PRIMERGY CDI system administrator
@@ -188,20 +188,20 @@ Below is a list of items that should be updated in `values.yaml`.
 
 ### Setting definition information for each device
 
-In this README, the software that enables the addition and deletion of hardware
-is referred to as "CoHDI management software". FSAS calls it "CDI management
-software."
+In this README, the software that enables the addition and deletion of
+hardware is referred to as "CoHDI management software".   FSAS calls
+it "CDI management software."
 
-To configure this, collect the following information. Currently, only NVIDIA
-GPUs are supported.
+To configure this,collect the following information. Currently, only
+NVIDIA GPUs are supported.
 
 #### fabricIdRange
 
-- Obtain a list of fabric numbers from the CoHDI management software. For FSAS's
-  PRIMERGY CDI, you can obtain this using the `cdictl unify fabric list`
-  command.
-- Specify the list in array format. For example, if the fabric numbers are 0 and
-  1, the following is a configuration example.
+* Obtain a list of fabric numbers from the CoHDI management software.
+  For FSAS's PRIMERGY CDI, you can obtain this using the
+  `cdictl unify fabric list` command.
+* Specify the list in array format.  For example, if the fabric
+  numbers are 0 and 1, the following is a configuration example.
 
 ```
 global:
@@ -213,17 +213,18 @@ global:
 
 #### deviceInfo
 
-Collect the following information for all models of installed NVIDIA GPUs that
-will be used with the CoHDI management software.
+Collect the following information for all models of installed NVIDIA
+GPUs that will be used with the CoHDI management software.
 
-(1) The model name of the GPU registered in the CoHDI management software. For
-FSAS's PRIMERGY CDI, you can obtain it with the `cdictl spec list` command
-(e.g., "L40S").  
+(1) The model name of the GPU registered in the CoHDI management
+    software.  For FSAS's PRIMERGY CDI, you can obtain it with the
+    `cdictl spec list` command (e.g., "L40S").  
 (2) The product name of the NVIDIA GPU (e.g., "NVIDIA L40S").  
- Reference:https://github.com/NVIDIA/open-gpu-kernel-modules  
-(3) A unique and arbitrary identifier for K8s (e.g., "nvidia-l40s"). Choose an
-appropriate name. It must follow the rules for DNS label names.  
- Reference:https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#dns-label-names
+    Reference:https://github.com/NVIDIA/open-gpu-kernel-modules  
+(3) A unique and arbitrary identifier for K8s (e.g., "nvidia-l40s").
+    Choose an appropriate name.  It must follow the rules for DNS
+    label names.  
+    Reference:https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#dns-label-names
 
 deviceInfo is defined as an array in the following format.
 
@@ -243,10 +244,10 @@ deviceInfo: |
 
 Each entry in the deviceInfo array has the following keys: index,
 cdi-model-name, dra-attributes, driver-name, k8s-device-name, and
-cannot-coexist-with. For each resource type (model), an index number is assigned
-sequentially, starting from 1, and the deviceInfo information is constructed
-using the (1), (2), and (3) above. When using an NVIDIA GPU, the driver-name is
-"gpu.nvidia.com".
+cannot-coexist-with.  For each resource type (model), an index number
+is assigned sequentially, starting from 1, and the deviceInfo
+information is constructed using the (1), (2), and (3) above.  When
+using an NVIDIA GPU, the driver-name is "gpu.nvidia.com".
 
 An example of the settings is as follows.
 
@@ -298,26 +299,27 @@ Verify that the following three Pods exist and are Running.
 
 ```
 $ kubectl get pods -A
-NAMESPACE                             NAME                                                                            READY   STATUS                  RESTARTS         AGE
-composable-dra                        composable-dra-driver-b87cc77d7-7mwg9                                           1/1     Running                 0                112m
-composable-dra                        dds-controller-manager-c777b4f95-dxc2q                                          1/1     Running                 0                18m
-composable-resource-operator-system   composable-resource-operator-controller-manager-79c58887bcjbl99                 1/1     Running                 0                6h20m
+NAMESPACE                             NAME                                                              READY   STATUS    RESTARTS   AGE
+composable-dra                        composable-dra-driver-b87cc77d7-7mwg9                             1/1     Running   0          112m
+composable-dra                        dds-controller-manager-c777b4f95-dxc2q                            1/1     Running   0          18m
+composable-resource-operator-system   composable-resource-operator-controller-manager-79c58887bcjbl99   1/1     Running   0          6h20m
 ...
 ```
 
 ## Check available resources
 
-In the context of K8s DRA, resources available within a K8s cluster are output
-as a resource called a ResourceSlice. The manager source (output source) of the
-ResourceSlice changes depending on whether it is attached to a node.
+In the context of K8s DRA, resources available within a K8s cluster
+are output as a resource called a ResourceSlice.  The manager source
+(output source) of the ResourceSlice changes depending on whether it
+is attached to a node.
 
 ### Resources attached to the node
 
-For resources already attached to a node, the driver provided by the device
-vendor outputs a ResourceSlice. A characteristic of this is that a NodeName
-exists under Spec and has a value (in the example, worker-2odah). For example,
-for an NVIDIA GPU, the DRA driver provided by NVIDIA outputs the following
-information:
+For resources already attached to a node, the driver provided by the
+device vendor outputs a ResourceSlice.  A characteristic of this is
+that a NodeName exists under Spec and has a value (in the example,
+worker-2odah).  For example, for an NVIDIA GPU, the DRA driver
+provided by NVIDIA outputs the following information:
 
 ```
 $ kubectl describe resourceslices
@@ -381,12 +383,13 @@ Events:                    <none>
 
 ### Resources not attached to a node
 
-For resources that are not attached to a node, the cdi-dra pod included in CoHDI
-outputs a ResourceSlice. Specifically, it outputs the following information. A
-notable feature is that a "Node Selector" exists under Spec and is filled with a
-value. The number of Name: entries under Spec.Devices is the number of devices
-that are available to K8s but are not attached to a node (in this example, there
-are two L40S resources that are not attached to the node).
+For resources that are not attached to a node, the cdi-dra pod
+included in CoHDI outputs a ResourceSlice. Specifically, it outputs
+the following information.  A notable feature is that a "Node
+Selector" exists under Spec and is filled with a value.  The number of
+Name: entries under Spec.Devices is the number of devices that are
+available to K8s but are not attached to a node (in this example,
+there are two L40S resources that are not attached to the node).
 
 ```
 $ kubectl describe resourceslices
@@ -449,13 +452,13 @@ Events:                    <none>
 
 ## How to deploy workload
 
-This procedure assumes that you have an actual device such as a FSAS's PRIMERGY
-CDI.
+This procedure assumes that you have an actual device such as a
+FSAS's PRIMERGY CDI.
 
-In a Kubernetes environment, workloads are launched in the form of Pods. Pods
-can define resource requirements according to the K8s Dynamic Resource
-Allocation mechanism. To achieve dynamic scaling using CoHDI, Pods are launched
-in accordance with this DRA mechanism.
+In a Kubernetes environment, workloads are launched in the form of
+Pods.  Pods can define resource requirements according to the K8s
+Dynamic Resource Allocation mechanism.  To achieve dynamic scaling
+using CoHDI, Pods are launched in accordance with this DRA mechanism.
 
 https://kubernetes.io/docs/concepts/scheduling-eviction/dynamic-resource-allocation/
 
@@ -466,10 +469,11 @@ The Pods are deployed in two steps.
 
 ### Create a ResourceClaimTemplate
 
-Currently, we are assuming usage that uses the productName output by the NVIDIA
-driver. For example, if you want to use an NVIDIA GPU with a productName of
-"NVIDIA L40S", create a ResourceClaimTemplate with the following definition
-(assuming that is defined in the deviceInfo above).
+Currently, we are assuming usage that uses the productName output by
+the NVIDIA driver.
+For example, if you want to use an NVIDIA GPU with a productName of
+"NVIDIA L40S", create a ResourceClaimTemplate with the following
+definition (assuming that is defined in the deviceInfo above).
 
 ```
 apiVersion: resource.k8s.io/v1
@@ -493,9 +497,9 @@ spec:
 
 ### Launch the Pod by referencing the created ResourceClaimTemplate
 
-Launch a Pod so that it is linked to the ResourceClaimTemplate you created.
-Here, we use the ResourceClaimTemplate name `single-gpu` to link the
-ResourceClaimTemplate to the Pod.
+Launch a Pod so that it is linked to the ResourceClaimTemplate you
+created.  Here, we use the ResourceClaimTemplate name `single-gpu` to
+link the ResourceClaimTemplate to the Pod.
 
 ```
 apiVersion: v1
@@ -514,13 +518,15 @@ spec:
     resourceClaimTemplateName: single-gpu
 ```
 
-This will create a Pod with the claims defined in the ResourceClaimTemplate.
+This will create a Pod with the claims defined in the
+ResourceClaimTemplate.
 
 ## Checking the allocation status to Pods
 
-The Pod will be in the Pending state as shown below until the resources attached
-to the node are actually assigned to the Pod and the Pod can run on the node,
-such as waiting for the resources to be attached.
+The Pod will be in the Pending state as shown below until the
+resources attached to the node are actually assigned to the Pod and
+the Pod can run on the node, such as waiting for the resources to be
+attached.
 
 ```
 $ kubectl get pods
@@ -528,17 +534,17 @@ NAME                READY   STATUS    RESTARTS   AGE
 workload-pod-1      0/1     Pending   0          10s
 ```
 
-When the Pod is ready to start, it is expected to go through the following
-ContainerCreating states before entering the Running state.
+When the Pod is ready to start, it is expected to go through the
+following ContainerCreating states before entering the Running state.
 
 ```
 $ kubectl get pods
 NAME                READY   STATUS              RESTARTS   AGE
 workload-pod-1      0/1     ContainerCreating   0          22s
-
 ```
 
-A Running state means that the Pod is running using the resources it requested.
+A Running state means that the Pod is running using the resources it
+requested.
 
 ```
 $ kubectl get pods
@@ -547,7 +553,8 @@ workload-pod-1      1/1     Running   0          83s
 ```
 
 To check whether a GPU has actually been allocated to a Pod, check the
-information under Allocation as the Status of the ResourceClaim, as shown below.
+information under Allocation as the Status of the ResourceClaim, as
+shown below.
 
 ```
 $ kubectl describe resourceclaim
@@ -601,9 +608,8 @@ annotation validation error: missing key "meta.helm.sh/release-namespace": must 
 Unable to continue with install
 ```
 
-Invalid ownership metadata; annotation validation error Helm refuses to "adopt"
-pre-existing resources unless they already carry Helm ownership metadata that
-matches the release which is being installed.
+Invalid ownership metadata; annotation validation error
+Helm refuses to "adopt" pre-existing resources unless they already carry Helm ownership metadata that matches the release which is being installed.
 
 ### Current fix (using kubectl CLI):
 
@@ -629,4 +635,6 @@ done
 
 ### An idea for a better solution
 
-Maybe there is a possibility to embed this fix inside CoHDI `.yaml` files.
+Maybe there is a possibility to embed this fix inside CoHDI `.yaml`
+files.
+

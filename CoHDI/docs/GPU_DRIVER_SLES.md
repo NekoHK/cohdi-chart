@@ -2,12 +2,12 @@
 
 ## RKE2 Environment Setup Prerequisites
 
-- The RKE2 environment must be ready and running properly.
-- A SUSE subscription must be attached to the target worker node.
-- A compatible NVIDIA GPU must be attached to the target worker node.
+* The RKE2 environment must be ready and running properly.
+* A SUSE subscription must be attached to the target worker node.
+* A compatible NVIDIA GPU must be attached to the target worker node.
 
-Refer to the following documentation to install the GPU driver and container
-toolkit on the worker node.
+Refer to the following documentation to install the GPU driver and
+container toolkit on the worker node.
 
 ```
 https://documentation.suse.com/suse-ai/1.0/html/NVIDIA-GPU-driver-on-SLES/index.html
@@ -15,10 +15,10 @@ https://documentation.suse.com/suse-ai/1.0/html/NVIDIA-GPU-driver-on-SLES/index.
 
 The following steps are required.
 
-- Add the NVIDIA package repository
-- Install the NVIDIA driver and various dependencies
-- Install the NVIDIA container toolkit
-- Generate the CDI configuration YAML file (/etc/cdi/nvidia.yaml)
+* Add the NVIDIA package repository
+* Install the NVIDIA driver and various dependencies
+* Install the NVIDIA container toolkit
+* Generate the CDI configuration YAML file (/etc/cdi/nvidia.yaml)
 
 [reference]
 
@@ -44,16 +44,16 @@ sudo zypper install -y --auto-agree-with-licenses nvidia-compute-utils-G06=$vers
 
 ## Deploying the NVIDIA GPU Operator
 
-Deploy the GPU Operator in the Control Plane by referring to the following
-document.
+Deploy the GPU Operator in the Control Plane by referring to the
+following document.
 
 ```
 https://docs.rke2.io/add-ons/gpu_operators#operator-installation
 ```
 
 After all the created Pods are Running, edit the ClusterPolicy using
-`kubectl edit clusterpolicy` command as follows to turn off components other
-than GFD.
+`kubectl edit clusterpolicy` command as follows to turn off components
+other than GFD.
 
 ```
 apiVersion: v1
@@ -105,9 +105,9 @@ items:
 
 Install DRA in the Control Plane by referring to the following steps.
 
-- Prepare a helm binary for installation.
-- Git clone the latest nvidia-dra-driver-gpu into /home/rancher/test.
-- Run following command.
+* Prepare a helm binary for installation.
+* Git clone the latest nvidia-dra-driver-gpu into /home/rancher/test.
+* Run following command.
 
 ```
 helm upgrade -i \
@@ -121,8 +121,8 @@ helm upgrade -i \
     --wait
 ```
 
-After installation, please confirm that the following ResourceSlice objects
-exist.
+After installation, please confirm that the following ResourceSlice
+objects exist.
 
 ```
 Every 2.0s: kubectl get resourceslices.resource.k8s.io
@@ -139,5 +139,7 @@ sudo reboot
 sudo nvidia-smi
 ```
 
-Note: At this point, if you attach a suitable GPU to the agent node from LCC,
-the GPU will be visible in /sbin/lspci | grep NVIDIA and nvidia-smi.
+Note: At this point, if you attach a suitable GPU to the agent node
+      from LCC, the GPU will be visible in /sbin/lspci | grep NVIDIA
+      and nvidia-smi.
+
