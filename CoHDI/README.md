@@ -15,6 +15,47 @@ The following environment is required.
 
 # Getting Started
 
+## Installing the GPU driver
+
+The GPU driver installation process depends on your environment.
+
+- [SLES Instructions](./docs/GPU_DRIVER_SLES.md)
+- [RHEL Instructions](./docs/GPU_DRIVER_RHEL.md) (in preparation)
+
+## Creating `DeviceClass`
+
+On the Kubernetes cluster where you will deploy CoHDI, create
+`DeviceClass` for Dynamic Resource Allocation
+(https://kubernetes.io/docs/concepts/scheduling-eviction/dynamic-resource-allocation/).
+If you are using an NVIDIA GPU, create the following `DeviceClass`.
+
+```
+apiVersion: resource.k8s.io/v1
+kind: DeviceClass
+metadata:
+  name: gpu.nvidia.com
+spec:
+  selectors:
+  - cel:
+      expression: device.driver == 'gpu.nvidia.com'
+```
+
+## Setting the provider ID
+
+For FSAS's PRIMERGY CDI, you need to set the provider ID of the Node
+resource in the following format:
+
+```
+providerID: fsas-cdi://<machine_uuid>
+
+For example:
+
+providerID: fsas-cdi://be85a638-9c81-4ca7-84f7-59ae78bfd672
+```
+
+Once you set the provider ID, it cannot be changed later, so please
+set it carefully.
+
 ## Obtain the Chart
 
 Add the CoHDI Helm repository:
@@ -43,7 +84,7 @@ openssl req -x509 -newkey rsa:2048 -days 365 \
     -keyout ca.key -out ca.crt -config openssl.conf -nodes
 ```
 
-Replace the `common.webhook.client.caBundle` value in
+Replace the `common.webhook.client` value in
 `CoHDI/composable-resource-operator/values.yaml` of the CoHDI Helm
 Chart with the contents of the generated `ca.crt` file.
 
@@ -69,31 +110,6 @@ openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key \
 Replace the `common.webhook.server.crt` value in
 `CoHDI/composable-resource-operator/values.yaml` of the CoHDI Helm
 Chart with the contents of the generated `server.crt` file.
-
-## Installing the GPU driver
-
-The GPU driver installation process depends on your environment.
-
-- [SLES Instructions](./docs/GPU_DRIVER_SLES.md)
-- [RHEL Instructions](./docs/GPU_DRIVER_RHEL.md) (in preparation)
-
-## Creating `DeviceClass`
-
-On the Kubernetes cluster where you will deploy CoHDI, create
-`DeviceClass` for Dynamic Resource Allocation
-(https://kubernetes.io/docs/concepts/scheduling-eviction/dynamic-resource-allocation/).
-If you are using an NVIDIA GPU, create the following `DeviceClass`.
-
-```
-apiVersion: resource.k8s.io/v1
-kind: DeviceClass
-metadata:
-  name: gpu.nvidia.com
-spec:
-  selectors:
-  - cel:
-      expression: device.driver == 'gpu.nvidia.com'
-```
 
 ## Configure `values.yaml`
 
@@ -234,6 +250,7 @@ deviceInfo: |
     cdi-model-name: "<Info. on (1)>"
     dra-attributes:
       productName: "<Info. on (2)>"
+      uuid: ""
     driver-name: "gpu.nvidia.com"
     k8s-device-name: "<Info. on (3)>"
     cannot-coexist-with: "An array listing all index numbers except me"
@@ -260,6 +277,7 @@ global:
           cdi-model-name: "a100"
           dra-attributes:
             productName: "NVIDIA A100 80GB PCIe"
+            uuid: ""
           driver-name: "gpu.nvidia.com"
           k8s-device-name: "nvidia-a100-80"
           cannot-coexist-with: [2,3]
@@ -267,6 +285,7 @@ global:
           cdi-model-name: "L40S"
           dra-attributes:
             productName: "NVIDIA L40S"
+            uuid: ""
           driver-name: "gpu.nvidia.com"
           k8s-device-name: "nvidia-l40s"
           cannot-coexist-with: [1,3]
@@ -274,6 +293,7 @@ global:
           cdi-model-name: "a30"
           dra-attributes:
             productName: "NVIDIA A30"
+            uuid: ""
           driver-name: "gpu.nvidia.com"
           k8s-device-name: "nvidia-a30"
           cannot-coexist-with: [1,2]
@@ -305,6 +325,54 @@ composable-dra                        dds-controller-manager-c777b4f95-dxc2q    
 composable-resource-operator-system   composable-resource-operator-controller-manager-79c58887bcjbl99   1/1     Running   0          6h20m
 ...
 ```
+
+To check the operation of each CoHDI Pod after installation, do the
+following.
+
+### composable-dra-driver
+
+```
+$ kubectl logs -n composable-dra composable-dra-driver-xxx
+    :
+    :
+time=2025-12-10T23:25:43.011Z level=INFO source=manager.go:174 msg="Loop Successful" compo=CDI_DRA
+    :
+    :
+```
+
+* Make sure that the message `Loop Successful` is output to the log
+  and that there are no error messages.
+
+```
+$ kubectl get resourceslice
+NAME                   NODE   DRIVER           POOL                     AGE
+gpu.nvidia.com-96qth          gpu.nvidia.com   nvidia-l40s-fabric0      2m3s
+gpu.nvidia.com-mm9jg          gpu.nvidia.com   nvidia-a100-80-fabric0   2m3s
+gpu.nvidia.com-mxx46          gpu.nvidia.com   nvidia-a30-fabric0       2m3s
+```
+
+* Make sure you create a ResourceSlice without any node information.
+
+### composable-resource-operator
+
+```
+$ kubectl logs -n composable-resource-operator-system composable-resource-operator-controller-manager-xxx
+2025-12-10T23:28:20Z    INFO    upstream_syncer_controller      start scheduled upstream data synchronization
+2025-12-10T23:28:20Z    INFO    fti_fm_client   start getting resources
+2025-12-10T23:28:21Z    INFO    upstream_syncer_controller      Device is still missing but within grace period, skipping       {"deviceID": "GPU-a83da4d9-d250-ff86-30e7-352b57eb9202"}
+```
+
+* Make sure there are no errors in the log.
+
+### dynamic-device-scaler
+
+```
+$ kubectl logs -n composable-dra dds-controller-manager-xxx
+{"level":"info","ts":"2025-12-10T23:30:42Z","logger":"DDS","msg":"Start reconcile"}
+```
+
+* Make sure that the message `Start reconcile` is output to the log
+  and that there are no error messages.
 
 ## Check available resources
 
@@ -485,14 +553,24 @@ spec:
     devices:
       requests:
       - name: gpu
-        exactly:
-          allocationMode: ExactCount
-          count: 1
-          deviceClassName: gpu.nvidia.com
-          selectors:
-          - cel:
-             expression: |-
-               device.attributes["gpu.nvidia.com"].productName == "NVIDIA L40S"
+        firstAvailable:
+          - name: node-gpu
+            allocationMode: ExactCount
+            count: 1
+            deviceClassName: gpu.nvidia.com
+            selectors:
+            - cel:
+                expression: |-
+                   device.attributes["gpu.nvidia.com"].productName == "NVIDIA L40S" &&
+                   device.attributes["gpu.nvidia.com"].uuid != ""
+          - name: fabric-gpu
+            allocationMode: ExactCount
+            count: 1
+            deviceClassName: gpu.nvidia.com
+            selectors:
+            - cel:
+                expression: |-
+                   device.attributes["gpu.nvidia.com"].productName == "NVIDIA L40S"
 ```
 
 ### Launch the Pod by referencing the created ResourceClaimTemplate
@@ -637,4 +715,3 @@ done
 
 Maybe there is a possibility to embed this fix inside CoHDI `.yaml`
 files.
-
