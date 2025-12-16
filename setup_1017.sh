@@ -92,9 +92,6 @@ grep -qs 'export PATH="$PATH:/sbin"' "$HOME/.bashrc" || echo 'export PATH="$PATH
 echo 'export PATH="$PATH:/sbin"' >> ~/.bashrc
 source ~/.bashrc
 
-GPU_UUID=$(sudo -E nvidia-smi --query-gpu=gpu_uuid --format=csv,noheader | sed -n '1p')
-echo "GPU_UUID = $GPU_UUID"
-
 if [[ "${RUN_AGENT_STEPS}" == "true" ]]; then
 
   # Detach GPU (safe no-ops if not present)
@@ -231,10 +228,13 @@ if [[ "${RUN_SERVER_STEPS}" == "true" ]]; then
   echo "SUCCESS: ${CURRENT_STEP}"
 fi
 
-# ================ STEP 5 — WORKLOAD POD (SERVER) ================
-if [[ "${RUN_SERVER_STEPS}" == "true" ]]; then
+# ================ STEP 5 — WORKLOAD POD (AGENT) ================
+if [[ "${RUN_AGENT_STEPS}" == "true" ]]; then
   CURRENT_STEP="Step 5: Create ResourceClaimTemplate + workload pod"
   echo -e "\nBEGIN: ${CURRENT_STEP}"
+
+  GPU_UUID=$(sudo -E nvidia-smi --query-gpu=gpu_uuid --format=csv,noheader | sed -n '1p')
+  echo "GPU_UUID = $GPU_UUID"
 
   if [[ -z "${GPU_UUID}" ]]; then
     echo "GPU_UUID is required for Step 5 (from 'nvidia-smi -L' on the agent). Set GPU_UUID=GPU-... and re-run."
