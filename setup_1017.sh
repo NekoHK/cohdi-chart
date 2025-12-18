@@ -20,6 +20,7 @@ CA_CERT_SRC="${CA_CERT_SRC:-/usr/share/pki/trust/anchors/cohdi-ca.crt}"
 CDI_DRA_TAG="v19-c6e55ba"         # choose tag (doc: updated regularly)
 CDI_CRO_TAG="gc"         # choose tag (doc: updated regularly)
 CDI_DDS_TAG="test"         # choose tag (doc: updated regularly)
+GPU_OPERATOR_VERSION="v25.10.1"
 NVIDIA_DRA_DRIVER_GPU_IMAGE_TAG="v25.8.1"
 
 # Kube config (RKE2)
@@ -153,8 +154,8 @@ if [[ "${RUN_SERVER_STEPS}" == "true" ]]; then
   echo -e "\nBEGIN: ${CURRENT_STEP}"
 
   sudo chmod 644 /etc/rancher/rke2/rke2.yaml
-  # Non-interactive equivalent of kubectl edit: apply HelmChart CR w/ GFD only
-  cat <<'EOF' | kubectl -n kube-system apply -f -
+
+  cat <<EOF | kubectl -n kube-system apply -f -
 apiVersion: helm.cattle.io/v1
 kind: HelmChart
 metadata:
@@ -163,14 +164,35 @@ metadata:
 spec:
   repo: https://helm.ngc.nvidia.com/nvidia
   chart: gpu-operator
+  version: ${GPU_OPERATOR_VERSION}
+  targetNamespace: gpu-operator
+  createNamespace: true
+  valuesContent: |-
+    toolkit:
+      env:
+      - name: CONTAINERD_SOCKET
+        value: /run/k3s/containerd/containerd.sock
+EOF
+
+  # Wait for the gpu-operator pods to do their initial job
+  sleep 60
+
+  # Non-interactive equivalent of kubectl edit: apply HelmChart CR w/ GFD only
+  cat <<EOF | kubectl -n kube-system apply -f -
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: gpu-operator
+  namespace: kube-system
+spec:
+  repo: https://helm.ngc.nvidia.com/nvidia
+  chart: gpu-operator
+  version: ${GPU_OPERATOR_VERSION}
   targetNamespace: gpu-operator
   createNamespace: true
   valuesContent: |-
     toolkit:
       enabled: false
-      env:
-      - name: CONTAINERD_SOCKET
-        value: /run/k3s/containerd/containerd.sock
     driver:
       enabled: false
     devicePlugin:
