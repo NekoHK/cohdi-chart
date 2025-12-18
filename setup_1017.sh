@@ -20,6 +20,7 @@ CA_CERT_SRC="${CA_CERT_SRC:-/usr/share/pki/trust/anchors/cohdi-ca.crt}"
 CDI_DRA_TAG="v19-c6e55ba"         # choose tag (doc: updated regularly)
 CDI_CRO_TAG="gc"         # choose tag (doc: updated regularly)
 CDI_DDS_TAG="test"         # choose tag (doc: updated regularly)
+NVIDIA_DRA_DRIVER_GPU_IMAGE_TAG="v25.8.1"
 
 # Kube config (RKE2)
 export KUBECONFIG="${KUBECONFIG:-/etc/rancher/rke2/rke2.yaml}"
@@ -213,17 +214,19 @@ fi
 if [[ "${RUN_SERVER_STEPS}" == "true" ]]; then
   CURRENT_STEP="Step 4: Deploy NVIDIA DRA Driver"
   echo -e "\nBEGIN: ${CURRENT_STEP}"
+
   helm repo add nvidia https://helm.ngc.nvidia.com/nvidia || true
+
   helm repo update
 
-
   helm upgrade -i nvidia-dra-driver-gpu nvidia/nvidia-dra-driver-gpu \
-      --namespace nvidia-dra-driver-gpu --create-namespace --wait \
-      --set image.repository=nvcr.io/nvidia/k8s-dra-driver-gpu \
-      --set image.tag=v25.3.2 \
+      --namespace nvidia-dra-driver-gpu \
+      --create-namespace \
+      --set image.tag=${NVIDIA_DRA_DRIVER_GPU_IMAGE_TAG} \
       --set nvidiaDriverRoot=/ \
       --set maskNvidiaDriverParams=false \
-      --set gpuResourcesEnabledOverride=true
+      --set gpuResourcesEnabledOverride=true \
+      --wait
 
   echo "SUCCESS: ${CURRENT_STEP}"
 fi
