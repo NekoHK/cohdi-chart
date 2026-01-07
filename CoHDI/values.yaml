@@ -6,6 +6,7 @@ global:
           cdi-model-name: "a100"
           dra-attributes:
             productName: "NVIDIA A100 80GB PCIe"
+            uuid: ""
           driver-name: "gpu.nvidia.com"
           k8s-device-name: "nvidia-a100-80"
           cannot-coexist-with: [2,3]
@@ -13,6 +14,7 @@ global:
           cdi-model-name: "L40S"
           dra-attributes:
             productName: "NVIDIA L40S"
+            uuid: ""
           driver-name: "gpu.nvidia.com"
           k8s-device-name: "nvidia-l40s"
           cannot-coexist-with: [1,3]
@@ -20,6 +22,7 @@ global:
           cdi-model-name: "a30"
           dra-attributes:
             productName: "NVIDIA A30"
+            uuid: ""
           driver-name: "gpu.nvidia.com"
           k8s-device-name: "nvidia-a30"
           cannot-coexist-with: [1,2]
