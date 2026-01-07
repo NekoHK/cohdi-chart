@@ -22,13 +22,14 @@ The GPU driver installation process depends on your environment.
 - [SLES Instructions](./docs/GPU_DRIVER_SLES.md)
 - [RHEL Instructions](./docs/GPU_DRIVER_RHEL.md) (in preparation)
 
-## Creating `DeviceClass`
+## Creating DeviceClass
 
 On the Kubernetes cluster where you will deploy CoHDI, create
-`DeviceClass` for Dynamic Resource Allocation
+DeviceClass for Dynamic Resource Allocation
 (https://kubernetes.io/docs/concepts/scheduling-eviction/dynamic-resource-allocation/).
-If you are using an NVIDIA GPU, create the following `DeviceClass`.
+If you are using an NVIDIA GPU, create the following DeviceClass.
 
+[GPU-DeviceClass.yaml]
 ```
 apiVersion: resource.k8s.io/v1
 kind: DeviceClass
@@ -38,6 +39,10 @@ spec:
   selectors:
   - cel:
       expression: device.driver == 'gpu.nvidia.com'
+```
+
+```bash
+kubectl apply -f GPU-DeviceClass.yaml
 ```
 
 ## Setting the provider ID
@@ -55,6 +60,13 @@ providerID: fsas-cdi://be85a638-9c81-4ca7-84f7-59ae78bfd672
 
 Once you set the provider ID, it cannot be changed later, so please
 set it carefully.
+
+## Additional configuration prior to installing CoHDI
+
+Currently, a workaround is required before installing CoHDI.
+
+For more information, see the "Supplementary Information" section of
+this document.
 
 ## Obtain the Chart
 
@@ -74,42 +86,37 @@ cd cohdi_helm
 
 ## Creating Certificates (for webhook)
 
-These steps show how to create CA and server certificates and server
-private key for webhook with OpenSSL.
+These steps show how to create a server private key, CA certificate,
+and server certificate for webhooks with OpenSSL.
 
-1. Create a CA Private Key and Certificate
-
-```bash
-openssl req -x509 -newkey rsa:2048 -days 365 \
-    -keyout ca.key -out ca.crt -config openssl.conf -nodes
-```
-
-Replace the `common.webhook.client` value in
-`CoHDI/composable-resource-operator/values.yaml` of the CoHDI Helm
-Chart with the contents of the generated `ca.crt` file.
-
-2. Create a Server Private Key and CSR
+1. Create a server private key
 
 ```bash
-openssl req -new -newkey rsa:2048 -keyout server.key \
-    -out server.csr -config openssl.conf -nodes
+openssl genrsa -out tls.key 2048
 ```
 
-Replace the `common.webhook.server.key` value in
-`CoHDI/composable-resource-operator/values.yaml` of the CoHDI Helm
-Chart with the contents of the generated `server.key` file.
+Replace the `common.webhook.server.key` value in 
+`CoHDI/charts/composable-resource-operator/values.yaml` of the CoHDI
+Helm Chart with the contents of the generated `tls.key` file.
 
-3. Sign the Server Certificate with the CA
+2. Create a CA certificate and a server certificate
 
 ```bash
-openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key \
-    -CAcreateserial -out server.crt -days 365 -extensions v3_ca \
-    -extfile openssl.conf
+cro=composable-resource-operator
+crows=$cro-webhook-service
+cross=$crows.$cro-system.svc
+openssl req -x509 -key tls.key -new -sha256 -days 365 -out tls.crt \
+    -subj "/CN=$crows" \
+    -addext "subjectAltName = DNS:$cross, DNS:$cross.cluster.local" \
+    -addext "basicConstraints = critical, CA:FALSE" \
+    -addext "keyUsage = critical, digitalSignature, keyEncipherment" \
+    -addext "extendedKeyUsage = serverAuth, clientAuth"
 ```
 
-Replace the `common.webhook.server.crt` value in
-`CoHDI/composable-resource-operator/values.yaml` of the CoHDI Helm
-Chart with the contents of the generated `server.crt` file.
+Replace the `common.webhook.client.caBundle` and
+`common.webhook.server.crt` values in
+`CoHDI/charts/composable-resource-operator/values.yaml` of the CoHDI
+Helm Chart with the contents of the generated `tls.crt` file.
 
 ## Configure `values.yaml`
 
@@ -264,7 +271,7 @@ cdi-model-name, dra-attributes, driver-name, k8s-device-name, and
 cannot-coexist-with.  For each resource type (model), an index number
 is assigned sequentially, starting from 1, and the deviceInfo
 information is constructed using the (1), (2), and (3) above.  When
-using an NVIDIA GPU, the driver-name is "gpu.nvidia.com".
+using an NVIDIA GPU, the driver-name is `gpu.nvidia.com`.
 
 An example of the settings is as follows.
 
@@ -543,6 +550,7 @@ For example, if you want to use an NVIDIA GPU with a productName of
 "NVIDIA L40S", create a ResourceClaimTemplate with the following
 definition (assuming that is defined in the deviceInfo above).
 
+[workload-ResourceClaimTemplate.yaml]
 ```
 apiVersion: resource.k8s.io/v1
 kind: ResourceClaimTemplate
@@ -573,12 +581,17 @@ spec:
                    device.attributes["gpu.nvidia.com"].productName == "NVIDIA L40S"
 ```
 
+```bash
+kubectl apply -f workload-ResourceClaimTemplate.yaml
+```
+
 ### Launch the Pod by referencing the created ResourceClaimTemplate
 
 Launch a Pod so that it is linked to the ResourceClaimTemplate you
 created.  Here, we use the ResourceClaimTemplate name `single-gpu` to
 link the ResourceClaimTemplate to the Pod.
 
+[workload-Pod.yaml]
 ```
 apiVersion: v1
 kind: Pod
@@ -594,6 +607,10 @@ spec:
   resourceClaims:
   - name: gpu
     resourceClaimTemplateName: single-gpu
+```
+
+```bash
+kubectl apply -f workload-Pod.yaml
 ```
 
 This will create a Pod with the claims defined in the
@@ -664,11 +681,21 @@ Status:
 
 ## Uninstall
 
+If uninstalling CoHDI while there is a ComposableResource in progress,
+problems may occur.  To be safe, run the following command to confirm
+that `No resources found` is output and there is no
+ComposableResource.  Then run the uninstall command.
+
+```
+$ kubectl get composableresource -A
+No resources found
+```
+
 ```bash
 helm uninstall cohdi -n cohdi
 ```
 
-# Contribute
+# Supplementary Information
 
 ## Issues
 
