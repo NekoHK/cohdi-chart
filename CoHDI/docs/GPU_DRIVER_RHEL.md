@@ -21,4 +21,3 @@ sudo dnf install -y nvidia-driver-open
 ```bash
 sudo dnf install -y nvidia-utils nvidia-persistenced
 ```
-
