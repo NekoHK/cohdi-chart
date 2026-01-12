@@ -157,7 +157,7 @@ tests:
         documentIndex: 2
 
 ---
-suite: cdi-operator deployment and webhook checks
+suite: cdi-operator deployment, webhook and daemonset checks
 templates:
   - templates/generated-manifests-v5.yaml
 
@@ -267,3 +267,40 @@ tests:
       - equal:
           path: webhooks[0].clientConfig.service.namespace
           value: composable-resource-operator-system
+  - it: renders node agent DeamonSet
+    documentSelector:
+      path: kind
+      value: DaemonSet
+    asserts:
+      - isKind:
+          of: DaemonSet
+      - equal:
+          path: metadata.name
+          value: cro-node-agent
+      - equal:
+          path: spec.template.spec.containers[0].imagePullPolicy
+          value: IfNotPresent
+      - equal:
+          path: spec.template.spec.containers[0].name
+          value: cro-node-agent
+      - equal:
+          path: spec.template.spec.containers[0].volumeMounts[0].mountPath
+          value: /host-root
+      - equal:
+          path: spec.template.spec.containers[0].volumeMounts[0].name
+          value: host-root
+      - equal:
+          path: spec.template.spec.containers[0].volumeMounts[0].readOnly
+          value: true
+      - equal:
+          path: spec.template.spec.volumes[0].hostPath.path
+          value: /
+      - equal:
+          path: spec.template.spec.volumes[0].name
+          value: host-root
+      - equal:
+          path: spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].key
+          value: node-role.kubernetes.io/control-plane
+      - equal:
+          path: spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].operator
+          value: DoesNotExist

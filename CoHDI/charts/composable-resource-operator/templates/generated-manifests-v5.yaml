@@ -513,3 +513,43 @@ webhooks:
     apiVersions: ["v1alpha1"]
     operations: ["CREATE","UPDATE"]
     resources: ["composabilityrequests"]
+---
+# DaemonSet
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  namespace: composable-resource-operator-system
+  name: cro-node-agent
+spec:
+  selector:
+    matchLabels:
+      app: cro-node-agent
+  template:
+    metadata:
+      labels:
+        app: cro-node-agent
+    spec:
+      containers:
+      - image: busybox:1.36
+        imagePullPolicy: IfNotPresent
+        name: cro-node-agent
+        command:
+          - /bin/sleep
+          - infinity
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - mountPath: /host-root
+          name: host-root
+          readOnly: true
+      volumes:
+      - hostPath:
+          path: /
+        name: host-root
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                - key: node-role.kubernetes.io/control-plane
+                  operator: DoesNotExist
