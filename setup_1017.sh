@@ -21,7 +21,8 @@ CDI_DRA_TAG="v20-c7f88bd"         # choose tag (doc: updated regularly)
 CDI_CRO_TAG="gdctest"         # choose tag (doc: updated regularly)
 CDI_DDS_TAG="test"         # choose tag (doc: updated regularly)
 GPU_OPERATOR_VERSION="v25.10.1"
-NVIDIA_DRA_DRIVER_GPU_IMAGE_TAG="v25.8.1"
+NVIDIA_DRA_DRIVER_GPU_VERSION="25.3.2"
+NVIDIA_DRA_DRIVER_GPU_IMAGE_TAG="v25.3.2"
 
 # Kube config (RKE2)
 export KUBECONFIG="${KUBECONFIG:-/etc/rancher/rke2/rke2.yaml}"
@@ -244,6 +245,7 @@ if [[ "${RUN_SERVER_STEPS}" == "true" ]]; then
   helm upgrade -i nvidia-dra-driver-gpu nvidia/nvidia-dra-driver-gpu \
       --namespace nvidia-dra-driver-gpu \
       --create-namespace \
+      --version=${NVIDIA_DRA_DRIVER_GPU_VERSION} \
       --set image.tag=${NVIDIA_DRA_DRIVER_GPU_IMAGE_TAG} \
       --set nvidiaDriverRoot=/ \
       --set maskNvidiaDriverParams=false \
