@@ -125,7 +125,7 @@ if [[ "${RUN_AGENT_STEPS}" == "true" ]]; then
   sudo -E zypper ar -f "https://nvidia.github.io/libnvidia-container/stable/rpm/"nvidia-container-toolkit.repo || true
   sudo -E zypper --gpg-auto-import-keys -n install -y nvidia-container-toolkit
   sudo -E mkdir -p /etc/cdi
-  # sudo -E nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
+  sudo -E nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
 
   # nvidia-smi --query-gpu=pci.bus_id --format=csv,noheader -i 0 | sed -E "s/^00000000/0000/"
 
