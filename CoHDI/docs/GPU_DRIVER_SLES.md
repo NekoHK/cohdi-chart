@@ -135,15 +135,40 @@ helm repo update
 helm upgrade -i nvidia-dra-driver-gpu nvidia/nvidia-dra-driver-gpu \
     -n nvidia-dra-driver-gpu \
     --create-namespace \
-    --version=v25.3.2 \
+    --version=25.3.2 \
+    --set image.tag=v25.3.2 \
     --set nvidiaDriverRoot=/ \
     --set maskNvidiaDriverParams=false \
     --set gpuResourcesEnabledOverride=true \
     --wait
 ```
 
-After installation, please confirm that the following ResourceSlice
-objects exist.
+After installation, please confirm that the following Dynamic Resource
+Allocation DeviceClass exists.
+
+```bash
+kubectl get deviceclass gpu.nvidia.com -o yaml
+apiVersion: resource.k8s.io/v1
+kind: DeviceClass
+metadata:
+  annotations:
+    meta.helm.sh/release-name: nvidia-dra-driver-gpu
+    meta.helm.sh/release-namespace: nvidia-dra-driver-gpu
+  creationTimestamp: "2026-01-13T12:36:09Z"
+  generation: 1
+  labels:
+    app.kubernetes.io/managed-by: Helm
+  name: gpu.nvidia.com
+  resourceVersion: "1508263"
+  uid: d615b6ea-2b84-4649-aa53-a316f3c24c4a
+spec:
+  selectors:
+  - cel:
+      expression: device.driver == 'gpu.nvidia.com' && device.attributes['gpu.nvidia.com'].type
+        == 'gpu'
+```
+
+Also, please confirm that the following ResourceSlice objects exist.
 
 ```
 Every 2.0s: kubectl get resourceslices.resource.k8s.io
@@ -189,3 +214,4 @@ By setting `nvidia-drm` to `modeset=0` in "Additional driver
 configuration" and changing `enabled` of each item from `true` to
 `false` in "Deploying the NVIDIA GPU Operator", the nvidia-drm modeset
 and functions such as dcgm, mig, vgpu will result in restrictions.
+

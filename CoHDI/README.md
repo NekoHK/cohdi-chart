@@ -12,6 +12,7 @@ The following environment is required.
 * K8s v1.34 or higher
 * Enable feature gate for DRADeviceTaints
 * Enable feature gate for DRADeviceBindingConditions
+* Enable feature gate for DRAResourceClaimDeviceStatus
 
 # Getting Started
 
@@ -21,29 +22,6 @@ The GPU driver installation process depends on your environment.
 
 - [SLES Instructions](./docs/GPU_DRIVER_SLES.md)
 - [RHEL Instructions](./docs/GPU_DRIVER_RHEL.md) (in preparation)
-
-## Creating DeviceClass
-
-On the Kubernetes cluster where you will deploy CoHDI, create
-DeviceClass for Dynamic Resource Allocation
-(https://kubernetes.io/docs/concepts/scheduling-eviction/dynamic-resource-allocation/).
-If you are using an NVIDIA GPU, create the following DeviceClass.
-
-[GPU-DeviceClass.yaml]
-```
-apiVersion: resource.k8s.io/v1
-kind: DeviceClass
-metadata:
-  name: gpu.nvidia.com
-spec:
-  selectors:
-  - cel:
-      expression: device.driver == 'gpu.nvidia.com'
-```
-
-```bash
-kubectl apply -f GPU-DeviceClass.yaml
-```
 
 ## Setting the provider ID
 
@@ -257,6 +235,7 @@ deviceInfo: |
     cdi-model-name: "<Info. on (1)>"
     dra-attributes:
       productName: "<Info. on (2)>"
+      type: "gpu"
       uuid: ""
     driver-name: "gpu.nvidia.com"
     k8s-device-name: "<Info. on (3)>"
@@ -284,6 +263,7 @@ global:
           cdi-model-name: "a100"
           dra-attributes:
             productName: "NVIDIA A100 80GB PCIe"
+            type: "gpu"
             uuid: ""
           driver-name: "gpu.nvidia.com"
           k8s-device-name: "nvidia-a100-80"
@@ -292,6 +272,7 @@ global:
           cdi-model-name: "L40S"
           dra-attributes:
             productName: "NVIDIA L40S"
+            type: "gpu"
             uuid: ""
           driver-name: "gpu.nvidia.com"
           k8s-device-name: "nvidia-l40s"
@@ -300,6 +281,7 @@ global:
           cdi-model-name: "a30"
           dra-attributes:
             productName: "NVIDIA A30"
+            type: "gpu"
             uuid: ""
           driver-name: "gpu.nvidia.com"
           k8s-device-name: "nvidia-a30"
@@ -550,7 +532,7 @@ For example, if you want to use an NVIDIA GPU with a productName of
 "NVIDIA L40S", create a ResourceClaimTemplate with the following
 definition (assuming that is defined in the deviceInfo above).
 
-[workload-ResourceClaimTemplate.yaml]
+[ResourceClaimTemplate-workload.yaml]
 ```
 apiVersion: resource.k8s.io/v1
 kind: ResourceClaimTemplate
@@ -582,7 +564,7 @@ spec:
 ```
 
 ```bash
-kubectl apply -f workload-ResourceClaimTemplate.yaml
+kubectl apply -f ResourceClaimTemplate-workload.yaml
 ```
 
 ### Launch the Pod by referencing the created ResourceClaimTemplate
@@ -591,7 +573,7 @@ Launch a Pod so that it is linked to the ResourceClaimTemplate you
 created.  Here, we use the ResourceClaimTemplate name `single-gpu` to
 link the ResourceClaimTemplate to the Pod.
 
-[workload-Pod.yaml]
+[Pod-workload.yaml]
 ```
 apiVersion: v1
 kind: Pod
@@ -610,7 +592,7 @@ spec:
 ```
 
 ```bash
-kubectl apply -f workload-Pod.yaml
+kubectl apply -f Pod-workload.yaml
 ```
 
 This will create a Pod with the claims defined in the
@@ -742,3 +724,4 @@ done
 
 Maybe there is a possibility to embed this fix inside CoHDI `.yaml`
 files.
+
