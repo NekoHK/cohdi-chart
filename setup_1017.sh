@@ -354,7 +354,7 @@ fi
 # fi
 
 # ================ STEP 5 - REGISTRY (SERVER) ================
-    CURRENT_STEP="Step 5 Pattern 2: Configure private registry + ctr pulls"
+    CURRENT_STEP="Step 5 Pattern 2: Configure private registry"
     echo -e "\nBEGIN: ${CURRENT_STEP}"
 
     # (1) Install Docker on server node
