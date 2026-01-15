@@ -214,4 +214,3 @@ By setting `nvidia-drm` to `modeset=0` in "Additional driver
 configuration" and changing `enabled` of each item from `true` to
 `false` in "Deploying the NVIDIA GPU Operator", the nvidia-drm modeset
 and functions such as dcgm, mig, vgpu will result in restrictions.
-

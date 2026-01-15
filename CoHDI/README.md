@@ -39,13 +39,6 @@ providerID: fsas-cdi://be85a638-9c81-4ca7-84f7-59ae78bfd672
 Once you set the provider ID, it cannot be changed later, so please
 set it carefully.
 
-## Additional configuration prior to installing CoHDI
-
-Currently, a workaround is required before installing CoHDI.
-
-For more information, see the "Supplementary Information" section of
-this document.
-
 ## Obtain the Chart
 
 Add the CoHDI Helm repository:
@@ -676,52 +669,3 @@ No resources found
 ```bash
 helm uninstall cohdi -n cohdi
 ```
-
-# Supplementary Information
-
-## Issues
-
-### Errors during CoHDI installation such as:
-
-```
-Error: Unable to continue with install: ClusterRole "cdi-dra" in namespace "" exists and cannot be imported into the current release: invalid ownership metadata;
-label validation error: missing key "app.kubernetes.io/managed-by": must be set to "Helm";
-annotation validation error: missing key "meta.helm.sh/release-name": must be set to "cohdi";
-annotation validation error: missing key "meta.helm.sh/release-namespace": must be set to "cohdi"
-helm.go:84: [debug] ClusterRole "cdi-dra" in namespace "" exists and cannot be imported into the current release: invalid ownership metadata;
-label validation error: missing key "app.kubernetes.io/managed-by": must be set to "Helm";
-annotation validation error: missing key "meta.helm.sh/release-name": must be set to "cohdi";
-annotation validation error: missing key "meta.helm.sh/release-namespace": must be set to "cohdi"
-Unable to continue with install
-```
-
-Invalid ownership metadata; annotation validation error
-Helm refuses to "adopt" pre-existing resources unless they already carry Helm ownership metadata that matches the release which is being installed.
-
-### Current fix (using kubectl CLI):
-
-There is a need to run the code below before CoHDI installation.
-
-```bash
-PREFIXES='^(composable-resource-operator-|cdi-|dynamic-device-scaler-)'
-for kind in clusterrole clusterrolebinding validatingwebhookconfiguration \
-    mutatingwebhookconfiguration ; do
-  kubectl get "$kind" \
-      -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}' | \
-      grep -E "$PREFIXES" | while read -r name ; do
-    echo "Adopting $kind/$name"
-    kubectl label "$kind" "$name" app.kubernetes.io/managed-by=Helm \
-        --overwrite
-    kubectl annotate "$kind" "$name" \
-        meta.helm.sh/release-name=cohdi \
-        meta.helm.sh/release-namespace=cohdi \
-        --overwrite
-  done
-done
-```
-
-### An idea for a better solution
-
-Maybe there is a possibility to embed this fix inside CoHDI `.yaml`
-files.
-
