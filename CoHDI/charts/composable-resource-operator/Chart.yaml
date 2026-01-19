@@ -2,5 +2,5 @@ apiVersion: v2
 name: composable-resource-operator
 description: Composable Resource Operator (CRO)
 type: application
-version: 0.1.0
-appVersion: "0.1.0"
+version: v0.1.0-3-dev
+appVersion: "v0.1.0-3-dev"
