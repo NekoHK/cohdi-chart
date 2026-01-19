@@ -91,6 +91,12 @@ spec:
     spec:
       serviceAccountName: {{ $saName }}
       terminationGracePeriodSeconds: {{ $tgps }}
+      nodeSelector:
+        node-role.kubernetes.io/control-plane: "true"
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
       containers:
         - name: {{ $name }}
           image: {{ printf "%s/%s:%s" $image.registry $image.repository $image.tag | quote }}
