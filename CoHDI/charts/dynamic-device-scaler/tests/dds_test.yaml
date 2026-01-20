@@ -118,25 +118,17 @@ tests:
             name: DEVICE_NO_ALLOCATION_DURATION
             value: "10"
         documentIndex: 3
-      - equal:
-          path: spec.template.spec.nodeSelector["node-role.kubernetes.io/control-plane"]
-          value: "true"
-        documentIndex: 3
-      - contains:
-          path: spec.template.spec.tolerations
-          content:
-            key: "node-role.kubernetes.io/control-plane"
-            operator: "Exists"
-            effect: "NoSchedule"
-        documentIndex: 3
   - it: "renders Deployment dds-controller-manager with correct selectors and tolerations"
     documentSelector:
       path: kind
       value: Deployment
     asserts:
       - equal:
-          path: spec.template.spec.nodeSelector["node-role.kubernetes.io/control-plane"]
-          value: "true"
+          path: spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms
+          value:
+            - matchExpressions:
+                - key: "node-role.kubernetes.io/control-plane"
+                  operator: "Exists"
       - contains:
           path: spec.template.spec.tolerations
           content:

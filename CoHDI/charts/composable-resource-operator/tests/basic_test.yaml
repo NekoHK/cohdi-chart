@@ -310,8 +310,11 @@ tests:
       value: Deployment
     asserts:
       - equal:
-          path: spec.template.spec.nodeSelector["node-role.kubernetes.io/control-plane"]
-          value: "true"
+          path: spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms
+          value:
+            - matchExpressions:
+                - key: "node-role.kubernetes.io/control-plane"
+                  operator: "Exists"
       - contains:
           path: spec.template.spec.tolerations
           content:
