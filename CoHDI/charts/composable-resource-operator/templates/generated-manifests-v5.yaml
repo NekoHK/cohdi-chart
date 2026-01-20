@@ -432,6 +432,9 @@ spec:
       - key: "node-role.kubernetes.io/control-plane"
         operator: "Exists"
         effect: "NoSchedule"
+      - key: "node-role.kubernetes.io/etcd"
+        operator: "Exists"
+        effect: "NoExecute"
       containers:
       - name: manager
         image: {{ printf "%s/%s:%s" .Values.common.image.registry .Values.common.image.repository .Values.common.image.tag | quote }}

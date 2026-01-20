@@ -318,3 +318,9 @@ tests:
             key: "node-role.kubernetes.io/control-plane"
             operator: "Exists"
             effect: "NoSchedule"
+      - contains:
+          path: spec.template.spec.tolerations
+          content:
+            key: "node-role.kubernetes.io/etcd"
+            operator: "Exists"
+            effect: "NoExecute"

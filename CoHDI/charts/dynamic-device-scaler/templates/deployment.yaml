@@ -97,6 +97,9 @@ spec:
       - key: "node-role.kubernetes.io/control-plane"
         operator: "Exists"
         effect: "NoSchedule"
+      - key: "node-role.kubernetes.io/etcd"
+        operator: "Exists"
+        effect: "NoExecute"
       containers:
         - name: {{ $name }}
           image: {{ printf "%s/%s:%s" $image.registry $image.repository $image.tag | quote }}
