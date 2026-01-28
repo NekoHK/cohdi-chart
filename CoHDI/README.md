@@ -10,6 +10,8 @@ layer for CDI management and device configuration in Kubernetes.
 The following environment is required.
 
 * K8s v1.34 or higher
+* resource.k8s.io/v1alpha3=true is enabled as runtime-config for
+  kube-apiserver
 * Enable feature gate for DRADeviceTaints
 * Enable feature gate for DRADeviceBindingConditions
 * Enable feature gate for DRAResourceClaimDeviceStatus
