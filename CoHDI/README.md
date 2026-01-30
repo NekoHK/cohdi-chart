@@ -86,6 +86,9 @@ openssl req -x509 -key tls.key -new -sha256 -days 365 -out tls.crt \
     -addext "extendedKeyUsage = serverAuth, clientAuth"
 ```
 
+Note: The validity period of the certificate is set to 365 days
+      (1 year).  Please update the validity period as necessary.
+
 Replace the `common.webhook.client.caBundle` and
 `common.webhook.server.crt` values in
 `CoHDI/charts/composable-resource-operator/values.yaml` of the CoHDI

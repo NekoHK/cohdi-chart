@@ -2,9 +2,9 @@ common:
   name: composable-resource-operator
 
   image:
-    registry: docker.io
-    repository: bitnami/composable-resource-operator
-    tag: 0.1.0
+    registry: ghcr.io
+    repository: cohdi/composable-resource-operator
+    tag: v0.1.0-4-dev
     pullPolicy: IfNotPresent
 
   webhook:
