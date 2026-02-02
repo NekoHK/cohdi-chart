@@ -1,9 +1,19 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: composable-resource-operator
+    control-plane: controller-manager
+  name: composable-resource-operator-system
+---
+---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  name: composabilityrequests.cro.hpsys.ibm.ie.com
   annotations:
     controller-gen.kubebuilder.io/version: v0.16.1
+  name: composabilityrequests.cro.hpsys.ibm.ie.com
 spec:
   group: cro.hpsys.ibm.ie.com
   names:
@@ -24,93 +34,172 @@ spec:
       conversionReviewVersions:
         - v1
   versions:
-    - name: v1alpha1
-      served: true
-      storage: true
-      schema:
-        openAPIV3Schema:
-          type: object
-          description: ComposabilityRequest is the Schema for the composabilityrequests API
-          properties:
-            apiVersion: { type: string }
-            kind: { type: string }
-            metadata: { type: object }
-            spec:
-              type: object
-              description: ComposabilityRequestSpec defines the desired state of ComposabilityRequest
-              properties:
-                resource:
-                  type: object
-                  properties:
-                    allocation_policy:
-                      type: string
-                      enum: [samenode, differentnode]
-                      default: samenode
-                    force_detach: { type: boolean }
-                    model: { type: string, minLength: 1 }
-                    other_spec:
-                      type: object
-                      properties:
-                        allowed_pod_number: { type: integer, format: int64, minimum: 0 }
-                        ephemeral_storage:  { type: integer, format: int64, minimum: 0 }
-                        memory:             { type: integer, format: int64, minimum: 0 }
-                        milli_cpu:          { type: integer, format: int64, minimum: 0 }
-                    size: { type: integer, format: int64, minimum: 0 }
-                    target_node: { type: string }
-                    type:
-                      type: string
-                      enum: [gpu, cxlmemory]
-                  required: [model, size, type]
-            status:
-              type: object
-              description: ComposabilityRequestStatus defines the observed state
-              properties:
-                error: { type: string }
-                resources:
-                  type: object
-                  additionalProperties:
-                    type: object
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: ComposabilityRequest is the Schema for the composabilityrequests
+          API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: ComposabilityRequestSpec defines the desired state of ComposabilityRequest
+            properties:
+              resource:
+                properties:
+                  allocation_policy:
+                    default: samenode
+                    enum:
+                    - samenode
+                    - differentnode
+                    type: string
+                  force_detach:
+                    type: boolean
+                  model:
+                    minLength: 1
+                    type: string
+                  other_spec:
                     properties:
-                      cdi_device_id: { type: string }
-                      device_id: { type: string }
-                      error: { type: string }
-                      node_name: { type: string }
-                      state: { type: string }
-                    required: [state]
-                scalarResource:
-                  type: object
+                      allowed_pod_number:
+                        format: int64
+                        minimum: 0
+                        type: integer
+                      ephemeral_storage:
+                        format: int64
+                        minimum: 0
+                        type: integer
+                      memory:
+                        format: int64
+                        minimum: 0
+                        type: integer
+                      milli_cpu:
+                        format: int64
+                        minimum: 0
+                        type: integer
+                    type: object
+                  size:
+                    format: int64
+                    minimum: 0
+                    type: integer
+                  target_node:
+                    type: string
+                  type:
+                    enum:
+                    - gpu
+                    - cxlmemory
+                    type: string
+                required:
+                - model
+                - size
+                - type
+                type: object
+            required:
+            - resource
+            type: object
+          status:
+            description: ComposabilityRequestStatus defines the observed state of
+              ComposabilityRequest
+            properties:
+              error:
+                type: string
+              resources:
+                additionalProperties:
                   properties:
-                    allocation_policy:
+                    cdi_device_id:
                       type: string
-                      enum: [samenode, differentnode]
-                      default: samenode
-                    force_detach: { type: boolean }
-                    model: { type: string, minLength: 1 }
-                    other_spec:
-                      type: object
-                      properties:
-                        allowed_pod_number: { type: integer, format: int64, minimum: 0 }
-                        ephemeral_storage:  { type: integer, format: int64, minimum: 0 }
-                        memory:             { type: integer, format: int64, minimum: 0 }
-                        milli_cpu:          { type: integer, format: int64, minimum: 0 }
-                    size: { type: integer, format: int64, minimum: 0 }
-                    target_node: { type: string }
-                    type:
+                    device_id:
                       type: string
-                      enum: [gpu, cxlmemory]
-                  required: [model, size, type]
-                state: { type: string }
-              required: [state]
-      subresources:
-        status: {}
+                    error:
+                      type: string
+                    node_name:
+                      type: string
+                    state:
+                      type: string
+                  required:
+                  - state
+                  type: object
+                type: object
+              scalarResource:
+                properties:
+                  allocation_policy:
+                    default: samenode
+                    enum:
+                    - samenode
+                    - differentnode
+                    type: string
+                  force_detach:
+                    type: boolean
+                  model:
+                    minLength: 1
+                    type: string
+                  other_spec:
+                    properties:
+                      allowed_pod_number:
+                        format: int64
+                        minimum: 0
+                        type: integer
+                      ephemeral_storage:
+                        format: int64
+                        minimum: 0
+                        type: integer
+                      memory:
+                        format: int64
+                        minimum: 0
+                        type: integer
+                      milli_cpu:
+                        format: int64
+                        minimum: 0
+                        type: integer
+                    type: object
+                  size:
+                    format: int64
+                    minimum: 0
+                    type: integer
+                  target_node:
+                    type: string
+                  type:
+                    enum:
+                    - gpu
+                    - cxlmemory
+                    type: string
+                required:
+                - model
+                - size
+                - type
+                type: object
+              state:
+                type: string
+            required:
+            - state
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+
 ---
-# CRD: composableresources
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  name: composableresources.cro.hpsys.ibm.ie.com
   annotations:
     controller-gen.kubebuilder.io/version: v0.16.1
+  name: composableresources.cro.hpsys.ibm.ie.com
 spec:
   group: cro.hpsys.ibm.ie.com
   names:
@@ -120,233 +209,368 @@ spec:
     singular: composableresource
   scope: Cluster
   versions:
-    - name: v1alpha1
-      served: true
-      storage: true
-      schema:
-        openAPIV3Schema:
-          type: object
-          description: ComposableResource is the Schema for the composableresources API
-          properties:
-            apiVersion: { type: string }
-            kind: { type: string }
-            metadata: { type: object }
-            spec:
-              type: object
-              description: ComposableResourceSpec
-              properties:
-                force_detach: { type: boolean }
-                model: { type: string }
-                target_node: { type: string }
-                type:
-                  type: string
-                  enum: [gpu, cxlmemory]
-              required: [model, target_node, type]
-            status:
-              type: object
-              description: ComposableResourceStatus
-              properties:
-                cdi_device_id: { type: string }
-                device_id: { type: string }
-                error: { type: string }
-                state: { type: string }
-              required: [state]
-      subresources:
-        status: {}
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: ComposableResource is the Schema for the composableresources
+          API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: ComposableResourceSpec defines the desired state of ComposableResource
+            properties:
+              force_detach:
+                type: boolean
+              model:
+                type: string
+              target_node:
+                type: string
+              type:
+                enum:
+                - gpu
+                - cxlmemory
+                type: string
+            required:
+            - model
+            - target_node
+            - type
+            type: object
+          status:
+            description: ComposableResourceStatus defines the observed state of ComposableResource
+            properties:
+              cdi_device_id:
+                type: string
+              device_id:
+                type: string
+              error:
+                type: string
+              state:
+                type: string
+            required:
+            - state
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
 ---
-# ServiceAccount
 apiVersion: v1
 kind: ServiceAccount
 metadata:
+  labels:
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: composable-resource-operator
   name: composable-resource-operator-controller-manager
   namespace: composable-resource-operator-system
-  labels:
-    app.kubernetes.io/name: {{ .Values.common.name }}
-    app.kubernetes.io/managed-by: Helm
 ---
-# Leader election Role (namespaced)
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: {{ .Values.common.name }}-leader-election-role
+  labels:
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: composable-resource-operator
+  name: composable-resource-operator-leader-election-role
   namespace: composable-resource-operator-system
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - coordination.k8s.io
+  resources:
+  - leases
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - patch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
   labels:
-    app.kubernetes.io/name: {{ .Values.common.name }}
-    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: composable-resource-operator
+  name: composable-resource-operator-composabilityrequest-editor-role
 rules:
-- apiGroups: [""]
-  resources: ["configmaps"]
-  verbs: ["get","list","watch","create","update","patch","delete"]
-- apiGroups: ["coordination.k8s.io"]
-  resources: ["leases"]
-  verbs: ["get","list","watch","create","update","patch","delete"]
-- apiGroups: [""]
-  resources: ["events"]
-  verbs: ["create","patch"]
+- apiGroups:
+  - cro.hpsys.ibm.ie.com
+  resources:
+  - composabilityrequests
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - cro.hpsys.ibm.ie.com
+  resources:
+  - composabilityrequests/status
+  verbs:
+  - get
 ---
-# ClusterRoles (edit/view + manager/metering)
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ .Values.common.name }}-composabilityrequest-editor-role
   labels:
-    app.kubernetes.io/name: {{ .Values.common.name }}
-    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: composable-resource-operator
+  name: composable-resource-operator-composabilityrequest-viewer-role
 rules:
-- apiGroups: ["cro.hpsys.ibm.ie.com"]
-  resources: ["composabilityrequests"]
-  verbs: ["create","delete","get","list","patch","update","watch"]
-- apiGroups: ["cro.hpsys.ibm.ie.com"]
-  resources: ["composabilityrequests/status"]
-  verbs: ["get"]
+- apiGroups:
+  - cro.hpsys.ibm.ie.com
+  resources:
+  - composabilityrequests
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - cro.hpsys.ibm.ie.com
+  resources:
+  - composabilityrequests/status
+  verbs:
+  - get
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ .Values.common.name }}-composabilityrequest-viewer-role
   labels:
-    app.kubernetes.io/name: {{ .Values.common.name }}
-    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: composable-resource-operator
+  name: composable-resource-operator-composableresource-editor-role
 rules:
-- apiGroups: ["cro.hpsys.ibm.ie.com"]
-  resources: ["composabilityrequests"]
-  verbs: ["get","list","watch"]
-- apiGroups: ["cro.hpsys.ibm.ie.com"]
-  resources: ["composabilityrequests/status"]
-  verbs: ["get"]
+- apiGroups:
+  - cro.hpsys.ibm.ie.com
+  resources:
+  - composableresources
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - cro.hpsys.ibm.ie.com
+  resources:
+  - composableresources/status
+  verbs:
+  - get
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ .Values.common.name }}-composableresource-editor-role
   labels:
-    app.kubernetes.io/name: {{ .Values.common.name }}
-    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: composable-resource-operator
+  name: composable-resource-operator-composableresource-viewer-role
 rules:
-- apiGroups: ["cro.hpsys.ibm.ie.com"]
-  resources: ["composableresources"]
-  verbs: ["create","delete","get","list","patch","update","watch"]
-- apiGroups: ["cro.hpsys.ibm.ie.com"]
-  resources: ["composableresources/status"]
-  verbs: ["get"]
+- apiGroups:
+  - cro.hpsys.ibm.ie.com
+  resources:
+  - composableresources
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - cro.hpsys.ibm.ie.com
+  resources:
+  - composableresources/status
+  verbs:
+  - get
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ .Values.common.name }}-composableresource-viewer-role
-  labels:
-    app.kubernetes.io/name: {{ .Values.common.name }}
-    app.kubernetes.io/managed-by: Helm
+  name: composable-resource-operator-manager-role
 rules:
-- apiGroups: ["cro.hpsys.ibm.ie.com"]
-  resources: ["composableresources"]
-  verbs: ["get","list","watch"]
-- apiGroups: ["cro.hpsys.ibm.ie.com"]
-  resources: ["composableresources/status"]
-  verbs: ["get"]
+- apiGroups:
+  - ""
+  resources:
+  - nodes
+  - pods
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - apps
+  resources:
+  - daemonsets
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - cro.hpsys.ibm.ie.com
+  resources:
+  - composabilityrequests
+  - composableresources
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - cro.hpsys.ibm.ie.com
+  resources:
+  - composabilityrequests/finalizers
+  - composableresources/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - cro.hpsys.ibm.ie.com
+  resources:
+  - composabilityrequests/status
+  - composableresources/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - machine.openshift.io
+  resources:
+  - machines
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - metal3.io
+  resources:
+  - baremetalhosts
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - nvidia.com
+  resources:
+  - clusterpolicies
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - resource.k8s.io
+  resources:
+  - resourceslices
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - resource.k8s.io
+  resources:
+  - devicetaintrules
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ .Values.common.name }}-manager-role
+  name: composable-resource-operator-metrics-auth-role
 rules:
-- apiGroups: [""]
-  resources: ["nodes","pods"]
-  verbs: ["get","list","watch"]
-- apiGroups: [""]
-  resources: ["nodes/status","pods/status"]
-  verbs: ["get"]
-- apiGroups: [""]
-  resources: ["pods/exec"]
-  verbs: ["create"]
-- apiGroups: [""]
-  resourceNames: ["credentials"]
-  resources: ["secrets"]
-  verbs: ["get"]
-- apiGroups: ["apps"]
-  resources: ["daemonsets"]
-  verbs: ["get","list","update","watch"]
-- apiGroups: ["apps"]
-  resources: ["daemonsets/status"]
-  verbs: ["get"]
-- apiGroups: ["cro.hpsys.ibm.ie.com"]
-  resources: ["composabilityrequests","composableresources"]
-  verbs: ["create","delete","get","list","patch","update","watch"]
-- apiGroups: ["cro.hpsys.ibm.ie.com"]
-  resources: ["composabilityrequests/finalizers","composableresources/finalizers"]
-  verbs: ["update"]
-- apiGroups: ["cro.hpsys.ibm.ie.com"]
-  resources: ["composabilityrequests/status","composableresources/status"]
-  verbs: ["get","patch","update"]
-- apiGroups: ["metal3.io"]
-  resources: ["baremetalhosts"]
-  verbs: ["get","list","watch"]
-- apiGroups: ["metal3.io"]
-  resources: ["baremetalhosts/status"]
-  verbs: ["get"]
-- apiGroups: ["nvidia.com"]
-  resources: ["clusterpolicies"]
-  verbs: ["get","list","watch"]
-- apiGroups: ["resource.k8s.io"]
-  resources: ["resourceslices"]
-  verbs: ["get","list","patch","update","watch"]
-- apiGroups: ["resource.k8s.io"]
-  resources: ["resourceslices/status"]
-  verbs: ["get","patch","update"]
-- apiGroups: ["resource.k8s.io"]
-  resources: ["devicetaintrules","devicetaintrules/status"]
-  verbs: ["get","list","watch","create","update","patch","delete"]
+- apiGroups:
+  - authentication.k8s.io
+  resources:
+  - tokenreviews
+  verbs:
+  - create
+- apiGroups:
+  - authorization.k8s.io
+  resources:
+  - subjectaccessreviews
+  verbs:
+  - create
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ .Values.common.name }}-metrics-auth-role
+  name: composable-resource-operator-metrics-reader
 rules:
-- apiGroups: ["authentication.k8s.io"]
-  resources: ["tokenreviews"]
-  verbs: ["create"]
-- apiGroups: ["authorization.k8s.io"]
-  resources: ["subjectaccessreviews"]
-  verbs: ["create"]
+- nonResourceURLs:
+  - /metrics
+  verbs:
+  - get
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: {{ .Values.common.name }}-metrics-reader
-rules:
-- nonResourceURLs: ["/metrics"]
-  verbs: ["get"]
----
-# RoleBinding for leader election
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: {{ .Values.common.name }}-leader-election-rolebinding
-  namespace: composable-resource-operator-system
   labels:
-    app.kubernetes.io/name: {{ .Values.common.name }}
-    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: composable-resource-operator
+  name: composable-resource-operator-leader-election-rolebinding
+  namespace: composable-resource-operator-system
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: {{ .Values.common.name }}-leader-election-role
+  name: composable-resource-operator-leader-election-role
 subjects:
 - kind: ServiceAccount
   name: composable-resource-operator-controller-manager
   namespace: composable-resource-operator-system
 ---
-# ClusterRoleBindings
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: {{ .Values.common.name }}-manager-rolebinding
   labels:
-    app.kubernetes.io/name: {{ .Values.common.name }}
-    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: composable-resource-operator
+  name: composable-resource-operator-manager-rolebinding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ .Values.common.name }}-manager-role
+  name: composable-resource-operator-manager-role
 subjects:
 - kind: ServiceAccount
   name: composable-resource-operator-controller-manager
@@ -355,26 +579,25 @@ subjects:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: {{ .Values.common.name }}-metrics-auth-rolebinding
+  name: composable-resource-operator-metrics-auth-rolebinding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ .Values.common.name }}-metrics-auth-role
+  name: composable-resource-operator-metrics-auth-role
 subjects:
 - kind: ServiceAccount
   name: composable-resource-operator-controller-manager
   namespace: composable-resource-operator-system
 ---
-# Services
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.common.name }}-controller-manager-metrics-service
-  namespace: composable-resource-operator-system
   labels:
-    app.kubernetes.io/name: {{ .Values.common.name }}
-    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: composable-resource-operator
     control-plane: controller-manager
+  name: composable-resource-operator-controller-manager-metrics-service
+  namespace: composable-resource-operator-system
 spec:
   ports:
   - name: https
@@ -387,11 +610,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.common.name }}-webhook-service
-  namespace: composable-resource-operator-system
   labels:
-    app.kubernetes.io/name: {{ .Values.common.name }}
-    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: composable-resource-operator
+  name: composable-resource-operator-webhook-service
+  namespace: composable-resource-operator-system
 spec:
   ports:
   - port: 443
@@ -400,16 +623,15 @@ spec:
   selector:
     control-plane: controller-manager
 ---
-# Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.common.name }}-controller-manager
-  namespace: composable-resource-operator-system
   labels:
-    app.kubernetes.io/name: {{ .Values.common.name }}
-    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: composable-resource-operator
     control-plane: controller-manager
+  name: composable-resource-operator-controller-manager
+  namespace: composable-resource-operator-system
 spec:
   replicas: 1
   selector:
@@ -417,153 +639,215 @@ spec:
       control-plane: controller-manager
   template:
     metadata:
-      labels:
-        control-plane: controller-manager
       annotations:
         kubectl.kubernetes.io/default-container: manager
+      labels:
+        control-plane: controller-manager
     spec:
-      serviceAccountName: composable-resource-operator-controller-manager
-      terminationGracePeriodSeconds: 10
-      securityContext:
-        runAsNonRoot: true
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: "node-role.kubernetes.io/control-plane"
-                operator: "Exists"
-      tolerations:
-      - key: "node-role.kubernetes.io/control-plane"
-        operator: "Exists"
-        effect: "NoSchedule"
-      - key: "node-role.kubernetes.io/etcd"
-        operator: "Exists"
-        effect: "NoExecute"
       containers:
-      - name: manager
-        image: {{ printf "%s/%s:%s" .Values.common.image.registry .Values.common.image.repository .Values.common.image.tag | quote }}
-        imagePullPolicy: {{ .Values.common.image.pullPolicy }}
-        command: ["/manager"]
-        args:
-          - --metrics-bind-address=:8443
-          - --leader-elect
-          - --health-probe-bind-address=:8081
-        env:
-{{- range $k, $v := .Values.fti_cdi.managerEnv }}
-        - name: {{ $k }}
-          value: {{ $v | quote }}
-{{- end }}
-{{- range $k, $v := .Values.common.managerEnv }}
-        - name: {{ $k }}
-          value: {{ $v | quote }}
-{{- end }}
-        - name: SSL_CERT_FILE
-          value: "/etc/ssl/certs/custom-ca/ca.crt"
-        - name: FTI_CDI_TENANT_ID
-          value: {{ .Values.global.fti_cdi.env.TENANT_ID | quote}}
-        - name: FTI_CDI_ENDPOINT
-        {{- with (first .Values.global.fti_cdi.hostAliases) }}
-          value: "{{ .ip }}:443"
-        {{- end }}
-        ports:
-        - name: webhook-server
-          containerPort: 9443
-          protocol: TCP
+      - args:
+        - --metrics-bind-address=:8443
+        - --leader-elect
+        - --health-probe-bind-address=:8081
+        command:
+        - /manager
+        image: 10.38.251.227:5000/cdi-operator:latest
+        imagePullPolicy: IfNotPresent
         livenessProbe:
-          httpGet: { path: /healthz, port: 8081 }
+          httpGet:
+            path: /healthz
+            port: 8081
           initialDelaySeconds: 15
           periodSeconds: 20
+        name: manager
+        env:
+        - name: CDI_PROVIDER_TYPE
+          value: "FTI_CDI"
+        - name: DEVICE_RESOURCE_TYPE
+          value: "DRA"
+        - name: FTI_CDI_API_TYPE
+          value: "FM"
+        - name: FTI_CDI_ENDPOINT
+          value: "192.168.1.101:443"
+        - name: FTI_CDI_TENANT_ID
+          value: "060ea5a5-46e4-42b4-8d95-70578718d8d0"
+        - name: SSL_CERT_FILE
+          value: "/etc/ssl/certs/custom-ca/ca.crt"
+        ports:
+        - containerPort: 9443
+          name: webhook-server
+          protocol: TCP
         readinessProbe:
-          httpGet: { path: /readyz, port: 8081 }
+          httpGet:
+            path: /readyz
+            port: 8081
           initialDelaySeconds: 5
           periodSeconds: 10
         resources:
-          requests:
-            cpu: 10m
-            memory: 64Mi
           limits:
             cpu: 500m
             memory: 128Mi
+          requests:
+            cpu: 10m
+            memory: 64Mi
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
-            drop: ["ALL"]
+            drop:
+            - ALL
         volumeMounts:
-        - name: cert
-          mountPath: /tmp/k8s-webhook-server/serving-certs
+        - mountPath: /tmp/k8s-webhook-server/serving-certs
+          name: cert
           readOnly: true
-        - name: custom-ca-certs
-          mountPath: /etc/ssl/certs/custom-ca
+        - mountPath: /etc/ssl/certs/custom-ca
+          name: custom-ca-certs
           readOnly: true
+      securityContext:
+        runAsNonRoot: true
+      serviceAccountName: composable-resource-operator-controller-manager
+      terminationGracePeriodSeconds: 10
       volumes:
       - name: cert
         secret:
-          secretName: webhook-server-cert
           defaultMode: 420
+          secretName: webhook-server-cert
       - name: custom-ca-certs
         secret:
           secretName: external-server-ca-cert
           defaultMode: 420
 ---
-# ValidatingWebhookConfiguration
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
 metadata:
-  name: {{ .Values.common.name }}-validating-webhook-configuration
+  name: composable-resource-operator-validating-webhook-configuration
 webhooks:
-- name: vcomposabilityrequest.kb.io
-  admissionReviewVersions: ["v1"]
-  sideEffects: None
-  failurePolicy: Fail
+- admissionReviewVersions:
+  - v1
   clientConfig:
-    caBundle: {{ .Values.common.webhook.client.caBundle | trim | b64enc }}
+    caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURFekNDQWZ1Z0F3SUJBZ0lVTW55WEVkSmhYamdqNE9qQ0JUNVYvNXN2VWdFd0RRWUpLb1pJaHZjTkFRRUwKQlFBd0dURVhNQlVHQTFVRUF3d09ZM0p2TFhkbFltaHZiMnN0WTJFd0hoY05NalV3TlRNd01UWTFPVFUyV2hjTgpNelV3TlRJNE1UWTFPVFUyV2pBWk1SY3dGUVlEVlFRRERBNWpjbTh0ZDJWaWFHOXZheTFqWVRDQ0FTSXdEUVlKCktvWklodmNOQVFFQkJRQURnZ0VQQURDQ0FRb0NnZ0VCQUpsRlU0SjFxR1hkK1BqcmxaWmpuNHF1RlJwcks5eXUKLytDQWp1alJnWFFhcStiNGVUSDNCaWxMOEQ3eGlPWkFmdmgzRm5SbWlVdjBObUNiSUdMVldQZXdIT0ZYWnBjRAorZVliZk9qS2UzUmFlcFhPdFRoU05tYmZkM1U3b0Q0U3hHUGY2RXRWeXUvUmlsck1tL3dOZ29BYWgrd1pKUGJLCks5M1JwK1ZFcTVuUDh1Y1ozQlFjRFlNaUJtYkYrTFNCdlkzNHdsZzliQk1xY0F6SUg5Zm15VU8rNTk4QTM5V3EKWG8rNDQ2ZDNaekRYVk4wbHFwRGM5MERhMlpTR2ZzM09RRWxmOWtLNG1PTVJCa1h0Z09IQVNSdUUvd3hSRVludgppczM0YjVOdTVvWVFndmcrNy9ZNnNPanp2SlNXM3VMbjhmektRay8zNm5BL2x4dHY3MDhxVmFVQ0F3RUFBYU5UCk1GRXdIUVlEVlIwT0JCWUVGRFdSTkl5UUV6cXZEdVFRQjRET25tbjFobzQ5TUI4R0ExVWRJd1FZTUJhQUZEV1IKTkl5UUV6cXZEdVFRQjRET25tbjFobzQ5TUE4R0ExVWRFd0VCL3dRRk1BTUJBZjh3RFFZSktvWklodmNOQVFFTApCUUFEZ2dFQkFCNWxyUGJLNVZDRDhWdnBndkU2V0NCQ1JWbEwvQU15RURkalFmeFFEM1lsZEljcXdnY3lITkZwCnRVM0JwR1NScFE1SU83SGYxZmZ6YTMybXA3YjJLUDBXMkFYa3hQZGtPeW5VMUQ4RGZYbXV3NDlKaHpFcGMwL0UKK2xTZkNEWnpkUVVyMXVwNGxvNUlOSlRaV3NhSE1wMnJacHduejJUMnRIZDZHaDdZV29lTFNvM3ZhQVYrNEFSSgorQmdpaU9kMlpnL0V1aE84ZENyYS9Mc2sxcVhib2hKZ213dEhIYTNnaUF4ZmpNcFdZdXlGN2hZUTl6V0ZUZ2Z3Ck43TjUxZXpxQmVDR3YrbG1ySmJWODlnbW5SWktMTml6aC9UelRjNkNHRWIyUklJWkJYWVpjUDJOOEd0LzJLdDcKYWowOVVsYlExTE9pajU3MldZNEI1OGhaeERIbXZZND0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQ==
     service:
-      name: {{ .Values.common.name }}-webhook-service
+      name: composable-resource-operator-webhook-service
       namespace: composable-resource-operator-system
       path: /validate-cro-hpsys-ibm-ie-com-v1alpha1-composabilityrequest
+  failurePolicy: Fail
+  name: vcomposabilityrequest.kb.io
   rules:
-  - apiGroups: ["cro.hpsys.ibm.ie.com"]
-    apiVersions: ["v1alpha1"]
-    operations: ["CREATE","UPDATE"]
-    resources: ["composabilityrequests"]
+  - apiGroups:
+    - cro.hpsys.ibm.ie.com
+    apiVersions:
+    - v1alpha1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - composabilityrequests
+  sideEffects: None
 ---
-# DaemonSet
-apiVersion: apps/v1
-kind: DaemonSet
+# Role for common operations
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
 metadata:
+  name: composable-resource-operator-common-role
   namespace: composable-resource-operator-system
-  name: cro-node-agent
-spec:
-  selector:
-    matchLabels:
-      app: cro-node-agent
-  template:
-    metadata:
-      labels:
-        app: cro-node-agent
-    spec:
-      containers:
-      - image: busybox:1.36
-        imagePullPolicy: IfNotPresent
-        name: cro-node-agent
-        command:
-          - /bin/sleep
-          - infinity
-        securityContext:
-          privileged: true
-        volumeMounts:
-        - mountPath: /host-root
-          name: host-root
-          readOnly: true
-      volumes:
-      - hostPath:
-          path: /
-        name: host-root
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                - key: node-role.kubernetes.io/control-plane
-                  operator: DoesNotExist
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - pods/exec
+  verbs:
+  - create
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  resourceNames:
+  - credentials
+  verbs:
+  - get
+---
+# RoleBinding for common operations
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: composable-resource-operator-common-rolebinding
+  namespace: composable-resource-operator-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: composable-resource-operator-common-role
+subjects:
+- kind: ServiceAccount
+  name: composable-resource-operator-controller-manager
+  namespace: composable-resource-operator-system
+---
+# Role for NVIDIA Driver DaemonSet
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: composable-resource-operator-nvidia-driver-daemonset-role
+  namespace: nvidia-gpu-operator
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - pods/exec
+  verbs:
+  - create
+- apiGroups:
+  - apps
+  resources:
+  - daemonsets
+  verbs:
+  - update
+---
+# RoleBinding for NVIDIA Driver DaemonSet
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: composable-resource-operator-nvidia-driver-daemonset-rolebinding
+  namespace: nvidia-gpu-operator
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: composable-resource-operator-nvidia-driver-daemonset-role
+subjects:
+- kind: ServiceAccount
+  name: composable-resource-operator-controller-manager
+  namespace: composable-resource-operator-system
+---
+# Role for NVIDIA Driver DRA
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: composable-resource-operator-nvidia-dra-driver-role
+  namespace: nvidia-dra-driver-gpu
+rules:
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - pods/exec
+  verbs:
+  - create
+- apiGroups:
+  - apps
+  resources:
+  - daemonsets
+  verbs:
+  - update
+---
+# RoleBinding for NVIDIA Driver DRA
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: composable-resource-operator-nvidia-dra-driver-rolebinding
+  namespace: nvidia-dra-driver-gpu
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: composable-resource-operator-nvidia-dra-driver-role
+subjects:
+- kind: ServiceAccount
+  name: composable-resource-operator-controller-manager
+  namespace: composable-resource-operator-system
+---
