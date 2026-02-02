@@ -36,23 +36,23 @@ metadata:
     app.kubernetes.io/name: dynamic-device-scaler
 rules:
 - apiGroups: [""]
-  resources: ["configmaps"]
-  verbs: ["get"]
-- apiGroups: [""]
   resources: ["nodes"]
-  verbs: ["get", "list", "patch", "update"]
+  verbs: ["list", "patch"]
 - apiGroups: ["cro.hpsys.ibm.ie.com"]
-  resources: ["composabilityrequests", "composableresources"]
-  verbs: ["create", "delete", "get", "list", "patch", "update", "watch"]
+  resources: ["composabilityrequests"]
+  verbs: ["create", "get", "list", "watch", "patch"]
 - apiGroups: ["cro.hpsys.ibm.ie.com"]
-  resources: ["composabilityrequests/status", "composableresources/status"]
-  verbs: ["get", "patch", "update"]
+  resources: ["composableresources"]
+  verbs: ["get", "list", "watch", "patch"]
 - apiGroups: ["resource.k8s.io"]
-  resources: ["resourceclaims", "resourceslices"]
-  verbs: ["get", "list", "patch", "update", "watch"]
+  resources: ["resourceclaims"]
+  verbs: ["get", "list", "watch"]
 - apiGroups: ["resource.k8s.io"]
-  resources: ["resourceclaims/status", "resourceslices/status"]
-  verbs: ["get", "patch", "update"]
+  resources: ["resourceslices"]
+  verbs: ["list", "watch"]
+- apiGroups: ["resource.k8s.io"]
+  resources: ["resourceclaims/status"]
+  verbs: ["patch"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -116,3 +116,33 @@ spec:
             - name: {{ $k }}
               value: {{ $v | quote }}
           {{- end }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: dynamic-device-scaler-configmap-reader
+  namespace: {{ $ns }}
+  labels:
+    app.kubernetes.io/name: dynamic-device-scaler
+rules:
+- apiGroups: [""]
+  resources: ["configmaps"]
+  resourceNames: ["composable-dra-dds"]
+  verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: dynamic-device-scaler-configmap-readerbinding
+  namespace: {{ $ns }}
+  labels:
+    app.kubernetes.io/name: dynamic-device-scaler
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: dynamic-device-scaler-configmap-reader
+subjects:
+- kind: ServiceAccount
+  name: {{ $saName }}
+  namespace: {{ $ns }}
+---
