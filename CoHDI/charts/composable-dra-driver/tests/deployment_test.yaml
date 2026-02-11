@@ -95,3 +95,52 @@ tests:
             key: "node-role.kubernetes.io/etcd"
             operator: "Exists"
             effect: "NoExecute"
+  - it: test hostAliases, multiple hostnames
+    set:
+      global:
+        fti_cdi:
+          hostAliases:
+            - ip: "111.111.111.111"
+              hostnames:
+                - "ex1.local"
+                - "ex2.local"
+    documentSelector:
+      path: kind
+      value: Deployment
+    asserts:
+      - equal:
+          path: spec.template.spec.hostAliases[0].ip
+          value: "111.111.111.111"
+      - contains:
+          path: spec.template.spec.hostAliases[0].hostnames
+          content: "ex1.local"
+      - contains:
+          path: spec.template.spec.hostAliases[0].hostnames
+          content: "ex2.local"
+  - it: test multiple hostAliases
+    set:
+      global.fti_cdi.hostAliases:
+        - ip: "111.111.111.111"
+          hostnames:
+            - "ex1.local"
+        - ip: "222.222.222.222"
+          hostnames:
+            - "ex2.local"       
+    documentSelector:
+      path: kind
+      value: Deployment
+    asserts:
+      - equal:
+          path: spec.template.spec.hostAliases[0].ip
+          value: "111.111.111.111"
+      - contains:
+          path: spec.template.spec.hostAliases[0].hostnames
+          content: "ex1.local"
+      - equal:
+          path: spec.template.spec.hostAliases[1].ip
+          value: "222.222.222.222"
+      - contains:
+          path: spec.template.spec.hostAliases[1].hostnames
+          content: "ex2.local"
+
+
