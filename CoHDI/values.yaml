@@ -1,5 +1,11 @@
 global:
   common:
+    driver:
+      gpu:
+        nvidia:
+          gpuOperator:
+            namespace: gpu-operator
+
     configData:
       deviceInfo: |
         - index: 1

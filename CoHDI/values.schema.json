@@ -8,6 +8,33 @@
         "common": {
           "type": "object",
           "properties": {
+            "driver": {
+              "type": "object",
+              "description": "Device driver configuration, organized by vendor.",
+              "properties": {
+                "gpu": {
+                  "type": "object",
+                  "properties": {
+                    "nvidia": {
+                      "type": "object",
+                      "properties": {
+                        "gpuOperator": {
+                          "type": "object",
+                          "properties": {
+                            "namespace": {
+                              "type": "string",
+                              "minLength": 1,
+                              "default": "gpu-operator",
+                              "description": "Namespace where the NVIDIA GPU Operator is deployed."
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
             "configData": {
               "type": "object",
               "description": "Device and configuration data for CDI resources.",

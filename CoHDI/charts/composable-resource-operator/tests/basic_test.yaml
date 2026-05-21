@@ -327,3 +327,94 @@ tests:
             key: "node-role.kubernetes.io/etcd"
             operator: "Exists"
             effect: "NoExecute"
+
+  # GPU Operator RBAC
+  - it: "renders GPU Operator Role with default namespace gpu-operator"
+    documentSelector:
+      path: metadata.name
+      value: composable-resource-operator-gpu-operator-role
+    asserts:
+      - isKind:
+          of: Role
+      - equal:
+          path: metadata.namespace
+          value: gpu-operator
+      - contains:
+          path: rules
+          content:
+            apiGroups: [""]
+            resources: ["pods/exec"]
+            verbs: ["create"]
+      - contains:
+          path: rules
+          content:
+            apiGroups: ["apps"]
+            resources: ["daemonsets"]
+            verbs: ["update"]
+      - contains:
+          path: rules
+          content:
+            apiGroups: ["apps"]
+            resources: ["daemonsets/status"]
+            verbs: ["get"]
+
+  - it: "renders GPU Operator RoleBinding with default namespace gpu-operator"
+    documentSelector:
+      path: metadata.name
+      value: composable-resource-operator-gpu-operator-rolebinding
+    asserts:
+      - isKind:
+          of: RoleBinding
+      - equal:
+          path: metadata.namespace
+          value: gpu-operator
+      - equal:
+          path: roleRef.name
+          value: composable-resource-operator-gpu-operator-role
+      - equal:
+          path: subjects[0].kind
+          value: ServiceAccount
+      - equal:
+          path: subjects[0].name
+          value: composable-resource-operator-controller-manager
+      - equal:
+          path: subjects[0].namespace
+          value: composable-resource-operator-system
+
+  - it: "renders GPU Operator Role and RoleBinding with overridden namespace"
+    set:
+      global:
+        common:
+          driver:
+            gpu:
+              nvidia:
+                gpuOperator:
+                  namespace: nvidia-gpu-operator
+    documentSelector:
+      path: metadata.name
+      value: composable-resource-operator-gpu-operator-role
+    asserts:
+      - isKind:
+          of: Role
+      - equal:
+          path: metadata.namespace
+          value: nvidia-gpu-operator
+
+  - it: "renders GPU Operator RoleBinding with overridden namespace"
+    set:
+      global:
+        common:
+          driver:
+            gpu:
+              nvidia:
+                gpuOperator:
+                  namespace: nvidia-gpu-operator
+    documentSelector:
+      path: metadata.name
+      value: composable-resource-operator-gpu-operator-rolebinding
+    asserts:
+      - isKind:
+          of: RoleBinding
+      - equal:
+          path: metadata.namespace
+          value: nvidia-gpu-operator
