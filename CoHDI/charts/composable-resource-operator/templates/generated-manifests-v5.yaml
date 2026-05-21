@@ -445,7 +445,9 @@ spec:
         - name: SSL_CERT_FILE
           value: "/etc/ssl/certs/custom-ca/ca.crt"
         - name: FTI_CDI_TENANT_ID
-          value: {{ .Values.global.fti_cdi.env.TENANT_ID | quote}}
+          value: {{ .Values.global.fti_cdi.env.TENANT_ID | quote }}
+        - name: FTI_CDI_CLUSTER_ID
+          value: {{ .Values.global.fti_cdi.env.CLUSTER_ID | quote }}
         - name: FTI_CDI_ENDPOINT
         {{- with (first .Values.global.fti_cdi.hostAliases) }}
           value: "{{ .ip }}:443"
