@@ -184,6 +184,7 @@ tests:
         fti_cdi:
           env:
             TENANT_ID: "060ea5a5-46e4-42b4-8d95-70578718d8d0"
+            CLUSTER_ID: "test-cluster-uuid"
           hostAliases:
             - ip: "111.111.111.111"
               hostnames:
@@ -227,6 +228,11 @@ tests:
           content:
             name: FTI_CDI_TENANT_ID
             value: "060ea5a5-46e4-42b4-8d95-70578718d8d0"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: FTI_CDI_CLUSTER_ID
+            value: "test-cluster-uuid"
       - contains:
           path: spec.template.spec.containers[0].env
           content:
