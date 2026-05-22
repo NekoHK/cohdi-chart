@@ -334,6 +334,55 @@ tests:
             operator: "Exists"
             effect: "NoExecute"
 
+  - it: "renders manager ClusterRole with nodes and pods"
+    set:
+      common:
+        name: composable-resource-operator
+    documentSelector:
+      path: metadata.name
+      value: composable-resource-operator-manager-role
+    asserts:
+      - isKind:
+          of: ClusterRole
+      - contains:
+          path: rules
+          content:
+            apiGroups: [""]
+            resources: ["nodes","pods"]
+            verbs: ["get","list","watch"]
+  # NVIDIA DRA Driver RBAC
+  - it: "renders NVIDIA DRA Driver Role with pods delete in nvidia-dra-driver-gpu namespace"
+    set:
+      common:
+        name: composable-resource-operator
+    documentSelector:
+      path: metadata.name
+      value: composable-resource-operator-nvidia-dra-driver-role
+    asserts:
+      - isKind:
+          of: Role
+      - equal:
+          path: metadata.namespace
+          value: nvidia-dra-driver-gpu
+      - contains:
+          path: rules
+          content:
+            apiGroups: [""]
+            resources: ["pods"]
+            verbs: ["delete"]
+      - contains:
+          path: rules
+          content:
+            apiGroups: [""]
+            resources: ["pods/exec"]
+            verbs: ["create"]
+      - contains:
+          path: rules
+          content:
+            apiGroups: ["apps"]
+            resources: ["daemonsets"]
+            verbs: ["update"]
+
   # GPU Operator RBAC
   - it: "renders GPU Operator Role with default namespace gpu-operator"
     documentSelector:

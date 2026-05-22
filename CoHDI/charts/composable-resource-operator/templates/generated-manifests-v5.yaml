@@ -592,6 +592,9 @@ metadata:
   namespace: nvidia-dra-driver-gpu
 rules:
   - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["delete"]
+  - apiGroups: [""]
     resources: ["pods/exec"]
     verbs: ["create"]
   - apiGroups: ["apps"]
