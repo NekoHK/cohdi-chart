@@ -452,6 +452,8 @@ spec:
         {{- with (first .Values.global.fti_cdi.hostAliases) }}
           value: "{{ .ip }}:443"
         {{- end }}
+        - name: NVIDIA_GPU_OPERATOR_NAMESPACE
+          value: {{ .Values.global.common.driver.gpu.nvidia.gpuOperator.namespace | quote }}
         ports:
         - name: webhook-server
           containerPort: 9443
