@@ -49,7 +49,6 @@ rules:
   verbs: ["get", "list", "watch"]
 - apiGroups: ["resource.k8s.io"]
   resources: ["resourceslices"]
-  resourceNames: ["gpu.nvidia.com"]
   verbs: ["list", "watch"]
 - apiGroups: ["resource.k8s.io"]
   resources: ["resourceclaims/status"]
@@ -57,6 +56,7 @@ rules:
 - apiGroups: ["resource.k8s.io"]
   resources: ["resourceclaims/driver"]
   verbs: ["arbitrary-node:update", "arbitrary-node:patch"]
+  resourceNames: ["gpu.nvidia.com"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding

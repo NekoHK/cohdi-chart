@@ -32,21 +32,7 @@ tests:
         documentIndex: 0
 
   # ClusterRole
-  - it: "renders ClusterRole dynamic-device-scaler-role with resourceclaims/driver rule"
-    documentSelector:
-      path: metadata.name
-      value: dynamic-device-scaler-role
-    asserts:
-      - isKind:
-          of: ClusterRole
-      - contains:
-          path: rules
-          content:
-            apiGroups: ["resource.k8s.io"]
-            resources: ["resourceclaims/driver"]
-            verbs: ["arbitrary-node:update", "arbitrary-node:patch"]
-
-  - it: "renders ClusterRole dynamic-device-scaler-role with resourceslices rule scoped to gpu.nvidia.com"
+  - it: "renders ClusterRole dynamic-device-scaler-role with resourceslices list/watch rule without resourceNames"
     documentSelector:
       path: metadata.name
       value: dynamic-device-scaler-role
@@ -58,8 +44,22 @@ tests:
           content:
             apiGroups: ["resource.k8s.io"]
             resources: ["resourceslices"]
-            resourceNames: ["gpu.nvidia.com"]
             verbs: ["list", "watch"]
+
+  - it: "renders ClusterRole dynamic-device-scaler-role with resourceclaims/driver rule scoped to gpu.nvidia.com"
+    documentSelector:
+      path: metadata.name
+      value: dynamic-device-scaler-role
+    asserts:
+      - isKind:
+          of: ClusterRole
+      - contains:
+          path: rules
+          content:
+            apiGroups: ["resource.k8s.io"]
+            resources: ["resourceclaims/driver"]
+            resourceNames: ["gpu.nvidia.com"]
+            verbs: ["arbitrary-node:update", "arbitrary-node:patch"]
 
   # ClusterRoleBinding
   - it: "renders ClusterRoleBinding dds-manager-rolebinding for dds-controller-manager"
