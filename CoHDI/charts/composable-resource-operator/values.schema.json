@@ -91,6 +91,11 @@
               "description": "Defines the CDI provider type."
             }
           }
+        },
+        "deployPrivilegedAgent": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to deploy a privileged DaemonSet agent for enhanced host-level operations."
         }
       },
       "required": ["name", "image", "webhook", "managerEnv"]

@@ -279,6 +279,9 @@ tests:
           path: webhooks[0].clientConfig.service.namespace
           value: composable-resource-operator-system
   - it: renders node agent DeamonSet
+    set:
+      common:
+        deployPrivilegedAgent: true
     documentSelector:
       path: kind
       value: DaemonSet
@@ -478,3 +481,105 @@ tests:
       - equal:
           path: metadata.namespace
           value: nvidia-gpu-operator
+
+---
+suite: cdi-operator deployPrivilegedAgent toggle
+templates:
+  - templates/generated-manifests-v5.yaml
+
+tests:
+  - it: does not render cro-node-agent DaemonSet by default
+    set:
+      common:
+        name: composable-resource-operator
+        webhook:
+          client:
+            caBundle: "dummy-client"
+      global:
+        common:
+          driver:
+            gpu:
+              nvidia:
+                gpuOperator:
+                  namespace: gpu-operator
+        fti_cdi:
+          env:
+            TENANT_ID: "060ea5a5-46e4-42b4-8d95-70578718d8d0"
+            CLUSTER_ID: "test-cluster-uuid"
+          hostAliases:
+            - ip: "111.111.111.111"
+              hostnames:
+                - "cdimgr.localdomain"
+    asserts:
+      - notMatchRegex:
+          path: metadata.name
+          pattern: ^cro-node-agent$
+        any: true
+
+  - it: does not render cro-node-agent DaemonSet when deployPrivilegedAgent is false
+    set:
+      common:
+        name: composable-resource-operator
+        deployPrivilegedAgent: false
+        webhook:
+          client:
+            caBundle: "dummy-client"
+      global:
+        common:
+          driver:
+            gpu:
+              nvidia:
+                gpuOperator:
+                  namespace: gpu-operator
+        fti_cdi:
+          env:
+            TENANT_ID: "060ea5a5-46e4-42b4-8d95-70578718d8d0"
+            CLUSTER_ID: "test-cluster-uuid"
+          hostAliases:
+            - ip: "111.111.111.111"
+              hostnames:
+                - "cdimgr.localdomain"
+    asserts:
+      - notMatchRegex:
+          path: metadata.name
+          pattern: ^cro-node-agent$
+        any: true
+
+  - it: renders cro-node-agent DaemonSet when deployPrivilegedAgent is true
+    set:
+      common:
+        name: composable-resource-operator
+        deployPrivilegedAgent: true
+        webhook:
+          client:
+            caBundle: "dummy-client"
+      global:
+        common:
+          driver:
+            gpu:
+              nvidia:
+                gpuOperator:
+                  namespace: gpu-operator
+        fti_cdi:
+          env:
+            TENANT_ID: "060ea5a5-46e4-42b4-8d95-70578718d8d0"
+            CLUSTER_ID: "test-cluster-uuid"
+          hostAliases:
+            - ip: "111.111.111.111"
+              hostnames:
+                - "cdimgr.localdomain"
+    documentSelector:
+      path: kind
+      value: DaemonSet
+    asserts:
+      - isKind:
+          of: DaemonSet
+      - equal:
+          path: metadata.name
+          value: cro-node-agent
+      - equal:
+          path: metadata.namespace
+          value: composable-resource-operator-system
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.privileged
+          value: true

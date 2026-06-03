@@ -35,6 +35,8 @@ common:
     DEVICE_RESOURCE_TYPE: "DRA"
     CDI_PROVIDER_TYPE: "FTI_CDI"
 
+  deployPrivilegedAgent: false
+
 fti_cdi:
   managerEnv:
     FTI_CDI_API_TYPE: "FM"
