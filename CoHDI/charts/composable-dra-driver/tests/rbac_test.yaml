@@ -64,3 +64,37 @@ tests:
       - equal:
           path: subjects[0].name
           value: cdi-dra
+
+  - it: should allow reading BareMetalHosts
+    set:
+      common:
+        name: cdi-dra
+        image:
+          registry: example.io
+          repository: example/cdi-dra:latest
+          tag: 0.4.0
+          pullPolicy: Never
+      global:
+        fti_cdi:
+          hostAliases:
+            - ip: "111.111.111.111"
+              hostnames:
+                - "cdimgr.localdomain"
+          env:
+            CDI_ENDPOINT: "https://cdimgr.localdomain"
+            TENANT_ID: "060ea5a5-46e4-42b4-8d95-70578718d8d0"
+    documentSelector:
+      path: kind
+      value: ClusterRole
+    asserts:
+      - contains:
+          path: rules
+          content:
+            apiGroups:
+              - metal3.io
+            resources:
+              - baremetalhosts
+            verbs:
+              - get
+              - list
+              - watch

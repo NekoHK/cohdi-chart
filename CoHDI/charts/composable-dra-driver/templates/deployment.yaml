@@ -48,6 +48,8 @@ spec:
           env:
             - name: CDI_ENDPOINT
               value: {{ .Values.global.fti_cdi.env.CDI_ENDPOINT }}
+            - name: CLUSTER_ID
+              value: {{ .Values.global.fti_cdi.env.CLUSTER_ID | quote }}
             - name: TENANT_ID
               value: {{ .Values.global.fti_cdi.env.TENANT_ID }}
           {{- range $k, $v := .Values.fti_cdi.env }}
@@ -76,6 +78,9 @@ rules:
 - apiGroups: ["resource.k8s.io"]
   resources: ["resourceslices"]
   verbs: ["get", "list", "watch", "create", "patch", "update", "delete"]
+- apiGroups: ["metal3.io"]
+  resources: ["baremetalhosts"]
+  verbs: ["get", "list", "watch"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
