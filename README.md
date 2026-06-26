@@ -6,6 +6,13 @@
 The **CoHDI Helm chart** deploys the CoHDI system - an integration
 layer for CDI management and device configuration in Kubernetes.
 
+## Supported Platform
+
+* RHOCP 4.22
+* SLES16 + RKE2 v1.35
+* RHEL10.2 + K8s v1.36
+* Ubuntu24.04 + K8s v1.36
+
 ## Prerequisite environmental information
 
 The following environment is required.
